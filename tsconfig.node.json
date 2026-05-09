@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "lib": ["ESNext"],
-    "types": ["node"]
-  },
-  "include": ["bin/**/*", "agent/**/*", "lib/**/*", "app.ts", "main.ts"]
-}

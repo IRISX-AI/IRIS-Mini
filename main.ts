@@ -4,19 +4,25 @@ import { getAvailablePort } from "./lib/config.js"; // MUST BE .js
 
 const INITIAL_PORT = 5050; // Your custom unusual port
 
-// main.ts
-// ... (rest of your imports)
-
 const startServer = async () => {
-  const port = 5050; // Let's keep it simple while we debug
+  const port = await getAvailablePort(INITIAL_PORT);
 
-  // Specify '127.0.0.1' explicitly
-  app.listen(port, "127.0.0.1", () => {
+  // We print this BEFORE app.listen to ensure we see the attempt
+  console.log(chalk.cyan("\n[CORE] Starting Neural Engine..."));
+
+  app.listen(port, () => {
     console.log(
-      chalk.green.bold(`\n SUCCESS `) +
-        `IRIS-mini Uplink: http://127.0.0.1:${port}`,
+      chalk.green.bold(`
+   _____搁搁_____  ______搁搁搁搁搁   搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁搁
+  搁搁搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁搁
+  `),
+    );
+    console.log(
+      `${chalk.bgGreen.black.bold(" SUCCESS ")} IRIS-mini Core Uplink: ${chalk.cyan(`http://localhost:${port}`)}`,
     );
   });
 };
 
-startServer();
+startServer().catch((err) => {
+  console.error(chalk.red("[CORE] ERROR:"), err);
+});

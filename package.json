@@ -11,6 +11,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^17.4.2",
     "express": "^5.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

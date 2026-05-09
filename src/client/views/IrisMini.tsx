@@ -1,94 +1,134 @@
-import { useState, useEffect } from "react";
-import { Mic, MicOff, Power, Terminal, Zap } from "lucide-react";
+import {
+  Activity,
+  Cpu,
+  Database,
+  Mic,
+  MicOff,
+  Network,
+  Power,
+  Terminal,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import AICore from "../utils/AICore";
 
 const IrisMini = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [systemStatus, setSystemStatus] = useState("OFFLINE");
+  const [systemStatus, setSystemStatus] = useState("STANDBY");
 
   const [transcript] = useState([
+    { id: 1, role: "system", text: "INITIALIZING IRIS-MINI KERNEL..." },
+    { id: 2, role: "system", text: "AWAITING NEURAL UPLINK..." },
+    { id: 3, role: "user", text: "Connect to local filesystem." },
     {
-      id: 1,
-      role: "system",
-      text: "SYSTEM IS OFFLINE. AWAITING NEURAL UPLINK...",
-    },
-    { id: 2, role: "user", text: "Initialize Iris-Mini." },
-    {
-      id: 3,
+      id: 4,
       role: "agent",
-      text: "Neural connection active. Standby for command, Boss.",
+      text: "Uplink established. Awaiting instructions.",
     },
-    { id: 4, role: "system", text: "UPLINK STABLE :: MONITORING OS FEED..." },
   ]);
 
   useEffect(() => {
-    if (isConnected) {
-      setSystemStatus("STABLE");
-    } else {
-      setSystemStatus("OFFLINE");
-    }
+    setSystemStatus(isConnected ? "ACTIVE" : "STANDBY");
   }, [isConnected]);
 
   return (
-    <div className="h-screen w-full bg-bg text-primary font-mono selection:bg-primary/30 flex items-center justify-center overflow-hidden relative">
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,0,0.015)_1px,transparent_1px)] bg-size-[100%_4px] pointer-events-none" />
+    <div className="h-screen w-full bg-[#050505] text-[#00ff41] font-mono selection:bg-[#00ff41]/30 flex items-center justify-between overflow-hidden relative">
+      {/* Subtle Background Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,65,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,65,0.03)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
 
-      <div className="relative flex items-center justify-center scale-90 md:scale-100">
-        <div
-          className={`absolute w-lg h-128 border border-system/10 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_10s_linear_infinite]" : "scale-95 opacity-50"}`}
-        />
+      {/* Radial Vignette to darken edges */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_100%)] pointer-events-none z-0" />
 
-        <div
-          className={`absolute w-md h-112 border-t-2 border-r border-system/30 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_15s_linear_infinite_reverse]" : "scale-95 opacity-50"}`}
-        />
-
-        <div
-          className={`absolute w-88 h-88 border border-primary/10 rounded-full transition-all duration-1000 ${isConnected ? "animate-pulse scale-110" : "scale-95 opacity-50"}`}
-        />
-
-        <div
-          className={`w-40 h-40 rounded-full flex items-center justify-center transition-all duration-1000 ${isConnected ? "bg-primary/10 shadow-[0_0_80px_rgba(0,255,0,0.25)]" : "bg-black/30"}`}
-        >
-          <div
-            className={`w-28 h-28 rounded-full transition-all duration-500 flex items-center justify-center ${isConnected ? "bg-primary/20 shadow-[0_0_40px_rgba(0,255,0,0.7)] animate-pulse" : "bg-zinc-900"}`}
-          >
-            <Zap
-              size={40}
-              className={`transition-opacity duration-1000 ${isConnected ? "opacity-100" : "opacity-20"}`}
-            />
-          </div>
+      {/* --- LEFT: TELEMETRY PANEL --- */}
+      <div className="z-20 w-72 h-full flex flex-col justify-center pl-8 space-y-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Activity size={18} className="text-[#00ff41]" />
+          <span className="text-xs tracking-[0.3em] text-[#00ff41]/70">
+            SYS_METRICS
+          </span>
         </div>
+
+        {/* Metric Cards */}
+        {[
+          {
+            label: "CPU_LOAD",
+            value: isConnected ? "14.2%" : "--%",
+            icon: <Cpu size={14} />,
+          },
+          {
+            label: "MEM_ALLOC",
+            value: isConnected ? "2.1 GB" : "-- GB",
+            icon: <Database size={14} />,
+          },
+          {
+            label: "NET_LATENCY",
+            value: isConnected ? "12ms" : "--ms",
+            icon: <Network size={14} />,
+          },
+        ].map((metric, i) => (
+          <div
+            key={i}
+            className="bg-black/40 border border-[#00ff41]/20 p-4 backdrop-blur-md"
+          >
+            <div className="flex items-center justify-between text-[#00ff41]/50 text-[10px] tracking-widest mb-2">
+              <span className="flex items-center gap-2">
+                {metric.icon} {metric.label}
+              </span>
+            </div>
+            <div
+              className={`text-xl font-light ${isConnected ? "text-[#00ff41]" : "text-[#00ff41]/30"}`}
+            >
+              {metric.value}
+            </div>
+          </div>
+        ))}
       </div>
 
-      <div className="absolute right-0 top-0 bottom-0 w-80 bg-black/70 backdrop-blur-xl border-l border-system/30 p-5 flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.6)]">
-        <div className="flex items-center gap-3 mb-6 border-b border-system/30 pb-3">
-          <Terminal size={18} className="text-primary" />
-          <span className="text-xs tracking-[0.2em] font-bold">
-            NEURAL_FEED
-          </span>
+      {/* --- CENTER: 3D CORE --- */}
+      <div className="relative flex-1 flex items-center justify-center z-10 scale-90 md:scale-100">
+        {/* Subtle glow behind the 3D canvas */}
+        <div
+          className={`absolute w-96 h-96 rounded-full transition-all duration-1000 blur-[100px] pointer-events-none ${isConnected ? "bg-[#00ff41]/10" : "bg-transparent"}`}
+        />
+
+        <AICore isConnected={isConnected} />
+      </div>
+
+      {/* --- RIGHT: LIVE TRANSCRIPT --- */}
+      <div className="z-20 w-96 h-[85vh] mr-8 bg-[#0a0a0a]/80 backdrop-blur-xl border border-[#00ff41]/20 p-6 flex flex-col shadow-[-20px_0_50px_rgba(0,0,0,0.8)] relative">
+        {/* Glitch accent line */}
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#00ff41]/50 to-transparent" />
+
+        <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#00ff41]/20">
+          <div className="flex items-center gap-3">
+            <Terminal size={16} className="text-[#00ff41]" />
+            <span className="text-xs tracking-[0.2em] text-[#00ff41]/80">
+              TERMINAL_LOG
+            </span>
+          </div>
           <span
-            className={`ml-auto text-[10px] tracking-widest px-2 py-0.5 rounded ${isConnected ? "bg-primary/20 text-primary" : "bg-red-950/40 text-red-400"}`}
+            className={`text-[9px] tracking-widest px-2 py-1 border ${isConnected ? "border-[#00ff41]/50 text-[#00ff41] bg-[#00ff41]/10" : "border-[#00ff41]/20 text-[#00ff41]/40"}`}
           >
             {systemStatus}
           </span>
         </div>
 
-        <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-system/30">
+        <div className="flex-1 overflow-y-auto space-y-5 pr-4 scrollbar-thin scrollbar-thumb-[#00ff41]/20 scrollbar-track-transparent">
           {transcript.map((msg) => (
             <div
               key={msg.id}
               className={`flex flex-col ${msg.role === "user" ? "items-end" : "items-start"}`}
             >
-              <span className="text-[9px] uppercase tracking-widest text-system/60 mb-1">
-                {msg.role}
+              <span className="text-[8px] uppercase tracking-[0.2em] text-[#00ff41]/40 mb-1.5">
+                {msg.role === "agent" ? "IRIS" : msg.role}
               </span>
               <div
-                className={`text-xs p-3 rounded-lg leading-relaxed max-w-[90%] ${
+                className={`text-[11px] p-3 leading-relaxed max-w-[90%] border-l-2 ${
                   msg.role === "user"
-                    ? "bg-primary/10 border border-system/50 text-primary"
+                    ? "bg-[#00ff41]/5 border-[#00ff41] text-[#00ff41] border-l-0 border-r-2"
                     : msg.role === "system"
-                      ? "bg-zinc-900/60 border border-zinc-700 text-zinc-400"
-                      : "bg-black/80 border border-system/30 text-primary"
+                      ? "bg-transparent border-[#00ff41]/30 text-[#00ff41]/50 italic"
+                      : "bg-[#001100] border-[#00ff41] text-[#00ff41]"
                 }`}
               >
                 {msg.text}
@@ -98,41 +138,44 @@ const IrisMini = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/90 backdrop-blur-xl border border-system/30 px-6 py-3 rounded-full shadow-[0_0_40px_rgba(0,0,0,0.9)]">
+      {/* --- BOTTOM: COMMAND DOCK --- */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-6 bg-[#0a0a0a]/90 backdrop-blur-xl border border-[#00ff41]/20 px-8 py-4 rounded-none shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
+        {/* Power Button */}
         <button
           onClick={() => setIsConnected(!isConnected)}
-          className={`p-3 rounded-full transition-all duration-300 hover:scale-110 ${
+          className={`flex items-center gap-3 transition-all duration-300 ${
             isConnected
-              ? "bg-red-500/20 text-red-400 hover:bg-red-500/30 hover:shadow-[0_0_20px_rgba(239,68,68,0.3)]"
-              : "bg-primary/20 text-primary hover:bg-primary/30 hover:shadow-[0_0_20px_rgba(0,255,0,0.3)]"
+              ? "text-red-500 hover:text-red-400 hover:drop-shadow-[0_0_10px_rgba(239,68,68,0.8)]"
+              : "text-[#00ff41] hover:text-[#00ff41] hover:drop-shadow-[0_0_10px_rgba(0,255,65,0.8)]"
           }`}
-          title={isConnected ? "Shutdown System" : "Ignite Engine"}
         >
-          <Power size={22} />
+          <Power size={20} />
+          <span className="text-[10px] tracking-widest">
+            {isConnected ? "DISCONNECT" : "INITIALIZE"}
+          </span>
         </button>
 
-        <div className="w-px h-8 bg-system/30 mx-2" />
+        <div className="w-px h-6 bg-[#00ff41]/20" />
 
+        {/* Mic Toggle Button */}
         <button
           onClick={() => setIsMuted(!isMuted)}
           disabled={!isConnected}
-          className={`p-3 rounded-full transition-all duration-300 ${
-            !isConnected ? "opacity-20 cursor-not-allowed" : "hover:scale-110"
+          className={`flex items-center gap-3 transition-all duration-300 ${
+            !isConnected ? "opacity-30 cursor-not-allowed" : ""
           } ${
             isMuted && isConnected
-              ? "bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 hover:shadow-[0_0_20px_rgba(245,158,11,0.3)]"
+              ? "text-amber-500 hover:text-amber-400 hover:drop-shadow-[0_0_10px_rgba(245,158,11,0.8)]"
               : isConnected
-                ? "bg-primary/20 text-primary hover:bg-primary/30 hover:shadow-[0_0_20px_rgba(0,255,0,0.3)]"
-                : "bg-black text-system/30 border border-system/30"
+                ? "text-[#00ff41] hover:text-[#00ff41] hover:drop-shadow-[0_0_10px_rgba(0,255,65,0.8)]"
+                : "text-[#00ff41]/50"
           }`}
-          title={isMuted ? "Activate Neural Input" : "Mute Neural Input"}
         >
-          {isMuted ? <MicOff size={22} /> : <Mic size={22} />}
+          {isMuted ? <MicOff size={20} /> : <Mic size={20} />}
+          <span className="text-[10px] tracking-widest">
+            {isMuted ? "MUTED" : "VOICE_LINK"}
+          </span>
         </button>
-      </div>
-
-      <div className="absolute bottom-4 right-5 text-[9px] text-system/50 tracking-[0.2em] pointer-events-none">
-        IRIS-MINI :: NEURAL INTERFACE PROTOCOL v1.0
       </div>
     </div>
   );

@@ -5,7 +5,6 @@ const App = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
 
-  // Dummy transcript data for layout testing
   const [transcript] = useState([
     {
       id: 1,
@@ -22,27 +21,21 @@ const App = () => {
 
   return (
     <div className="h-screen w-full bg-[#030712] flex items-center justify-center text-[#4ade80] font-mono overflow-hidden relative selection:bg-[#4ade80]/30">
-      {/* Background Grid / Scanlines */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(74,222,128,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(74,222,128,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
-      {/* --- CENTRAL JARVIS CORE (Pure CSS, Zero Lag) --- */}
       <div className="relative flex items-center justify-center">
-        {/* Outer Ring 1 */}
         <div
           className={`absolute w-[28rem] h-[28rem] border border-[#4ade80]/20 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_12s_linear_infinite]" : "scale-90 opacity-50"}`}
         />
 
-        {/* Outer Ring 2 (Dashed/Partial) */}
         <div
           className={`absolute w-[24rem] h-[24rem] border-t-2 border-r-2 border-[#4ade80]/40 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_8s_linear_infinite_reverse]" : "scale-90 opacity-50"}`}
         />
 
-        {/* Inner Pulse Ring */}
         <div
           className={`absolute w-64 h-64 border border-[#4ade80]/10 rounded-full transition-all duration-1000 ${isConnected ? "animate-pulse scale-110" : "scale-90 opacity-50"}`}
         />
 
-        {/* The Core */}
         <div
           className={`w-32 h-32 rounded-full flex items-center justify-center transition-all duration-700 ${isConnected ? "bg-[#4ade80]/10 shadow-[0_0_60px_rgba(74,222,128,0.3)]" : "bg-zinc-900/30"}`}
         >
@@ -52,9 +45,7 @@ const App = () => {
         </div>
       </div>
 
-      {/* --- TRANSCRIPT PANEL (Right Side Overlay) --- */}
       <div className="absolute right-0 top-0 bottom-0 w-80 bg-black/60 backdrop-blur-xl border-l border-[#4ade80]/20 p-5 flex flex-col shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
-        {/* Panel Header */}
         <div className="flex items-center gap-3 mb-6 border-b border-[#4ade80]/30 pb-3">
           <Terminal size={18} className="text-[#4ade80]" />
           <span className="text-xs tracking-[0.2em] font-bold">LIVE_LOG</span>
@@ -68,7 +59,6 @@ const App = () => {
           </span>
         </div>
 
-        {/* Messages */}
         <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-[#4ade80]/20">
           {transcript.map((msg) => (
             <div
@@ -94,9 +84,7 @@ const App = () => {
         </div>
       </div>
 
-      {/* --- BOTTOM CONTROL BAR --- */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/80 backdrop-blur-xl border border-[#4ade80]/20 px-6 py-3 rounded-full shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-        {/* Connect Button */}
         <button
           onClick={() => setIsConnected(!isConnected)}
           className={`p-3 rounded-full transition-all duration-300 hover:scale-110 ${
@@ -111,7 +99,6 @@ const App = () => {
 
         <div className="w-px h-8 bg-[#4ade80]/20 mx-2" />
 
-        {/* Mic Toggle Button */}
         <button
           onClick={() => setIsMuted(!isMuted)}
           disabled={!isConnected}

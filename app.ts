@@ -21,12 +21,10 @@ async function createServer() {
   });
 
   if (!isProd) {
-    // --- DEVELOPMENT: Vite Middleware Mode ---
-    // This is what you want: Express renders React with HMR in real-time
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "custom",
-      root: path.resolve(__dirname, "client"),
+      configFile: path.resolve(__dirname, "vite.config.ts"),
     });
 
     app.use(vite.middlewares);

@@ -1,17 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  /* Futuristic Aesthetic: Pure, deep black for background */
   --color-bg: #000000;
 
-  /* Primary Action: Vibrant Neon Green for text, icons, and glows */
   --color-primary: #00ff00;
 
-  /* System/Subtle: Deeper green for borders, muted text, and panels */
   --color-system: #008800;
 }
 
-/* Base style resets */
 @layer base {
   body {
     background-color: var(--color-bg);

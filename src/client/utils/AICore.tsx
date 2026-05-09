@@ -6,8 +6,8 @@ const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
   const pointsRef = useRef<THREE.Points>(null);
 
   const [positions] = useMemo(() => {
-    const pos = new Float32Array(5000 * 3);
-    for (let i = 0; i < 5000; i++) {
+    const pos = new Float32Array(3000 * 3);
+    for (let i = 0; i < 3000; i++) {
       const u = Math.random();
       const v = Math.random();
       const theta = 2 * Math.PI * u;

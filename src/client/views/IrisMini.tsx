@@ -87,7 +87,7 @@ const IrisMini = () => {
       </div>
 
       <div className="z-20 w-96 h-[85vh] mr-8 bg-[#0a0a0a]/80 backdrop-blur-xl border border-[#00ff41]/20 p-6 flex flex-col shadow-[-20px_0_50px_rgba(0,0,0,0.8)] relative">
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#00ff41]/50 to-transparent" />
+        <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-[#00ff41]/50 to-transparent" />
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#00ff41]/20">
           <div className="flex items-center gap-3">

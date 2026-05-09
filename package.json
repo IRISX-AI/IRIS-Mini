@@ -7,7 +7,7 @@
     "iris-mini": "./bin/iris-mini.js"
   },
   "scripts": {
-    "dev": "concurrently \"npx vite --clearScreen false\" \"npx tsx watch main.ts\"",
+    "dev": "tsx watch main.ts",
     "build": "vite build && tsc -p tsconfig.node.json",
     "start": "node dist/main.js"
   },

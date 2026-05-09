@@ -38,6 +38,7 @@ const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
           count={positions.length / 3}
           array={positions}
           itemSize={3}
+          args={[positions as Float32Array, 3]}
         />
       </bufferGeometry>
       <pointsMaterial

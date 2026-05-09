@@ -33,13 +33,8 @@ const IrisMini = () => {
 
   return (
     <div className="h-screen w-full bg-[#050505] text-[#00ff41] font-mono selection:bg-[#00ff41]/30 flex items-center justify-between overflow-hidden relative">
-      {/* Subtle Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,65,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,65,0.03)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
-
-      {/* Radial Vignette to darken edges */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_100%)] pointer-events-none z-0" />
 
-      {/* --- LEFT: TELEMETRY PANEL --- */}
       <div className="z-20 w-72 h-full flex flex-col justify-center pl-8 space-y-6">
         <div className="flex items-center gap-3 mb-4">
           <Activity size={18} className="text-[#00ff41]" />
@@ -48,7 +43,6 @@ const IrisMini = () => {
           </span>
         </div>
 
-        {/* Metric Cards */}
         {[
           {
             label: "CPU_LOAD",
@@ -84,9 +78,7 @@ const IrisMini = () => {
         ))}
       </div>
 
-      {/* --- CENTER: 3D CORE --- */}
       <div className="relative flex-1 flex items-center justify-center z-10 scale-90 md:scale-100">
-        {/* Subtle glow behind the 3D canvas */}
         <div
           className={`absolute w-96 h-96 rounded-full transition-all duration-1000 blur-[100px] pointer-events-none ${isConnected ? "bg-[#00ff41]/10" : "bg-transparent"}`}
         />
@@ -94,9 +86,7 @@ const IrisMini = () => {
         <AICore isConnected={isConnected} />
       </div>
 
-      {/* --- RIGHT: LIVE TRANSCRIPT --- */}
       <div className="z-20 w-96 h-[85vh] mr-8 bg-[#0a0a0a]/80 backdrop-blur-xl border border-[#00ff41]/20 p-6 flex flex-col shadow-[-20px_0_50px_rgba(0,0,0,0.8)] relative">
-        {/* Glitch accent line */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#00ff41]/50 to-transparent" />
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#00ff41]/20">
@@ -138,9 +128,7 @@ const IrisMini = () => {
         </div>
       </div>
 
-      {/* --- BOTTOM: COMMAND DOCK --- */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-6 bg-[#0a0a0a]/90 backdrop-blur-xl border border-[#00ff41]/20 px-8 py-4 rounded-none shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
-        {/* Power Button */}
         <button
           onClick={() => setIsConnected(!isConnected)}
           className={`flex items-center gap-3 transition-all duration-300 ${
@@ -157,7 +145,6 @@ const IrisMini = () => {
 
         <div className="w-px h-6 bg-[#00ff41]/20" />
 
-        {/* Mic Toggle Button */}
         <button
           onClick={() => setIsMuted(!isMuted)}
           disabled={!isConnected}

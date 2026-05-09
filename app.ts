@@ -4,7 +4,6 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { createServer as createViteServer } from "vite";
-import { processUserCommand } from "./agent/index.js"; // Ensuring the 'agent' folder path
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,17 +18,6 @@ async function createServer() {
   // --- API ROUTES ---
   app.get("/api/health", (req, res) => {
     res.json({ status: "online", mode: isProd ? "production" : "development" });
-  });
-
-  // Agent Execution Route
-  app.post("/api/agent/execute", async (req, res) => {
-    const { prompt } = req.body;
-    try {
-      const result = await processUserCommand(prompt);
-      res.json(result);
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
-    }
   });
 
   if (!isProd) {

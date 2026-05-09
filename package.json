@@ -7,11 +7,9 @@
     "iris-mini": "./bin/iris-mini.js"
   },
   "scripts": {
-    "dev:client": "vite build --watch",
-    "dev:server": "tsx watch main.ts",
-    "dev": "concurrently --prefix \"[{name}]\" --names \"BUILD,CORE\" --prefix-colors \"yellow,cyan\" \"npm run dev:client\" \"npm run dev:server\"",
+    "dev": "tsx watch --ignore client main.ts",
     "build": "vite build && tsc -p tsconfig.node.json",
-    "start": "node dist/main.js"
+    "start": "NODE_ENV=production node dist/main.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",

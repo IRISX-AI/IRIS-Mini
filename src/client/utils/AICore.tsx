@@ -5,7 +5,6 @@ import * as THREE from "three";
 const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
   const pointsRef = useRef<THREE.Points>(null);
 
-  // 4000 particles for dense but clean look
   const [positions] = useMemo(() => {
     const pos = new Float32Array(4000 * 3);
     for (let i = 0; i < 4000; i++) {
@@ -13,7 +12,6 @@ const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
       const v = Math.random();
       const theta = 2 * Math.PI * u;
       const phi = Math.acos(2 * v - 1);
-      // REDUCED RADIUS: 1.8 makes it much smaller and cleaner in the center
       const r = 1.8;
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);

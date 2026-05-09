@@ -6,23 +6,17 @@ import path from "path";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   root: "client",
-  resolve: {
-    alias: {
-      // Safely resolves @ to your src folder
-      "@": path.resolve(__dirname, "./client/src"),
-    },
-  },
   build: {
     outDir: "../dist/client",
-    emptyOutDir: true,
+    emptyOutDir: true, // Cleans the folder before each rebuild
+    watch: {
+      // Ensures the build watcher is sensitive to changes
+      include: 'src/**',
+    }
   },
-  server: {
-    port: 5173,
-    proxy: {
-      "/api": {
-        target: "http://localhost:5050",
-        changeOrigin: true,
-      },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./client/src"),
     },
   },
 });

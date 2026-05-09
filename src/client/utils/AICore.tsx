@@ -5,15 +5,15 @@ import * as THREE from "three";
 const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
   const pointsRef = useRef<THREE.Points>(null);
 
-  // Generate 6000 particles to create that dense, starry look
+  // Generate 5000 particles for a dense, high-tech look
   const [positions] = useMemo(() => {
-    const pos = new Float32Array(6000 * 3);
-    for (let i = 0; i < 6000; i++) {
+    const pos = new Float32Array(5000 * 3);
+    for (let i = 0; i < 5000; i++) {
       const u = Math.random();
       const v = Math.random();
       const theta = 2 * Math.PI * u;
       const phi = Math.acos(2 * v - 1);
-      const r = 2.8; // Radius
+      const r = 2.5; // Size of the sphere
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       pos[i * 3 + 2] = r * Math.cos(phi);
@@ -23,10 +23,10 @@ const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
 
   useFrame((state, delta) => {
     if (pointsRef.current) {
-      // Smooth, professional rotation (no chaotic bouncing)
-      const speed = isConnected ? 0.3 : 0.05;
+      // Smooth rotation based on connection state
+      const speed = isConnected ? 0.4 : 0.05;
       pointsRef.current.rotation.y += delta * speed;
-      pointsRef.current.rotation.x += delta * (speed * 0.3);
+      pointsRef.current.rotation.x += delta * (speed * 0.2);
     }
   });
 
@@ -41,10 +41,10 @@ const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.015} // Tiny points
+        size={0.015}
         color={isConnected ? "#00ff41" : "#004411"}
         transparent
-        opacity={isConnected ? 0.8 : 0.3}
+        opacity={isConnected ? 0.9 : 0.3}
         sizeAttenuation
       />
     </points>
@@ -53,8 +53,8 @@ const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
 
 const AICore = ({ isConnected }: { isConnected: boolean }) => {
   return (
-    <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
-      <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+    <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
+      <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
         <ParticleSphere isConnected={isConnected} />
       </Canvas>
     </div>

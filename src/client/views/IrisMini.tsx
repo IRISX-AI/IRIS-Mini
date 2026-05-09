@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Mic, MicOff, Power, Terminal, Zap, ShieldCheck } from "lucide-react";
+import { Mic, MicOff, Power, Terminal, Zap} from "lucide-react";
 
 const IrisMini = () => {
   const [isConnected, setIsConnected] = useState(false);

@@ -21,15 +21,15 @@ const App = () => {
 
   return (
     <div className="h-screen w-full bg-[#030712] flex items-center justify-center text-[#4ade80] font-mono overflow-hidden relative selection:bg-[#4ade80]/30">
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(74,222,128,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(74,222,128,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(74,222,128,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(74,222,128,0.03)_1px,transparent_1px)] bg-size-[40px_40px] pointer-events-none" />
 
       <div className="relative flex items-center justify-center">
         <div
-          className={`absolute w-[28rem] h-[28rem] border border-[#4ade80]/20 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_12s_linear_infinite]" : "scale-90 opacity-50"}`}
+          className={`absolute w-md h-112 border border-[#4ade80]/20 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_12s_linear_infinite]" : "scale-90 opacity-50"}`}
         />
 
         <div
-          className={`absolute w-[24rem] h-[24rem] border-t-2 border-r-2 border-[#4ade80]/40 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_8s_linear_infinite_reverse]" : "scale-90 opacity-50"}`}
+          className={`absolute w-[24rem] h-96 border-t-2 border-r-2 border-[#4ade80]/40 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_8s_linear_infinite_reverse]" : "scale-90 opacity-50"}`}
         />
 
         <div

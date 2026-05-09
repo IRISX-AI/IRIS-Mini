@@ -1,3 +1,4 @@
+import "./lib/dot-env.js";
 import createServer from "./app.js";
 import chalk from "chalk";
 

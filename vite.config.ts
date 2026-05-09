@@ -1,18 +1,21 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  root: "client", // Points Vite to the client folder
-  build: {
-    outDir: "../dist/client",
-    emptyOutDir: true,
-  },
+  root: "client",
   server: {
     port: 5173,
     proxy: {
-      "/api": "http://localhost:3000",
+      "/api": {
+        target: "http://localhost:5050",
+        changeOrigin: true,
+        secure: false,
+      },
     },
+  },
+  build: {
+    outDir: "../dist/client",
+    emptyOutDir: true,
   },
 });

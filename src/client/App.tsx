@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Mic, MicOff, Power, Terminal } from "lucide-react";
 
 const App = () => {

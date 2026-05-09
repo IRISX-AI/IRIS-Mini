@@ -3,39 +3,58 @@ import cors from "cors";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { createServer as createViteServer } from "vite";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+async function createServer() {
+  const app = express();
+  app.use(cors());
+  app.use(express.json());
 
-// --- THE AGENT'S HANDS (Backend Logic) ---
-app.get("/api/health", (req, res) => {
-  res.json({ status: "online", agent: "IRIS-mini" });
-});
+  const isProd = process.env.NODE_ENV === "production";
 
-// --- SMART UI SERVING ---
-const clientDistPath = path.resolve(__dirname, "dist/client");
-
-if (fs.existsSync(clientDistPath)) {
-  // If the build exists (Production mode)
-  app.use(express.static(clientDistPath));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(clientDistPath, "index.html"));
+  // --- API ROUTES ---
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "online", mode: isProd ? "production" : "development" });
   });
-} else {
-  // If the build is missing (Dev mode)
-  app.get("/", (req, res) => {
-    res.send(`
-      <body style="background:#09090b; color:#4ade80; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh;">
-        <h1>IRIS-mini <span style="color:#fff">Engine is Running</span></h1>
-        <p style="color:#71717a;">The backend is active on port 5050.</p>
-        <p>Go to <a href="http://localhost:5173" style="color:#4ade80;">http://localhost:5173</a> to see the UI (Vite Dev Mode).</p>
-      </body>
-    `);
-  });
+
+  if (!isProd) {
+    // --- DEVELOPMENT: Vite Middleware Mode ---
+    // This is what you want: Express renders React with HMR in real-time
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: "custom",
+      root: path.resolve(__dirname, "client"),
+    });
+
+    app.use(vite.middlewares);
+
+    app.use("*", async (req, res, next) => {
+      const url = req.originalUrl;
+      try {
+        let template = fs.readFileSync(
+          path.resolve(__dirname, "client/index.html"),
+          "utf-8",
+        );
+        template = await vite.transformIndexHtml(url, template);
+        res.status(200).set({ "Content-Type": "text/html" }).end(template);
+      } catch (e) {
+        vite.ssrFixStacktrace(e as Error);
+        next(e);
+      }
+    });
+  } else {
+    // --- PRODUCTION: Static Serve ---
+    const clientDistPath = path.resolve(__dirname, "dist/client");
+    app.use(express.static(clientDistPath));
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(clientDistPath, "index.html"));
+    });
+  }
+
+  return app;
 }
 
-export default app;
+export default createServer;

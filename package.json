@@ -7,9 +7,9 @@
     "iris-mini": "./bin/iris-mini.js"
   },
   "scripts": {
-    "dev": "concurrently \"vite\" \"tsx watch main.ts\"",
+    "dev": "tsx watch main.ts",
     "build": "vite build && tsc -p tsconfig.node.json",
-    "start": "node dist/main.js"
+    "start": "NODE_ENV=production node dist/main.js"
   },
   "dependencies": {
     "chalk": "^5.3.0",

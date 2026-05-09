@@ -1,9 +1,26 @@
-import app from "./app.js";
-import http from "http";
+import createServer from "./app.js";
+import chalk from "chalk";
 
-const server = http.createServer(app);
-const port = process.env.PORT || 5050;
+const start = async () => {
+  const app = await createServer();
+  const port = 5050;
 
-server.listen(port, () => {
-  console.log(`IRIS-mini server running on port  http://localhost:${port}`);
-});
+  app.listen(port, () => {
+    console.clear();
+    console.log(
+      chalk.cyan.bold(`
+   _____搁搁_____  ______搁搁搁搁搁   搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁搁
+  搁搁搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁搁
+    `),
+    );
+    console.log(
+      chalk.green.bold(` SUCCESS `) +
+        `IRIS-mini Unified Engine: http://localhost:${port}`,
+    );
+    console.log(
+      chalk.gray(` Mode: ${process.env.NODE_ENV || "development"}\n`),
+    );
+  });
+};
+
+start();

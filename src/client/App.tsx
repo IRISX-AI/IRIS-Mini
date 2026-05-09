@@ -1,5 +1,4 @@
-// client/src/App.tsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Mic, MicOff, Power, Terminal, Zap, ShieldCheck } from "lucide-react";
 
 const App = () => {

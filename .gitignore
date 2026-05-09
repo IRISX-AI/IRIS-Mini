@@ -1,0 +1,29 @@
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.sublime-project
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+client/node_modules/
+
+# Build outputs
+dist/
+client/dist/
+
+# Environment variables
+.env
+.env.local
+
+# OS Metadata
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore

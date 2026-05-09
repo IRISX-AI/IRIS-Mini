@@ -1,13 +1,4 @@
-import {
-  Activity,
-  Cpu,
-  Database,
-  Mic,
-  MicOff,
-  Monitor,
-  Phone,
-  Wrench,
-} from "lucide-react";
+import { Mic, MicOff, Power, Terminal } from "lucide-react";
 import { useState } from "react";
 import AICore from "../utils/AICore";
 
@@ -16,193 +7,109 @@ const IrisMini = () => {
   const [isMuted, setIsMuted] = useState(false);
 
   const [transcript] = useState([
-    { id: 1, role: "user", text: "हेलो आयरिश कैसा है" },
     {
-      id: 2,
+      id: 1,
       role: "system",
-      text: "Badhiya ek dam, bro! Tu bata, kya scene hai? How can I help you today?",
+      text: "IRIS MINI INITIALIZED. AWAITING NEURAL UPLINK...",
     },
+    { id: 2, role: "user", text: "Connect to local OS." },
     {
       id: 3,
-      role: "user",
-      text: "अच्छा तेरे को मेरा फेवरेट सॉन्ग याद है उसको Spotify पे प्ले कर दे यार",
-    },
-    {
-      id: 4,
-      role: "system",
-      text: 'Executing, bro! Playing "Blinding Lights" by The Weeknd on Spotify. Done, bro! Full vibe set ho gaya.',
-    },
-    { id: 5, role: "user", text: "हेलो हेलो हेलो" },
-    {
-      id: 6,
-      role: "system",
-      text: "Hello, bro! Kya haal hai? Sab badhiya? Bata, how can I assist you?",
+      role: "agent",
+      text: "Uplink established. Ready for voice command, Boss.",
     },
   ]);
 
   return (
-    <div className="h-screen w-full bg-[#030303] text-[#00ff41] font-mono selection:bg-[#00ff41]/30 flex flex-col overflow-hidden relative">
-      {/* --- TOP NAV BAR --- */}
-      <div className="w-full h-12 border-b border-[#1a1a1a] flex items-center justify-between px-6 bg-[#050505]/80 backdrop-blur z-30">
-        <div className="flex items-center gap-2">
-          <div
-            className={`w-2 h-2 rounded-full ${isConnected ? "bg-[#00ff41]" : "bg-red-500"}`}
-          />
-          <span className="text-xs font-bold tracking-widest text-[#00ff41]/70">
-            IRIS OS // SYSTEM
+    <div className="h-screen w-full bg-[#050505] flex items-center justify-center text-[#00ff41] font-mono overflow-hidden relative selection:bg-[#00ff41]/30">
+      {/* Background Subtle Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,65,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,65,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+
+      {/* --- CENTRAL 3D CORE --- */}
+      {/* The background glow */}
+      <div
+        className={`absolute w-[30rem] h-[30rem] rounded-full transition-all duration-1000 blur-[100px] pointer-events-none ${isConnected ? "bg-[#00ff41]/10" : "bg-transparent"}`}
+      />
+
+      {/* The 3D Canvas */}
+      <AICore isConnected={isConnected} />
+
+      {/* --- TRANSCRIPT PANEL (Right Side Overlay) --- */}
+      <div className="absolute right-0 top-0 bottom-0 w-[26rem] bg-[#0a0a0a]/80 backdrop-blur-xl border-l border-[#00ff41]/20 p-6 flex flex-col shadow-[-20px_0_50px_rgba(0,0,0,0.8)] z-10">
+        {/* Panel Header */}
+        <div className="flex items-center gap-3 mb-6 border-b border-[#00ff41]/30 pb-3">
+          <Terminal size={18} className="text-[#00ff41]" />
+          <span className="text-xs tracking-[0.2em] font-bold">LIVE_LOG</span>
+          <span className="ml-auto flex h-2.5 w-2.5 relative">
+            <span
+              className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isConnected ? "bg-[#00ff41]" : "bg-red-500"} opacity-75`}
+            ></span>
+            <span
+              className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isConnected ? "bg-[#00ff41]" : "bg-red-500"}`}
+            ></span>
           </span>
         </div>
-        <div className="text-[10px] tracking-widest text-[#00ff41]/50">
-          {isConnected ? "LINKED" : "OFFLINE"} | 100% | 7:51:13 PM
+
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-[#00ff41]/20 scrollbar-track-transparent">
+          {transcript.map((msg) => (
+            <div
+              key={msg.id}
+              className={`flex flex-col ${msg.role === "user" ? "items-end" : "items-start"}`}
+            >
+              <span className="text-[9px] uppercase tracking-widest text-[#00ff41]/50 mb-1">
+                {msg.role}
+              </span>
+              <div
+                className={`text-[11px] p-3 rounded-md leading-relaxed max-w-[90%] border ${
+                  msg.role === "user"
+                    ? "bg-[#00ff41]/10 border-[#00ff41]/40 text-[#00ff41]"
+                    : msg.role === "system"
+                      ? "bg-transparent border-[#00ff41]/20 text-[#00ff41]/60 italic"
+                      : "bg-[#050505] border-[#00ff41]/50 text-[#00ff41]"
+                }`}
+              >
+                {msg.text}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* --- MAIN CONTENT WINDOW --- */}
-      <div className="flex-1 flex justify-between p-4 gap-4 relative z-20">
-        {/* --- LEFT PANEL: METRICS --- */}
-        <div className="w-80 flex flex-col gap-4">
-          <div className="border border-[#1a1a1a] bg-[#0a0a0a] rounded-lg p-4">
-            <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#1a1a1a]">
-              <div className="flex items-center gap-2 text-[10px] tracking-widest text-[#00ff41]/70">
-                <Activity size={12} /> NEURAL UPLINK
-              </div>
-              <span
-                className={`text-[8px] px-1.5 py-0.5 rounded ${isConnected ? "bg-[#00ff41]/10 text-[#00ff41]" : "bg-red-500/10 text-red-500"}`}
-              >
-                {isConnected ? "CONNECTED" : "OFFLINE"}
-              </span>
-            </div>
-            <div className="flex justify-between items-end">
-              <div>
-                <div className="text-[8px] text-[#00ff41]/40 mb-1">
-                  WSS LATENCY
-                </div>
-                <div className="text-sm">24ms</div>
-              </div>
-              <div className="text-right">
-                <div className="text-[8px] text-[#00ff41]/40 mb-1">
-                  HOST NODE
-                </div>
-                <div className="text-sm">GEM-V2.5</div>
-              </div>
-            </div>
-          </div>
+      {/* --- BOTTOM CONTROL BAR --- */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-[#0a0a0a]/90 backdrop-blur-xl border border-[#00ff41]/30 px-6 py-3 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.9)] z-10">
+        {/* Connect Button */}
+        <button
+          onClick={() => setIsConnected(!isConnected)}
+          className={`p-4 rounded-full transition-all duration-300 hover:scale-105 ${
+            isConnected
+              ? "bg-red-950/40 text-red-500 border border-red-500/50 hover:bg-red-900/60 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]"
+              : "bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/50 hover:bg-[#00ff41]/20 hover:shadow-[0_0_20px_rgba(0,255,65,0.4)]"
+          }`}
+          title={isConnected ? "Disconnect" : "Initialize System"}
+        >
+          <Power size={20} />
+        </button>
 
-          <div className="flex-1 border border-[#1a1a1a] bg-[#0a0a0a] rounded-lg p-4 flex flex-col">
-            <div className="flex items-center gap-2 text-[10px] tracking-widest text-[#00ff41]/70 mb-4">
-              <Monitor size={12} /> CORE METRICS
-            </div>
+        <div className="w-px h-8 bg-[#00ff41]/30 mx-2" />
 
-            {/* 2x2 Grid matching screenshot */}
-            <div className="grid grid-cols-2 grid-rows-2 gap-3 flex-1">
-              <div className="border border-[#1a1a1a] bg-[#050505] rounded p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-between text-[8px] text-[#00ff41]/40 uppercase">
-                  <Cpu size={10} /> CPU LOAD
-                </div>
-                <div className="text-right text-xl font-bold">
-                  {isConnected ? "9.5%" : "--"}
-                </div>
-              </div>
-
-              <div className="border border-[#1a1a1a] bg-[#050505] rounded p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-between text-[8px] text-[#00ff41]/40 uppercase">
-                  <Database size={10} /> RAM USAGE
-                </div>
-                <div className="text-right text-xl font-bold">
-                  {isConnected ? "79.0%" : "--"}
-                </div>
-              </div>
-
-              <div className="border border-[#1a1a1a] bg-[#050505] rounded p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-between text-[8px] text-[#00ff41]/40 uppercase">
-                  <Wrench size={10} /> TEMP
-                </div>
-                <div className="text-right text-xl font-bold">
-                  {isConnected ? "50°C" : "--"}
-                </div>
-              </div>
-
-              <div className="border border-[#1a1a1a] bg-[#050505] rounded p-3 flex flex-col justify-between">
-                <div className="flex items-center justify-between text-[8px] text-[#00ff41]/40 uppercase">
-                  <Monitor size={10} /> OS
-                </div>
-                <div className="text-right text-sm font-bold pt-2 text-[#00ff41]/80">
-                  Windows 11
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* --- CENTER: THE AI CORE & DOCK --- */}
-        <div className="flex-1 relative flex flex-col items-center justify-center">
-          <div className="w-full h-full max-w-3xl absolute inset-0 m-auto flex items-center justify-center">
-            <AICore isConnected={isConnected} />
-          </div>
-
-          {/* Bottom Dock (Exact match to screenshot) */}
-          <div className="absolute bottom-8 flex items-center gap-6 z-30">
-            {/* Red Disconnect Button */}
-            <button
-              className="w-10 h-10 rounded-full border border-red-900/50 flex items-center justify-center bg-red-950/20 text-red-500 hover:bg-red-900/40 transition-colors"
-              onClick={() => setIsConnected(false)}
-            >
-              <Phone size={14} className="rotate-[135deg]" />
-            </button>
-
-            {/* Main Green Connect Button */}
-            <button
-              className={`w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,255,65,0.2)] transition-colors ${
-                isConnected
-                  ? "bg-[#00ff41] text-black"
-                  : "bg-[#00ff41]/20 border border-[#00ff41]/50 text-[#00ff41] hover:bg-[#00ff41]/40"
-              }`}
-              onClick={() => setIsConnected(true)}
-            >
-              <Phone size={24} />
-            </button>
-
-            {/* Mic Toggle Button */}
-            <button
-              className="w-10 h-10 rounded-full border border-[#00ff41]/20 flex items-center justify-center bg-[#00ff41]/5 text-[#00ff41] hover:bg-[#00ff41]/20 transition-colors"
-              onClick={() => setIsMuted(!isMuted)}
-              disabled={!isConnected}
-            >
-              {isMuted ? <MicOff size={14} /> : <Mic size={14} />}
-            </button>
-          </div>
-        </div>
-
-        {/* --- RIGHT PANEL: TRANSCRIPT --- */}
-        <div className="w-96 border border-[#1a1a1a] bg-[#0a0a0a] rounded-lg p-5 flex flex-col h-full">
-          <div className="flex items-center justify-between mb-6 pb-2 border-b border-[#1a1a1a]">
-            <div className="text-[10px] tracking-widest text-[#00ff41]/70">
-              TRANSCRIPT
-            </div>
-            <div className="text-[8px] tracking-widest text-[#00ff41]/40">
-              LIVE-LOG
-            </div>
-          </div>
-
-          <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-[#1a1a1a] scrollbar-track-transparent">
-            {transcript.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-              >
-                <div
-                  className={`text-[11px] p-3 rounded-lg max-w-[85%] leading-relaxed ${
-                    msg.role === "user"
-                      ? "border border-[#00ff41]/30 bg-[#00ff41]/5 text-[#00ff41]" // User styling
-                      : "border border-[#1a1a1a] bg-[#050505] text-[#00ff41]/70" // System styling
-                  }`}
-                >
-                  {msg.text}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Mic Toggle Button */}
+        <button
+          onClick={() => setIsMuted(!isMuted)}
+          disabled={!isConnected}
+          className={`p-4 rounded-full transition-all duration-300 ${
+            !isConnected ? "opacity-30 cursor-not-allowed" : "hover:scale-105"
+          } ${
+            isMuted && isConnected
+              ? "bg-amber-950/40 text-amber-500 border border-amber-500/50 hover:bg-amber-900/60 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)]"
+              : isConnected
+                ? "bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/50 hover:bg-[#00ff41]/20 hover:shadow-[0_0_20px_rgba(0,255,65,0.4)]"
+                : "bg-transparent text-[#00ff41]/30 border border-[#00ff41]/20"
+          }`}
+          title={isMuted ? "Unmute Mic" : "Mute Mic"}
+        >
+          {isMuted ? <MicOff size={20} /> : <Mic size={20} />}
+        </button>
       </div>
     </div>
   );

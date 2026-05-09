@@ -7,7 +7,6 @@ const App = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [systemStatus, setSystemStatus] = useState("OFFLINE");
 
-  // Placeholder transcript logic
   const [transcript] = useState([
     {
       id: 1,
@@ -23,7 +22,6 @@ const App = () => {
     { id: 4, role: "system", text: "UPLINK STABLE :: MONITORING OS FEED..." },
   ]);
 
-  // Update system status based on connection
   useEffect(() => {
     if (isConnected) {
       setSystemStatus("STABLE");
@@ -34,31 +32,24 @@ const App = () => {
 
   return (
     <div className="h-screen w-full bg-bg text-primary font-mono selection:bg-primary/30 flex items-center justify-center overflow-hidden relative">
-      {/* Background scanline effect (clean, subtle overlay) */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,0,0.015)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none" />
 
-      {/* --- CENTRAL JARVIS CORE (Pure CSS Animations, Zero Lag) --- */}
       <div className="relative flex items-center justify-center scale-90 md:scale-100">
-        {/* Outer Ring 1: Fast spin */}
         <div
           className={`absolute w-[32rem] h-[32rem] border border-system/10 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_10s_linear_infinite]" : "scale-95 opacity-50"}`}
         />
 
-        {/* Outer Ring 2 (Dashed/Partial): Slow spin */}
         <div
           className={`absolute w-[28rem] h-[28rem] border-t-2 border-r border-system/30 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_15s_linear_infinite_reverse]" : "scale-95 opacity-50"}`}
         />
 
-        {/* Pulse Ring 1: Subtle scaling pulse */}
         <div
           className={`absolute w-[22rem] h-[22rem] border border-primary/10 rounded-full transition-all duration-1000 ${isConnected ? "animate-pulse scale-110" : "scale-95 opacity-50"}`}
         />
 
-        {/* The Core: Scales and glows based on connection */}
         <div
           className={`w-40 h-40 rounded-full flex items-center justify-center transition-all duration-1000 ${isConnected ? "bg-primary/10 shadow-[0_0_80px_rgba(0,255,0,0.25)]" : "bg-black/30"}`}
         >
-          {/* Inner Glow Core */}
           <div
             className={`w-28 h-28 rounded-full transition-all duration-500 flex items-center justify-center ${isConnected ? "bg-primary/20 shadow-[0_0_40px_rgba(0,255,0,0.7)] animate-pulse" : "bg-zinc-900"}`}
           >
@@ -70,9 +61,7 @@ const App = () => {
         </div>
       </div>
 
-      {/* --- LIVE TRANSCRIPT PANEL (Right Sidebar Overlay) --- */}
       <div className="absolute right-0 top-0 bottom-0 w-80 bg-black/70 backdrop-blur-xl border-l border-system/30 p-5 flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.6)]">
-        {/* Panel Header */}
         <div className="flex items-center gap-3 mb-6 border-b border-system/30 pb-3">
           <Terminal size={18} className="text-primary" />
           <span className="text-xs tracking-[0.2em] font-bold">
@@ -85,7 +74,6 @@ const App = () => {
           </span>
         </div>
 
-        {/* Messages */}
         <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-system/30">
           {transcript.map((msg) => (
             <div
@@ -111,9 +99,7 @@ const App = () => {
         </div>
       </div>
 
-      {/* --- BOTTOM CONTROL BAR (Futuristic Pill Layout) --- */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/90 backdrop-blur-xl border border-system/30 px-6 py-3 rounded-full shadow-[0_0_40px_rgba(0,0,0,0.9)]">
-        {/* Connect Button */}
         <button
           onClick={() => setIsConnected(!isConnected)}
           className={`p-3 rounded-full transition-all duration-300 hover:scale-110 ${
@@ -128,7 +114,6 @@ const App = () => {
 
         <div className="w-px h-8 bg-system/30 mx-2" />
 
-        {/* Mic Toggle Button */}
         <button
           onClick={() => setIsMuted(!isMuted)}
           disabled={!isConnected}
@@ -147,7 +132,6 @@ const App = () => {
         </button>
       </div>
 
-      {/* Futuristic footer (professional stamp) */}
       <div className="absolute bottom-4 right-5 text-[9px] text-system/50 tracking-[0.2em] pointer-events-none">
         IRIS-MINI :: NEURAL INTERFACE PROTOCOL v1.0
       </div>

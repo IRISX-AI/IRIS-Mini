@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Mic, MicOff, Power, Terminal, Zap} from "lucide-react";
+import { Mic, MicOff, Power, Terminal, Zap } from "lucide-react";
 
 const IrisMini = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -31,19 +31,19 @@ const IrisMini = () => {
 
   return (
     <div className="h-screen w-full bg-bg text-primary font-mono selection:bg-primary/30 flex items-center justify-center overflow-hidden relative">
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,0,0.015)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,0,0.015)_1px,transparent_1px)] bg-size-[100%_4px] pointer-events-none" />
 
       <div className="relative flex items-center justify-center scale-90 md:scale-100">
         <div
-          className={`absolute w-[32rem] h-[32rem] border border-system/10 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_10s_linear_infinite]" : "scale-95 opacity-50"}`}
+          className={`absolute w-lg h-128 border border-system/10 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_10s_linear_infinite]" : "scale-95 opacity-50"}`}
         />
 
         <div
-          className={`absolute w-[28rem] h-[28rem] border-t-2 border-r border-system/30 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_15s_linear_infinite_reverse]" : "scale-95 opacity-50"}`}
+          className={`absolute w-md h-112 border-t-2 border-r border-system/30 rounded-full transition-all duration-1000 ${isConnected ? "animate-[spin_15s_linear_infinite_reverse]" : "scale-95 opacity-50"}`}
         />
 
         <div
-          className={`absolute w-[22rem] h-[22rem] border border-primary/10 rounded-full transition-all duration-1000 ${isConnected ? "animate-pulse scale-110" : "scale-95 opacity-50"}`}
+          className={`absolute w-88 h-88 border border-primary/10 rounded-full transition-all duration-1000 ${isConnected ? "animate-pulse scale-110" : "scale-95 opacity-50"}`}
         />
 
         <div

@@ -1,75 +1,53 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-const HolographicSphere = ({ isConnected }: { isConnected: boolean }) => {
-  const groupRef = useRef<THREE.Group>(null);
-  const outerRef = useRef<THREE.Mesh>(null);
-  const innerRef = useRef<THREE.Mesh>(null);
-  const ringRef = useRef<THREE.Mesh>(null);
+const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
+  const pointsRef = useRef<THREE.Points>(null);
+
+  // Generate 6000 particles to create that dense, starry look
+  const [positions] = useMemo(() => {
+    const pos = new Float32Array(6000 * 3);
+    for (let i = 0; i < 6000; i++) {
+      const u = Math.random();
+      const v = Math.random();
+      const theta = 2 * Math.PI * u;
+      const phi = Math.acos(2 * v - 1);
+      const r = 2.8; // Radius
+      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 2] = r * Math.cos(phi);
+    }
+    return [pos];
+  }, []);
 
   useFrame((state, delta) => {
-    if (
-      groupRef.current &&
-      outerRef.current &&
-      innerRef.current &&
-      ringRef.current
-    ) {
-      // 1. The Float Effect (Bobbing up and down)
-      const time = state.clock.elapsedTime;
-      groupRef.current.position.y = Math.sin(time * 1.5) * 0.15; // Smooth floating
-
-      // 2. The Rotation
-      const speed = isConnected ? 0.8 : 0.2;
-      outerRef.current.rotation.y += delta * speed;
-      outerRef.current.rotation.z += delta * (speed * 0.2);
-
-      innerRef.current.rotation.y -= delta * (speed * 0.8);
-      ringRef.current.rotation.z -= delta * speed;
-
-      // 3. The Pulse (Breathing)
-      const breath = isConnected ? 1 + Math.sin(time * 3) * 0.05 : 1;
-      innerRef.current.scale.setScalar(breath);
+    if (pointsRef.current) {
+      // Smooth, professional rotation (no chaotic bouncing)
+      const speed = isConnected ? 0.3 : 0.05;
+      pointsRef.current.rotation.y += delta * speed;
+      pointsRef.current.rotation.x += delta * (speed * 0.3);
     }
   });
 
-  const activeColor = new THREE.Color("#00ff41");
-  const idleColor = new THREE.Color("#003311");
-  const color = isConnected ? activeColor : idleColor;
-
   return (
-    <group ref={groupRef}>
-      {/* Outer Data Grid (Wireframe) */}
-      <mesh ref={outerRef}>
-        <sphereGeometry args={[2.5, 24, 24]} />
-        <meshBasicMaterial
-          color={color}
-          wireframe
-          transparent
-          opacity={isConnected ? 0.2 : 0.05}
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={positions.length / 3}
+          array={positions}
+          itemSize={3}
         />
-      </mesh>
-
-      {/* Equatorial Ring */}
-      <mesh ref={ringRef} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[3.0, 0.02, 16, 100]} />
-        <meshBasicMaterial
-          color={color}
-          transparent
-          opacity={isConnected ? 0.5 : 0.1}
-        />
-      </mesh>
-
-      {/* Inner Solid Core */}
-      <mesh ref={innerRef}>
-        <icosahedronGeometry args={[1.5, 2]} />
-        <meshBasicMaterial
-          color={color}
-          transparent
-          opacity={isConnected ? 0.8 : 0.2}
-        />
-      </mesh>
-    </group>
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.015} // Tiny points
+        color={isConnected ? "#00ff41" : "#004411"}
+        transparent
+        opacity={isConnected ? 0.8 : 0.3}
+        sizeAttenuation
+      />
+    </points>
   );
 };
 
@@ -77,7 +55,7 @@ const AICore = ({ isConnected }: { isConnected: boolean }) => {
   return (
     <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
       <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-        <HolographicSphere isConnected={isConnected} />
+        <ParticleSphere isConnected={isConnected} />
       </Canvas>
     </div>
   );

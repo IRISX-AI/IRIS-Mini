@@ -15,7 +15,6 @@ async function createServer() {
 
   const isProd = process.env.NODE_ENV === "production";
 
-  // --- API ROUTES ---
   app.get("/api/health", (req, res) => {
     res.json({ status: "online", mode: isProd ? "production" : "development" });
   });

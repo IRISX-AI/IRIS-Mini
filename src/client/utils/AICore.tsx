@@ -5,7 +5,6 @@ import * as THREE from "three";
 const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
   const pointsRef = useRef<THREE.Points>(null);
 
-  // Generate 5000 particles for a dense, high-tech look
   const [positions] = useMemo(() => {
     const pos = new Float32Array(5000 * 3);
     for (let i = 0; i < 5000; i++) {
@@ -13,7 +12,7 @@ const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
       const v = Math.random();
       const theta = 2 * Math.PI * u;
       const phi = Math.acos(2 * v - 1);
-      const r = 2.5; // Size of the sphere
+      const r = 2.5;
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       pos[i * 3 + 2] = r * Math.cos(phi);
@@ -23,7 +22,6 @@ const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
 
   useFrame((state, delta) => {
     if (pointsRef.current) {
-      // Smooth rotation based on connection state
       const speed = isConnected ? 0.4 : 0.05;
       pointsRef.current.rotation.y += delta * speed;
       pointsRef.current.rotation.x += delta * (speed * 0.2);

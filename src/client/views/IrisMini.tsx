@@ -22,18 +22,13 @@ const IrisMini = () => {
 
   return (
     <div className="h-screen w-full bg-[#050505] flex items-center justify-center text-[#00ff41] font-mono overflow-hidden relative selection:bg-[#00ff41]/30">
-      {/* Background Subtle Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,65,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,65,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-
-      {/* --- CENTRAL 3D CORE --- */}
-      {/* The background glow */}
       <div
         className={`absolute w-[30rem] h-[30rem] rounded-full transition-all duration-1000 blur-[100px] pointer-events-none ${isConnected ? "bg-[#00ff41]/10" : "bg-transparent"}`}
       />
 
-      {/* The 3D Canvas */}
-      <AICore isConnected={isConnected} />
-
+      <div className="relative z-0 w-1/2 h-[70%] flex items-center justify-center">
+        <AICore isConnected={isConnected} />
+      </div>
       {/* --- TRANSCRIPT PANEL (Right Side Overlay) --- */}
       <div className="absolute right-0 top-0 bottom-0 w-[26rem] bg-[#0a0a0a]/80 backdrop-blur-xl border-l border-[#00ff41]/20 p-6 flex flex-col shadow-[-20px_0_50px_rgba(0,0,0,0.8)] z-10">
         {/* Panel Header */}

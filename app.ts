@@ -15,7 +15,6 @@ async function createServer() {
 
   const isProd = process.env.NODE_ENV === "production";
 
-  // --- API ROUTES ---
   app.get("/api/health", (req, res) => {
     res.json({ status: "online", mode: isProd ? "production" : "development" });
   });
@@ -44,7 +43,6 @@ async function createServer() {
       }
     });
   } else {
-    // --- PRODUCTION: Static Serve ---
     const clientDistPath = path.resolve(__dirname, "dist/client");
     app.use(express.static(clientDistPath));
     app.get("*", (req, res) => {

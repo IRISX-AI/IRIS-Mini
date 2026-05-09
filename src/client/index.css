@@ -12,6 +12,6 @@
   body {
     background-color: var(--color-bg);
     color: var(--color-primary);
-    font-family: "Inter", system-ui, sans-serif; /* Clean, modern font */
+    font-family: "Inter", system-ui, sans-serif;
   }
 }

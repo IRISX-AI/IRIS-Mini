@@ -2,13 +2,14 @@ import app from "./app.js";
 import chalk from "chalk";
 import open from "open";
 import Conf from "conf";
+import { getAvailablePort } from "./lib/config.js";
 
 const config = new Conf({ projectName: "iris-mini" });
-const PORT = 3000;
+const INITIAL_PORT = 5050; // Unusual port choice
 
 const startServer = async () => {
-  // 1. Cool ASCII Art & Branding
-  console.clear();
+  const port = await getAvailablePort(INITIAL_PORT);
+
   console.log(
     chalk.cyan.bold(`
    _____搁搁_____  ______搁搁搁搁搁   搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁搁
@@ -22,35 +23,25 @@ const startServer = async () => {
 
   console.log(chalk.gray("  --------------------------------------------"));
   console.log(
-    chalk.white.bold("   IRIS-mini ") + chalk.green("Local Agentic OS v1.0.0"),
+    chalk.white.bold("   IRIS-mini ") + chalk.green("Neural Uplink Stable"),
   );
   console.log(chalk.gray("  --------------------------------------------\n"));
 
-  // 2. Status Indicators
-  console.log(
-    `${chalk.blue("ℹ")} ${chalk.white("Environment:")}  ${chalk.green("Local Dev")}`,
-  );
-  console.log(
-    `${chalk.blue("ℹ")} ${chalk.white("Persona:")}      ${chalk.magenta(config.get("persona") || "Default")}`,
-  );
-  console.log(
-    `${chalk.blue("ℹ")} ${chalk.white("Target Dir:")}   ${chalk.yellow(process.cwd())}`,
-  );
+  app.listen(port, () => {
+    console.log(
+      `${chalk.bgGreen.black.bold(" SUCCESS ")} ${chalk.white("Agent server online at:")} ${chalk.cyan(`http://localhost:${port}`)}`,
+    );
+    console.log(
+      `${chalk.blue("ℹ")} ${chalk.white("Persona:")} ${chalk.magenta(config.get("persona") || "Unset")}`,
+    );
 
-  try {
-    app.listen(PORT, () => {
-      console.log(
-        `\n${chalk.bgCyan.black.bold(" UPLINK ACTIVE ")} ${chalk.cyan(`Listening on http://localhost:${PORT}`)}`,
-      );
-      console.log(chalk.gray("Watching for agentic commands...\n"));
-
-      // 3. Auto-open Browser
-      open(`http://localhost:${PORT}`);
-    });
-  } catch (error) {
-    console.log(chalk.red("\n✖ Critical Failure: Could not establish uplink."));
-    process.exit(1);
-  }
+    // In a real CLI, we only open the browser once the server is actually ready
+    if (process.env.NODE_ENV !== "development") {
+      open(`http://localhost:${port}`);
+    }
+  });
 };
 
-startServer();
+startServer().catch((err) => {
+  console.error(chalk.red("Failed to ignite IRIS core:"), err);
+});

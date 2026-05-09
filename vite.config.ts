@@ -10,9 +10,9 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    port: 5173, // Vite dev server port
+    port: 5173, 
     proxy: {
-      "/api": "http://localhost:5050", // Forwards API calls to Express
+      "/api": "http://localhost:5050",
     },
   },
 });

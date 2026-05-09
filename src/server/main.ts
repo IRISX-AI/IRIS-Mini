@@ -11,7 +11,6 @@ app.get("/hello", (_, res) => {
 });
 
 const startServer = async () => {
-  // Grab the port dynamically
   const port = await getAvailablePort(6753, 8762);
 
   ViteExpress.listen(app, port, () => {

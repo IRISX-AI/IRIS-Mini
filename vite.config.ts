@@ -1,22 +1,18 @@
-// vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  root: "client",
-  server: {
-    port: 5173,
-    proxy: {
-      "/api": {
-        target: "http://127.0.0.1:5050", // Use the IP, not 'localhost'
-        changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
+  root: "client", // Vite looks here for index.html
   build: {
-    outDir: "../dist/client",
+    outDir: "../dist/client", // Build output goes here
     emptyOutDir: true,
+  },
+  server: {
+    port: 5173, // Vite dev server port
+    proxy: {
+      "/api": "http://localhost:5050", // Forwards API calls to Express
+    },
   },
 });

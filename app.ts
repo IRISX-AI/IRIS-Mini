@@ -15,15 +15,17 @@ async function createServer() {
 
   const isProd = process.env.NODE_ENV === "production";
 
+  // --- API ROUTES ---
   app.get("/api/health", (req, res) => {
     res.json({ status: "online", mode: isProd ? "production" : "development" });
   });
 
   if (!isProd) {
+    // --- DEVELOPMENT: Vite Middleware Mode ---
+    // This is what you want: Express renders React with HMR in real-time
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "custom",
-      configFile: path.resolve(__dirname, "vite.config.ts"),
       root: path.resolve(__dirname, "client"),
     });
 
@@ -36,9 +38,7 @@ async function createServer() {
           path.resolve(__dirname, "client/index.html"),
           "utf-8",
         );
-
         template = await vite.transformIndexHtml(url, template);
-
         res.status(200).set({ "Content-Type": "text/html" }).end(template);
       } catch (e) {
         vite.ssrFixStacktrace(e as Error);
@@ -46,10 +46,9 @@ async function createServer() {
       }
     });
   } else {
+    // --- PRODUCTION: Static Serve ---
     const clientDistPath = path.resolve(__dirname, "dist/client");
-
     app.use(express.static(clientDistPath));
-
     app.get("*", (req, res) => {
       res.sendFile(path.join(clientDistPath, "index.html"));
     });

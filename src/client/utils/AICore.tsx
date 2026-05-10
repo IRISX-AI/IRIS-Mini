@@ -28,7 +28,6 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
       outerRef.current.rotation.x += delta * (speed * 0.15);
       innerRef.current.rotation.y -= delta * (speed * 0.4);
 
-      // Expands when "talking/connected", but starts from a much smaller baseline
       const scale = isConnected
         ? 1 + Math.sin(state.clock.elapsedTime * 3) * 0.05
         : 1;
@@ -37,19 +36,16 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
     }
   });
 
-  // Grayscale when off, Green when on. NO opacity changes.
   const outerColor = isConnected ? "#00ff41" : "#555555";
   const innerColor = isConnected ? "#00cc33" : "#222222";
 
   return (
     <group>
-      {/* Inner Solid Core (Smaller, Green instead of Black) */}
       <mesh ref={innerRef}>
         <sphereGeometry args={[1.0, 64, 64]} />
         <meshBasicMaterial color={innerColor} />
       </mesh>
 
-      {/* Outer Organic Particle Shell */}
       <points ref={outerRef}>
         <bufferGeometry>
           <bufferAttribute

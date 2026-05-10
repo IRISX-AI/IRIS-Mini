@@ -6,41 +6,7 @@ import {
   type LiveServerMessage,
 } from "@google/genai";
 import Decibri from "decibri";
-import { Server } from "socket.io";
 const { DecibriOutput } = Decibri;
-
-let isRunning = false;
-
-export const startIrisVoice = (io: Server) => {
-  if (isRunning) return;
-  isRunning = true;
-
-  console.log("[ENGINE] Ignition sequence started...");
-
-  // Tell UI we are starting
-  io.emit("system_status", "Igniting Neural Core...");
-
-  // Fake the Gemini connection delay (1.5 seconds)
-  setTimeout(() => {
-    console.log("[ENGINE] Fake API Connected!");
-    io.emit("system_status", "Uplink Established. Ready for command.");
-    io.emit("ai_state", "connected"); // Turns the UI green and starts the 3D waves
-  }, 1500);
-};
-
-export const stopIrisVoice = (io: Server) => {
-  if (!isRunning) return;
-  isRunning = false;
-
-  console.log("[ENGINE] Shutting down...");
-  io.emit("system_status", "Terminating Neural Core...");
-
-  setTimeout(() => {
-    io.emit("ai_state", "disconnected"); // Turns the UI gray and slows the 3D model
-    io.emit("system_status", "System Offline :: Awaiting Link");
-    console.log("[ENGINE] Offline.");
-  }, 1000);
-};
 
 const ai = new GoogleGenAI({
   apiKey: (process.env.GOOGLE_API_KEY as string) || "",

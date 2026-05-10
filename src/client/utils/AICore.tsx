@@ -57,7 +57,7 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
       .array as Float32Array;
 
     for (let i = 0; i < 6000; i++) {
-      const ix = i * 3;
+      const ix = i * 2;
       const iy = i * 3 + 1;
       const iz = i * 3 + 2;
 
@@ -67,7 +67,7 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
 
       const dist = Math.sqrt(origX * origX + origY * origY + origZ * origZ);
 
-      const waveAmplitude = isConnected ? 0.12 : 0.01;
+      const waveAmplitude = isConnected ? 0.13 : 0.05;
       const wave = Math.sin(origY * 4 + time * speed) * waveAmplitude;
 
       const factor = (dist + wave) / dist;
@@ -82,7 +82,7 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
     innerRef.current.scale.setScalar(scale);
   });
 
-  const outerColor = isConnected ? "#00ff41" : "#555555";
+  const outerColor = isConnected ? "#00ff41" : "#777777";
   const innerColor = isConnected ? "#002b12" : "#111111";
 
   return (

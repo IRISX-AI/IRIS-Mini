@@ -21,7 +21,7 @@ const config = {
   responseModalities: [Modality.AUDIO],
   systemInstruction: "You are a helpful and friendly AI assistant.",
   automaticActivityDetection: {
-    disabled: true, // default
+    disabled: true,
     startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_HIGH,
     endOfSpeechSensitivity: EndSensitivity.END_SENSITIVITY_HIGH,
     prefixPaddingMs: 20,

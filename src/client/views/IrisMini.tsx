@@ -56,7 +56,7 @@ const IrisMini = () => {
             <button
               onClick={() => setIsMuted(!isMuted)}
               disabled={!isConnected}
-              className={`w-16 h-[54px] rounded-xl flex items-center justify-center transition-all border ${
+              className={`w-16 h-13.5 rounded-xl flex items-center justify-center transition-all border ${
                 !isConnected
                   ? "opacity-30 cursor-not-allowed bg-black border-[#111] text-gray-600"
                   : isMuted

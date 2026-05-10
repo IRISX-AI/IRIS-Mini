@@ -5,6 +5,7 @@ import * as THREE from "three";
 const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
   const pointsRef = useRef<THREE.Points>(null);
 
+  // High density, smaller radius (1.8)
   const [positions] = useMemo(() => {
     const pos = new Float32Array(4000 * 3);
     for (let i = 0; i < 4000; i++) {
@@ -28,7 +29,7 @@ const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
     }
   });
 
-  const color = isConnected ? "#00ff41" : "#737373";
+  const color = isConnected ? "#00ff41" : "#555555";
 
   return (
     <points ref={pointsRef}>
@@ -38,7 +39,7 @@ const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
           count={positions.length / 3}
           array={positions}
           itemSize={3}
-          args={[positions as Float32Array, 3]}
+          args={[positions, 3]}
         />
       </bufferGeometry>
       <pointsMaterial

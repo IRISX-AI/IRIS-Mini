@@ -50,11 +50,9 @@ async function live() {
   }
 
   async function messageLoop() {
-    // Puts incoming messages in the audio queue.
     while (true) {
       const message = await waitMessage();
       if (message.serverContent && message.serverContent.interrupted) {
-        // Empty the queue on interruption to stop playback
         audioQueue.length = 0;
         if (speaker) {
           speaker.stop();
@@ -74,13 +72,11 @@ async function live() {
         }
       }
       if (message.serverContent && message.serverContent.turnComplete) {
-        // Optionally handle turn complete if needed
       }
     }
   }
 
   async function playbackLoop() {
-    // Plays audio from the audio queue.
     while (true) {
       if (audioQueue.length === 0) {
         await new Promise<void>((resolve) => setImmediate(resolve));
@@ -94,11 +90,9 @@ async function live() {
     }
   }
 
-  // Start loops
   messageLoop();
   playbackLoop();
 
-  // Connect to Gemini Live API
   const session = await ai.live.connect({
     model: model,
     config: config,
@@ -110,7 +104,6 @@ async function live() {
     },
   });
 
-  // Setup Microphone for input
   const micInstance: any = new Decibri({
     sampleRate: 16000,
     framesPerBuffer: 1600,

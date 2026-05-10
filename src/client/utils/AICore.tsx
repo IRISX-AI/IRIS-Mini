@@ -1,63 +1,56 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import * as THREE from "three";
 
-const ParticleSphere = ({ isConnected }: { isConnected: boolean }) => {
-  const pointsRef = useRef<THREE.Points>(null);
-
-  // High density, smaller radius (1.8)
-  const [positions] = useMemo(() => {
-    const pos = new Float32Array(4000 * 3);
-    for (let i = 0; i < 4000; i++) {
-      const u = Math.random();
-      const v = Math.random();
-      const theta = 2 * Math.PI * u;
-      const phi = Math.acos(2 * v - 1);
-      const r = 1.8;
-      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      pos[i * 3 + 2] = r * Math.cos(phi);
-    }
-    return [pos];
-  }, []);
+const DualSphere = ({ isPlaying }: { isPlaying: boolean }) => {
+  const outerRef = useRef<THREE.Points>(null);
+  const innerRef = useRef<THREE.Mesh>(null);
 
   useFrame((state, delta) => {
-    if (pointsRef.current) {
-      const speed = isConnected ? 0.4 : 0.05;
-      pointsRef.current.rotation.y += delta * speed;
-      pointsRef.current.rotation.x += delta * (speed * 0.1);
+    if (outerRef.current && innerRef.current) {
+      // Smooth rotation
+      const speed = isPlaying ? 0.5 : 0.1;
+      outerRef.current.rotation.y += delta * speed;
+      outerRef.current.rotation.x += delta * (speed * 0.2);
+      innerRef.current.rotation.y -= delta * (speed * 0.5);
+
+      // Slight breathing effect when playing audio
+      const scale = isPlaying
+        ? 1 + Math.sin(state.clock.elapsedTime * 4) * 0.02
+        : 1;
+      outerRef.current.scale.setScalar(scale);
     }
   });
 
-  const color = isConnected ? "#00ff41" : "#555555";
+  const green = "#00ff41";
 
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={positions.length / 3}
-          array={positions}
-          itemSize={3}
-          args={[positions, 3]}
+    <group>
+      {/* Inner Solid Core (Dark) */}
+      <mesh ref={innerRef}>
+        <sphereGeometry args={[2.2, 64, 64]} />
+        <meshBasicMaterial color="#020a04" />
+      </mesh>
+
+      {/* Outer Dotted Shell (Matches your image's grid pattern) */}
+      <points ref={outerRef}>
+        <sphereGeometry args={[3, 48, 48]} />
+        <pointsMaterial
+          size={0.03}
+          color={green}
+          transparent
+          opacity={isPlaying ? 0.8 : 0.3}
         />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.012}
-        color={color}
-        transparent
-        opacity={isConnected ? 0.9 : 0.4}
-        sizeAttenuation
-      />
-    </points>
+      </points>
+    </group>
   );
 };
 
-const AICore = ({ isConnected }: { isConnected: boolean }) => {
+const AICore = ({ isPlaying }: { isPlaying: boolean }) => {
   return (
-    <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
-      <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
-        <ParticleSphere isConnected={isConnected} />
+    <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+      <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+        <DualSphere isPlaying={isPlaying} />
       </Canvas>
     </div>
   );

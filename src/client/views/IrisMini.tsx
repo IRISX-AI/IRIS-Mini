@@ -779,7 +779,7 @@ export default function IRISMini({
             }}
           />
 
-          <AICore state={state} audioLevel={audioLevel} />
+          <AICore isConnected={isConnected} audioLevel={audioLevel} />
         </div>
 
         {/* Audio Interface section */}

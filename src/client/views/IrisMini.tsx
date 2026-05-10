@@ -8,9 +8,7 @@ const IrisMini = () => {
 
   return (
     <div className="h-screen w-full bg-[#050505] text-white font-sans flex flex-col lg:flex-row overflow-hidden">
-      {/* --- LEFT SIDE: CHAT & CONTROLS --- */}
       <div className="w-full lg:w-1/2 h-[50vh] lg:h-full flex flex-col px-8 lg:px-16 py-10 lg:py-16 border-b lg:border-b-0 lg:border-r border-[#111] z-10 bg-[#050505]">
-        {/* Header */}
         <div className="flex-none">
           <h1 className="text-xl font-bold mb-1 text-white">
             IRIS NEURAL LINK
@@ -20,7 +18,6 @@ const IrisMini = () => {
           </p>
         </div>
 
-        {/* Transcript Area - FULL LEFT SIDE, NO BOX */}
         <div className="flex-1 overflow-y-auto space-y-6 py-8 pr-4 font-mono scrollbar-thin scrollbar-thumb-[#1a1a1a] flex flex-col justify-end">
           <div className="bg-[#111] rounded-xl p-4 text-[13px] text-gray-400 w-fit max-w-[85%] leading-relaxed border border-[#222]">
             [System] Uplink initialized. Current node time:{" "}
@@ -32,9 +29,7 @@ const IrisMini = () => {
           </div>
         </div>
 
-        {/* Bottom Controls */}
         <div className="flex-none pt-6 font-mono">
-          {/* Status Text */}
           <div className="h-6 mb-4 flex items-center">
             <span
               className={`text-[10px] tracking-[0.2em] uppercase font-bold ${isConnected ? "text-[#00ff41] animate-pulse" : "text-gray-600"}`}
@@ -45,7 +40,6 @@ const IrisMini = () => {
             </span>
           </div>
 
-          {/* IRIS Command Dock */}
           <div className="flex items-center gap-4 w-full max-w-md">
             <button
               onClick={() => setIsConnected(!isConnected)}
@@ -76,9 +70,7 @@ const IrisMini = () => {
         </div>
       </div>
 
-      {/* --- RIGHT SIDE: 3D MODEL --- */}
       <div className="w-full lg:w-1/2 h-[50vh] lg:h-full relative flex items-center justify-center bg-[#020202]">
-        {/* Glow */}
         <div
           className={`absolute w-[40%] h-[40%] rounded-full transition-all duration-1000 blur-[100px] pointer-events-none ${isConnected ? "bg-[#00ff41]/20" : "bg-transparent"}`}
         />

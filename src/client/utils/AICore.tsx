@@ -6,7 +6,6 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
   const outerRef = useRef<THREE.Points>(null);
   const innerRef = useRef<THREE.Mesh>(null);
 
-  // Generate organic particles for the outer shell instead of a rigid grid
   const [positions] = useMemo(() => {
     const pos = new Float32Array(6000 * 3);
     for (let i = 0; i < 6000; i++) {
@@ -14,7 +13,7 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
       const v = Math.random();
       const theta = 2 * Math.PI * u;
       const phi = Math.acos(2 * v - 1);
-      const r = 2.4; // Shrunk outer radius
+      const r = 2.4;
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       pos[i * 3 + 2] = r * Math.cos(phi);

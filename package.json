@@ -28,7 +28,6 @@
     "socket.io-client": "^4.8.3",
     "tailwindcss": "^4.3.0",
     "three": "^0.184.0",
-    "tsx": "^4.19.3",
     "typescript": "^5.8.3",
     "vite-express": "*"
   },
@@ -39,6 +38,7 @@
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
     "nodemon": "^3.1.10",
+    "tsx": "^4.21.0",
     "vite": "^6.3.3"
   }
 }

@@ -10,15 +10,12 @@ const IrisMini = () => {
   const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
-    // 1. Connect to the backend
     socket = io();
 
-    // 2. Listen for text status updates from Node
     socket.on("system_status", (msg: string) => {
       console.log(msg);
     });
 
-    // 3. Listen for state changes (turns the UI green/gray)
     socket.on("ai_state", (state: string) => {
       if (state === "connected") setIsConnected(true);
       if (state === "disconnected") setIsConnected(false);

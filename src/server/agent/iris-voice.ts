@@ -9,17 +9,14 @@ import Decibri from "decibri";
 const { DecibriOutput } = Decibri;
 
 const ai = new GoogleGenAI({
-  apiKey: process.env.GOOGLE_API_KEY as string,
+  apiKey: (process.env.GOOGLE_API_KEY as string) || "",
 });
-// WARNING: Do not use API keys in client-side (browser based) applications
-// Consider using Ephemeral Tokens instead
-// More information at: https://ai.google.dev/gemini-api/docs/ephemeral-tokens
 
-// --- Live API config ---
 const model = "gemini-3.1-flash-live-preview";
 const config = {
   responseModalities: [Modality.AUDIO],
-  systemInstruction: "You are a helpful and friendly AI assistant.",
+  systemInstruction:
+    "You are a helpful and friendly AI assistant named IRIS-mini.",
   automaticActivityDetection: {
     disabled: true,
     startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_HIGH,
@@ -54,11 +51,9 @@ async function live() {
   }
 
   async function messageLoop() {
-    // Puts incoming messages in the audio queue.
     while (true) {
       const message = await waitMessage();
       if (message.serverContent && message.serverContent.interrupted) {
-        // Empty the queue on interruption to stop playback
         audioQueue.length = 0;
         if (speaker) {
           speaker.stop();
@@ -78,13 +73,11 @@ async function live() {
         }
       }
       if (message.serverContent && message.serverContent.turnComplete) {
-        // Optionally handle turn complete if needed
       }
     }
   }
 
   async function playbackLoop() {
-    // Plays audio from the audio queue.
     while (true) {
       if (audioQueue.length === 0) {
         await new Promise<void>((resolve) => setImmediate(resolve));
@@ -98,11 +91,9 @@ async function live() {
     }
   }
 
-  // Start loops
   messageLoop();
   playbackLoop();
 
-  // Connect to Gemini Live API
   const session = await ai.live.connect({
     model: model,
     config: config,
@@ -114,7 +105,6 @@ async function live() {
     },
   });
 
-  // Setup Microphone for input
   const micInstance: any = new Decibri({
     sampleRate: 16000,
     framesPerBuffer: 1600,

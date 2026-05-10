@@ -13,8 +13,8 @@ const isPortAvailable = (port: number): Promise<boolean> => {
 };
 
 export const getAvailablePort = async (
-  primary: number = 6753,
-  fallback: number = 8762,
+  primary: number = 6754,
+  fallback: number = 8764,
 ): Promise<number> => {
   const isPrimaryFree = await isPortAvailable(primary);
   return isPrimaryFree ? primary : fallback;

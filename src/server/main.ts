@@ -1,32 +1,41 @@
-import "../config/dot-env.js";
 import express from "express";
+import http from "http";
+import { Server } from "socket.io";
 import ViteExpress from "vite-express";
-import chalk from "chalk";
+import "../config/dot-env.js";
 import { getAvailablePort } from "./lib/port-picker.js";
 
 const app = express();
+const server = http.createServer(app);
 
-app.get("/hello", (_, res) => {
-  res.send("Hello Vite + React + TypeScript!");
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("\n[UI LINK] IRIS connected. ID:", socket.id);
+
+  socket.on("Iris_Connected", (msg) => {
+    console.log(`Message From Frontend : ${msg}`);
+  });
+
+  socket.on("Iris_Disconnected", (msg) => {
+    console.log(`Message From Frontend : ${msg}`);
+  });
 });
 
 const startServer = async () => {
-  const port = await getAvailablePort(6753, 8762);
+  const port = await getAvailablePort(6754, 8764);
 
-  ViteExpress.listen(app, port, () => {
+  server.listen(port, () => {
     console.clear();
-    console.log(
-      chalk.cyan.bold(`
-   _____搁搁_____  ______搁搁搁搁搁   搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁搁
-  搁搁搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁  搁搁搁搁搁搁搁搁搁
-    `),
-    );
-    console.log(
-      chalk.green.bold(` SUCCESS `) +
-        chalk.white(`IRIS-mini Engine active at: `) +
-        chalk.underline.blue(`http://localhost:${port}`),
-    );
+    console.log(`Server is listening on http://localhost:${port}`);
+    console.log(`Socket is listening on http://localhost:${port}`);
   });
+
+  ViteExpress.bind(app, server);
 };
 
 startServer();

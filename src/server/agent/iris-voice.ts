@@ -9,13 +9,9 @@ import Decibri from "decibri";
 const { DecibriOutput } = Decibri;
 
 const ai = new GoogleGenAI({
-  apiKey: process.env.GOOGLE_API_KEY as string || "",
+  apiKey: (process.env.GOOGLE_API_KEY as string) || "",
 });
-// WARNING: Do not use API keys in client-side (browser based) applications
-// Consider using Ephemeral Tokens instead
-// More information at: https://ai.google.dev/gemini-api/docs/ephemeral-tokens
 
-// --- Live API config ---
 const model = "gemini-3.1-flash-live-preview";
 const config = {
   responseModalities: [Modality.AUDIO],

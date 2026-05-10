@@ -38,13 +38,11 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
 
   return (
     <group>
-      {/* Inner Solid Core (Shrunk to 1.8) */}
       <mesh ref={innerRef}>
         <sphereGeometry args={[1.8, 64, 64]} />
         <meshBasicMaterial color="#020a04" />
       </mesh>
 
-      {/* Outer Organic Particle Shell */}
       <points ref={outerRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -70,7 +68,6 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
 const AICore = ({ isConnected }: { isConnected: boolean }) => {
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      {/* Camera pushed back to z:7 so it stops clipping */}
       <Canvas
         style={{ width: "100%", height: "100%" }}
         camera={{ position: [0, 0, 7], fov: 45 }}

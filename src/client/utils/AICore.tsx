@@ -35,7 +35,7 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
     if (!groupRef.current || !pointsRef.current || !innerRef.current) return;
 
     const time = state.clock.elapsedTime;
-    const speed = isConnected ? 1.5 : 0.5;
+    const speed = isConnected ? 2.5 : 0.5;
 
     const targetX = state.mouse.y * 0.5;
     const targetY = state.mouse.x * 0.5;
@@ -50,14 +50,14 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
       0.05,
     );
 
-    innerRef.current.rotation.y -= delta * (isConnected ? 0.4 : 0.1);
+    innerRef.current.rotation.y -= delta * (isConnected ? 0.5 : 0.1);
     pointsRef.current.rotation.y += delta * (isConnected ? 0.2 : 0.05);
 
     const positionsArray = pointsRef.current.geometry.attributes.position
       .array as Float32Array;
 
     for (let i = 0; i < 6000; i++) {
-      const ix = i * 2;
+      const ix = i * 3;
       const iy = i * 3 + 1;
       const iz = i * 3 + 2;
 
@@ -67,7 +67,7 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
 
       const dist = Math.sqrt(origX * origX + origY * origY + origZ * origZ);
 
-      const waveAmplitude = isConnected ? 0.13 : 0.05;
+      const waveAmplitude = isConnected ? 0.12 : 0.02;
       const wave = Math.sin(origY * 4 + time * speed) * waveAmplitude;
 
       const factor = (dist + wave) / dist;

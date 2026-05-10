@@ -16,6 +16,10 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("\n[UI LINK] Face connected. ID:", socket.id);
+
+  socket.on("Iris_Connected", (msg) => {
+    console.log(`Message From Frontend : ${msg}`);
+  });
 });
 
 const startServer = async () => {

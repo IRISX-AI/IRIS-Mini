@@ -15,9 +15,13 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("\n[UI LINK] Face connected. ID:", socket.id);
+  console.log("\n[UI LINK] IRIS connected. ID:", socket.id);
 
   socket.on("Iris_Connected", (msg) => {
+    console.log(`Message From Frontend : ${msg}`);
+  });
+
+  socket.on("Iris_Disconnected", (msg) => {
     console.log(`Message From Frontend : ${msg}`);
   });
 });

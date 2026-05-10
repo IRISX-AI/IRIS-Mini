@@ -8,17 +8,11 @@ let socket: Socket;
 const IrisMini = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-
   useEffect(() => {
     socket = io();
 
     socket.on("system_status", (msg: string) => {
       console.log(msg);
-    });
-
-    socket.on("ai_state", (state: string) => {
-      if (state === "connected") setIsConnected(true);
-      if (state === "disconnected") setIsConnected(false);
     });
 
     return () => {
@@ -28,10 +22,10 @@ const IrisMini = () => {
 
   const handleConnect = () => {
     if (!isConnected) {
-      socket.emit("Iris_Connected", "Hello from Frontend");
+      socket.emit("Iris_Connected", "Iris Connected");
       setIsConnected(true);
     } else {
-      socket.emit("Iris_Disconnected", "Hello from Frontend");
+      socket.emit("Iris_Disconnected", "Iris Disconnected");
       setIsConnected(false);
     }
   };

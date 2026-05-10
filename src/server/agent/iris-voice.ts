@@ -6,9 +6,8 @@ import {
   type LiveServerMessage,
 } from "@google/genai";
 import Decibri from "decibri";
-const { DecibriOutput } = Decibri;
-
 import { Server } from "socket.io";
+const { DecibriOutput } = Decibri;
 
 let isRunning = false;
 

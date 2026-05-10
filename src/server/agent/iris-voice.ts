@@ -15,7 +15,8 @@ const ai = new GoogleGenAI({
 const model = "gemini-3.1-flash-live-preview";
 const config = {
   responseModalities: [Modality.AUDIO],
-  systemInstruction: "You are a helpful and friendly AI assistant.",
+  systemInstruction:
+    "You are a helpful and friendly AI assistant named IRIS-mini.",
   automaticActivityDetection: {
     disabled: true,
     startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_HIGH,

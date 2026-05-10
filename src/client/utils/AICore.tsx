@@ -13,7 +13,7 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
       const v = Math.random();
       const theta = 2 * Math.PI * u;
       const phi = Math.acos(2 * v - 1);
-      const r = 2.4;
+      const r = 1.6; // MUCH SMALLER outer radius
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       pos[i * 3 + 2] = r * Math.cos(phi);
@@ -28,20 +28,28 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
       outerRef.current.rotation.x += delta * (speed * 0.15);
       innerRef.current.rotation.y -= delta * (speed * 0.4);
 
+      // Expands when "talking/connected", but starts from a much smaller baseline
       const scale = isConnected
-        ? 1 + Math.sin(state.clock.elapsedTime * 3) * 0.015
+        ? 1 + Math.sin(state.clock.elapsedTime * 3) * 0.05
         : 1;
       outerRef.current.scale.setScalar(scale);
+      innerRef.current.scale.setScalar(scale);
     }
   });
 
+  // Grayscale when off, Green when on. NO opacity changes.
+  const outerColor = isConnected ? "#00ff41" : "#555555";
+  const innerColor = isConnected ? "#00cc33" : "#222222";
+
   return (
     <group>
+      {/* Inner Solid Core (Smaller, Green instead of Black) */}
       <mesh ref={innerRef}>
-        <sphereGeometry args={[1.8, 64, 64]} />
-        <meshBasicMaterial color="#020a04" />
+        <sphereGeometry args={[1.0, 64, 64]} />
+        <meshBasicMaterial color={innerColor} />
       </mesh>
 
+      {/* Outer Organic Particle Shell */}
       <points ref={outerRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -49,14 +57,13 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
             count={positions.length / 3}
             array={positions}
             itemSize={3}
-            args={[positions, 3]}
           />
         </bufferGeometry>
         <pointsMaterial
           size={0.015}
-          color={isConnected ? "#00ff41" : "#004411"}
+          color={outerColor}
           transparent
-          opacity={isConnected ? 0.8 : 0.2}
+          opacity={0.8} // Fixed high opacity
           sizeAttenuation
         />
       </points>

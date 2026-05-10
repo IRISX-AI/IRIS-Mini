@@ -1,10 +1,43 @@
 import { Mic, MicOff, Power } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { io, Socket } from "socket.io-client";
 import AICore from "../utils/AICore";
+
+let socket: Socket;
 
 const IrisMini = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+
+  useEffect(() => {
+    // 1. Connect to the backend
+    socket = io();
+
+    // 2. Listen for text status updates from Node
+    socket.on("system_status", (msg: string) => {
+      console.log(msg);
+    });
+
+    // 3. Listen for state changes (turns the UI green/gray)
+    socket.on("ai_state", (state: string) => {
+      if (state === "connected") setIsConnected(true);
+      if (state === "disconnected") setIsConnected(false);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  const handleConnect = () => {
+    if (!isConnected) {
+      socket.emit("Iris_Connected", "Hello from Frontend");
+      setIsConnected(true);
+    } else {
+      socket.emit("Iris_Disconnected", "Hello from Frontend");
+      setIsConnected(false);
+    }
+  };
 
   return (
     <div className="h-screen w-full bg-green-400/5 text-white font-sans flex flex-col lg:flex-row overflow-hidden pointer-events-auto select-none">
@@ -42,7 +75,7 @@ const IrisMini = () => {
 
           <div className="flex items-center gap-4 w-full max-w-md">
             <button
-              onClick={() => setIsConnected(!isConnected)}
+              onClick={() => handleConnect()}
               className={`flex-1 py-4 rounded-xl text-[12px] font-bold tracking-widest uppercase flex items-center justify-center gap-3 transition-all active:scale-[0.98] ${
                 isConnected
                   ? "bg-red-950/20 text-red-500 border border-red-900/40 hover:bg-red-900/30"

@@ -13,7 +13,7 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
       const v = Math.random();
       const theta = 2 * Math.PI * u;
       const phi = Math.acos(2 * v - 1);
-      const r = 1.6; // MUCH SMALLER outer radius
+      const r = 1.6;
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       pos[i * 3 + 2] = r * Math.cos(phi);
@@ -60,7 +60,7 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
           size={0.015}
           color={outerColor}
           transparent
-          opacity={0.8} // Fixed high opacity
+          opacity={0.8}
           sizeAttenuation
         />
       </points>

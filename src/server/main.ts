@@ -6,7 +6,7 @@ import { getAvailablePort } from "./lib/port-picker.js";
 const app = express();
 
 const startServer = async () => {
-  const port = await getAvailablePort(6753, 8762);
+  const port = await getAvailablePort(6754, 8764);
 
   ViteExpress.listen(app, port, () => {
     console.clear();

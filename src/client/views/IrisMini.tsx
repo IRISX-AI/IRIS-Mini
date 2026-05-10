@@ -7,8 +7,8 @@ const IrisMini = () => {
   const [isMuted, setIsMuted] = useState(false);
 
   return (
-    <div className="h-screen w-full bg-[#050505] text-white font-sans flex flex-col lg:flex-row overflow-hidden">
-      <div className="w-full lg:w-1/2 h-[50vh] lg:h-full flex flex-col px-8 lg:px-16 py-10 lg:py-16 border-b lg:border-b-0 lg:border-r border-[#111] z-10 bg-[#050505]">
+    <div className="h-screen w-full bg-green-400/5 text-white font-sans flex flex-col lg:flex-row overflow-hidden">
+      <div className="w-full lg:w-1/2 h-[50vh] lg:h-full flex flex-col px-8 lg:px-16 py-10 lg:py-16 border-b lg:border-b-0 lg:border-r border-[#111] z-10">
         <div className="flex-none">
           <h1 className="text-xl font-bold mb-1 text-white">
             IRIS NEURAL LINK
@@ -84,6 +84,5 @@ const IrisMini = () => {
     </div>
   );
 };
-
 
 export default IrisMini;

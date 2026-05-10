@@ -127,4 +127,4 @@ async function live() {
   console.log("Microphone started. Speak now...");
 }
 
-// live().catch(console.error);
+live().catch(console.error);

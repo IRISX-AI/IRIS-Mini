@@ -18,11 +18,15 @@ io.on("connection", (socket) => {
   console.log("\n[UI LINK] IRIS connected. ID:", socket.id);
 
   socket.on("Iris_Connected", (msg) => {
-    console.log(`Message From Frontend : ${msg}`);
+    console.log(`Message From Frontend (Connection): ${msg}`);
   });
 
   socket.on("Iris_Disconnected", (msg) => {
-    console.log(`Message From Frontend : ${msg}`);
+    console.log(`Message From Frontend (Disconnection) : ${msg}`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`The Frontend have been disconnected`);
   });
 });
 

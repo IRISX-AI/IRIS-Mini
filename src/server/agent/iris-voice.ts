@@ -18,6 +18,7 @@ export const startIrisVoice = (io: Server) => {
 
   live().catch(console.error);
 };
+
 export const stopIrisVoice = (io: Server) => {
   if (!isRunning) return;
   isRunning = false;

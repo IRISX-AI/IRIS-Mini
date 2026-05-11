@@ -13,6 +13,7 @@ import {
   handleBrowserAction,
 } from "../tools/browser-agent.js";
 import { handleNexusFs, nexusToolDeclarations } from "../tools/nexus-agent.js";
+import { addMemory, getMemoryContextString } from "../utils/memory.js";
 const { DecibriOutput } = Decibri;
 
 let isRunning = false;
@@ -45,10 +46,17 @@ const ai = new GoogleGenAI({
   apiKey: (process.env.GOOGLE_API_KEY as string) || "",
 });
 
+const pastContext = getMemoryContextString();
+
 const model = "gemini-3.1-flash-live-preview";
 const config = {
   responseModalities: [Modality.AUDIO],
-  systemInstruction: "You are IRIS. An AI voice assistant created by Harsh.",
+  systemInstruction: `You are IRIS. You have root access to the machine to manage files, apps, and browsers. 
+    
+    CRITICAL CONTEXT - HERE IS YOUR PREVIOUS CONVERSATION HISTORY WITH HARSH:
+    ${pastContext}
+    
+    Resume the conversation naturally based on this history.`,
   tools: [
     {
       functionDeclarations: [
@@ -74,6 +82,9 @@ async function live(io: Server) {
   const responseQueue: LiveServerMessage[] = [];
   const audioQueue: Buffer[] = [];
   let speaker: any | null = null;
+
+  let currentUserText = "";
+  let currentAgentText = "";
 
   async function waitMessage(): Promise<LiveServerMessage> {
     while (responseQueue.length === 0) {
@@ -170,20 +181,30 @@ async function live(io: Server) {
         responseQueue.push(message);
         const content = message.serverContent;
         if (content?.inputTranscription) {
+          currentUserText += content.inputTranscription.text; // Buffer user text
           io.emit("transcript_chunk", {
             role: "USER",
             text: content.inputTranscription.text,
           });
         }
-
         if (content?.outputTranscription) {
+          currentAgentText += content.outputTranscription.text; // Buffer agent text
           io.emit("transcript_chunk", {
             role: "AGENT",
             text: content.outputTranscription.text,
           });
         }
 
+        // --- SAVE TO HARD DRIVE ON TURN COMPLETE ---
         if (content?.turnComplete) {
+          if (currentUserText.trim()) {
+            addMemory("USER", currentUserText.trim());
+            currentUserText = ""; // Clear buffer
+          }
+          if (currentAgentText.trim()) {
+            addMemory("AGENT", currentAgentText.trim());
+            currentAgentText = ""; // Clear buffer
+          }
           io.emit("turn_complete");
         }
       },

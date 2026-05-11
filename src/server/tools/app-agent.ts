@@ -1,8 +1,8 @@
+import { Type, type FunctionDeclaration } from "@google/genai";
 import fkill from "fkill";
 import open, { openApp } from "open";
 import * as os from "os";
 import { Server } from "socket.io";
-import { Type, type FunctionDeclaration } from "@google/genai";
 
 export const appToolDeclarations: FunctionDeclaration[] = [
   {

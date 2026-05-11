@@ -61,13 +61,11 @@ export const handleBrowserAction = async (fc: any, io: Server) => {
       resultStr = `Success: Opened ${args.url} in the browser.`;
       io.emit("system_status", `[BROWSER] Opening URL: ${args.url}`);
     } else if (fc.name === "search_youtube") {
-      // Format the query for YouTube search URL
       const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(args.query)}`;
       await open(searchUrl);
       resultStr = `Success: Searched YouTube for '${args.query}'`;
       io.emit("system_status", `[BROWSER] Searching YouTube: ${args.query}`);
     } else if (fc.name === "search_google") {
-      // Format the query for Google search URL
       const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(args.query)}`;
       await open(searchUrl);
       resultStr = `Success: Searched Google for '${args.query}'`;

@@ -6,7 +6,18 @@ import {
   type LiveServerMessage,
 } from "@google/genai";
 import Decibri from "decibri";
+import { Server } from "socket.io";
 const { DecibriOutput } = Decibri;
+
+let isRunning = false;
+
+export const startIrisVoice = (io: Server) => {
+  if (isRunning) return;
+  isRunning = true;
+  console.log("[ENGINE] Ignition sequence started...");
+
+  live().catch(console.error);
+};
 
 const ai = new GoogleGenAI({
   apiKey: (process.env.GOOGLE_API_KEY as string) || "",
@@ -127,4 +138,4 @@ async function live() {
   console.log("Microphone started. Speak now...");
 }
 
-live().catch(console.error);
+// live().catch(console.error);

@@ -169,5 +169,3 @@ async function live() {
   };
   return closeSession;
 }
-
-// live().catch(console.error);

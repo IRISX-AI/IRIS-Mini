@@ -6,7 +6,6 @@ import AICore from "../utils/AICore";
 
 let socket: Socket;
 
-// We add an "isFinal" flag to track if the current bubble is still streaming
 type TranscriptMsg = {
   id: number;
   role: string;
@@ -39,14 +38,12 @@ const IrisMini = () => {
         });
       }
 
-      // Also add system statuses to the chat log
       setTranscripts((prev) => [
         ...prev,
         { id: Date.now(), role: "SYSTEM", text: msg, isFinal: true },
       ]);
     });
 
-    // --- THE STREAMING LOGIC ---
     socket.on("transcript_chunk", (msg: { role: string; text: string }) => {
       setTranscripts((prev) => {
         if (prev.length === 0) {
@@ -58,14 +55,11 @@ const IrisMini = () => {
         const lastIndex = prev.length - 1;
         const lastMsg = prev[lastIndex];
 
-        // If the last message is from the SAME person and hasn't been finalized, append the text!
         if (lastMsg.role === msg.role && !lastMsg.isFinal) {
           const updated = [...prev];
-          // Append the chunk
           updated[lastIndex].text += msg.text;
           return updated;
         } else {
-          // Otherwise, create a brand new message bubble
           return [
             ...prev,
             { id: Date.now(), role: msg.role, text: msg.text, isFinal: false },
@@ -74,7 +68,6 @@ const IrisMini = () => {
       });
     });
 
-    // Lock the bubble when the turn is complete
     socket.on("turn_complete", () => {
       setTranscripts((prev) => {
         if (prev.length === 0) return prev;
@@ -89,7 +82,6 @@ const IrisMini = () => {
     };
   }, []);
 
-  // Auto-scroll to the bottom automatically when new words arrive
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -116,7 +108,6 @@ const IrisMini = () => {
           </p>
         </div>
 
-        {/* --- DYNAMIC TRANSCRIPT MAP --- */}
         <div
           ref={scrollRef}
           className="flex-1 overflow-y-auto space-y-6 py-8 pr-4 font-mono scrollbar-thin scrollbar-thumb-[#1a1a1a] flex flex-col justify-start"
@@ -137,7 +128,6 @@ const IrisMini = () => {
                       : "bg-[#00ff41]/5 rounded-xl p-4 text-[13px] text-[#00ff41] w-fit max-w-[85%] leading-relaxed border border-[#00ff41]/20" // AI on left side
                 }
               >
-                {/* Add a tiny blinker if the message is currently streaming */}
                 {msg.role === "SYSTEM" ? `[System] ${msg.text}` : msg.text}
                 {!msg.isFinal && msg.role !== "SYSTEM" && (
                   <span className="animate-pulse ml-1 text-[#00ff41]">_</span>

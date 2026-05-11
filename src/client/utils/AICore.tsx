@@ -2,10 +2,20 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
+// ADDED isSpeaking prop
+const DualSphere = ({
+  isConnected,
+  isSpeaking,
+}: {
+  isConnected: boolean;
+  isSpeaking: boolean;
+}) => {
   const groupRef = useRef<THREE.Group>(null);
   const pointsRef = useRef<THREE.Points>(null);
   const innerRef = useRef<THREE.Mesh>(null);
+
+  // Ref to hold smooth transitions for animations
+  const animState = useRef({ amplitude: 0.02, scale: 1.0 });
 
   const { positions, originalPositions } = useMemo(() => {
     const pos = new Float32Array(6000 * 3);
@@ -35,7 +45,24 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
     if (!groupRef.current || !pointsRef.current || !innerRef.current) return;
 
     const time = state.clock.elapsedTime;
-    const speed = isConnected ? 2.5 : 0.5;
+
+    // Speed increases drastically when speaking
+    const speed = isSpeaking ? 5.0 : isConnected ? 2.5 : 0.5;
+
+    // Smoothly calculate target amplitude and scale based on state
+    const targetAmplitude = isSpeaking ? 0.35 : isConnected ? 0.12 : 0.02;
+    const targetScale = isSpeaking ? 1.15 : 1.0;
+
+    animState.current.amplitude = THREE.MathUtils.lerp(
+      animState.current.amplitude,
+      targetAmplitude,
+      0.1,
+    );
+    animState.current.scale = THREE.MathUtils.lerp(
+      animState.current.scale,
+      targetScale,
+      0.1,
+    );
 
     const targetX = state.mouse.y * 0.5;
     const targetY = state.mouse.x * 0.5;
@@ -53,6 +80,9 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
     innerRef.current.rotation.y -= delta * (isConnected ? 0.5 : 0.1);
     pointsRef.current.rotation.y += delta * (isConnected ? 0.2 : 0.05);
 
+    // Apply the scale expansion to the whole outer shell when talking
+    pointsRef.current.scale.setScalar(animState.current.scale);
+
     const positionsArray = pointsRef.current.geometry.attributes.position
       .array as Float32Array;
 
@@ -67,10 +97,13 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
 
       const dist = Math.sqrt(origX * origX + origY * origY + origZ * origZ);
 
-      const waveAmplitude = isConnected ? 0.12 : 0.02;
-      const wave = Math.sin(origY * 4 + time * speed) * waveAmplitude;
+      // Apply the smoothly lerped amplitude
+      const wave =
+        Math.sin(origY * 4 + time * speed) * animState.current.amplitude;
 
-      const factor = (dist + wave) / dist;
+      // Add erratic jitter only when actively speaking for that "audio waveform" look
+      const jitter = isSpeaking ? Math.random() * 0.03 : 0;
+      const factor = (dist + wave + jitter) / dist;
 
       positionsArray[ix] = origX * factor;
       positionsArray[iy] = origY * factor;
@@ -78,7 +111,11 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
     }
     pointsRef.current.geometry.attributes.position.needsUpdate = true;
 
-    const scale = isConnected ? 1 + Math.sin(time * 2) * 0.03 : 1;
+    // Inner core pulses wildly when speaking
+    const corePulse = isSpeaking
+      ? Math.sin(time * 20) * 0.05
+      : Math.sin(time * 2) * 0.03;
+    const scale = isConnected ? 1 + corePulse : 1;
     innerRef.current.scale.setScalar(scale);
   });
 
@@ -95,7 +132,6 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
           metalness={0.8}
         />
       </mesh>
-
       <points ref={pointsRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -118,7 +154,13 @@ const DualSphere = ({ isConnected }: { isConnected: boolean }) => {
   );
 };
 
-const AICore = ({ isConnected }: { isConnected: boolean }) => {
+const AICore = ({
+  isConnected,
+  isSpeaking,
+}: {
+  isConnected: boolean;
+  isSpeaking: boolean;
+}) => {
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
       <Canvas
@@ -127,11 +169,10 @@ const AICore = ({ isConnected }: { isConnected: boolean }) => {
       >
         <ambientLight intensity={1.5} />
         <directionalLight position={[5, 5, 5]} intensity={3} />
-        <DualSphere isConnected={isConnected} />
+        <DualSphere isConnected={isConnected} isSpeaking={isSpeaking} />
       </Canvas>
     </div>
   );
 };
 
 export default AICore;
-

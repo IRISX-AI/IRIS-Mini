@@ -2,7 +2,6 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-// ADDED isSpeaking prop
 const DualSphere = ({
   isConnected,
   isSpeaking,
@@ -14,7 +13,6 @@ const DualSphere = ({
   const pointsRef = useRef<THREE.Points>(null);
   const innerRef = useRef<THREE.Mesh>(null);
 
-  // Ref to hold smooth transitions for animations
   const animState = useRef({ amplitude: 0.02, scale: 1.0 });
 
   const { positions, originalPositions } = useMemo(() => {
@@ -46,10 +44,8 @@ const DualSphere = ({
 
     const time = state.clock.elapsedTime;
 
-    // Speed increases drastically when speaking
     const speed = isSpeaking ? 5.0 : isConnected ? 2.5 : 0.5;
 
-    // Smoothly calculate target amplitude and scale based on state
     const targetAmplitude = isSpeaking ? 0.35 : isConnected ? 0.12 : 0.02;
     const targetScale = isSpeaking ? 1.15 : 1.0;
 
@@ -80,7 +76,6 @@ const DualSphere = ({
     innerRef.current.rotation.y -= delta * (isConnected ? 0.5 : 0.1);
     pointsRef.current.rotation.y += delta * (isConnected ? 0.2 : 0.05);
 
-    // Apply the scale expansion to the whole outer shell when talking
     pointsRef.current.scale.setScalar(animState.current.scale);
 
     const positionsArray = pointsRef.current.geometry.attributes.position
@@ -97,11 +92,9 @@ const DualSphere = ({
 
       const dist = Math.sqrt(origX * origX + origY * origY + origZ * origZ);
 
-      // Apply the smoothly lerped amplitude
       const wave =
         Math.sin(origY * 4 + time * speed) * animState.current.amplitude;
 
-      // Add erratic jitter only when actively speaking for that "audio waveform" look
       const jitter = isSpeaking ? Math.random() * 0.03 : 0;
       const factor = (dist + wave + jitter) / dist;
 
@@ -111,7 +104,6 @@ const DualSphere = ({
     }
     pointsRef.current.geometry.attributes.position.needsUpdate = true;
 
-    // Inner core pulses wildly when speaking
     const corePulse = isSpeaking
       ? Math.sin(time * 20) * 0.05
       : Math.sin(time * 2) * 0.03;

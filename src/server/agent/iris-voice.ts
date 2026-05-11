@@ -188,22 +188,21 @@ async function live(io: Server) {
           });
         }
         if (content?.outputTranscription) {
-          currentAgentText += content.outputTranscription.text; // Buffer agent text
+          currentAgentText += content.outputTranscription.text;
           io.emit("transcript_chunk", {
             role: "AGENT",
             text: content.outputTranscription.text,
           });
         }
 
-        // --- SAVE TO HARD DRIVE ON TURN COMPLETE ---
         if (content?.turnComplete) {
           if (currentUserText.trim()) {
             addMemory("USER", currentUserText.trim());
-            currentUserText = ""; // Clear buffer
+            currentUserText = "";
           }
           if (currentAgentText.trim()) {
             addMemory("AGENT", currentAgentText.trim());
-            currentAgentText = ""; // Clear buffer
+            currentAgentText = "";
           }
           io.emit("turn_complete");
         }

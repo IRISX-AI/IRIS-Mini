@@ -7,6 +7,7 @@ import {
 } from "@google/genai";
 import Decibri from "decibri";
 import { Server } from "socket.io";
+import { handleNexusFs, nexusToolDeclarations } from "../tools/nexus-agent.js";
 const { DecibriOutput } = Decibri;
 
 let isRunning = false;
@@ -43,6 +44,7 @@ const model = "gemini-3.1-flash-live-preview";
 const config = {
   responseModalities: [Modality.AUDIO],
   systemInstruction: "You are IRIS. An AI voice assistant created by Harsh.",
+  tools: [{ functionDeclarations: nexusToolDeclarations }],
   automaticActivityDetection: {
     disabled: true,
     startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_HIGH,
@@ -90,6 +92,13 @@ async function live(io: Server) {
         }
         continue;
       }
+
+      if (message.toolCall) {
+        const responses = handleNexusFs(message.toolCall, io);
+
+        session.sendToolResponse({ functionResponses: responses });
+      }
+
       if (
         message.serverContent &&
         message.serverContent.modelTurn &&

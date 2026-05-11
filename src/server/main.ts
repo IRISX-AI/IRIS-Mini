@@ -36,7 +36,6 @@ const startServer = async () => {
   server.listen(port, () => {
     console.clear();
     console.log(`Server is listening on http://localhost:${port}`);
-    console.log(`Socket is listening on http://localhost:${port}`);
   });
 
   ViteExpress.bind(app, server);

@@ -13,10 +13,8 @@ const DualSphere = ({
   const pointsRef = useRef<THREE.Points>(null);
   const innerRef = useRef<THREE.Mesh>(null);
 
-  // Custom time tracker to fix the THREE.Clock warning and prevent "snapping"
   const timeRef = useRef(0);
 
-  // Holds our smoothed values
   const animState = useRef({ amplitude: 0.02, scale: 1.0, speed: 0.5 });
 
   const { positions, originalPositions } = useMemo(() => {
@@ -46,12 +44,10 @@ const DualSphere = ({
   useFrame((state, delta) => {
     if (!groupRef.current || !pointsRef.current || !innerRef.current) return;
 
-    // 1. Smoothly target values based on AI state
     const targetAmplitude = isSpeaking ? 0.25 : isConnected ? 0.08 : 0.02;
     const targetScale = isSpeaking ? 1.15 : 1.0;
     const targetSpeed = isSpeaking ? 3.5 : isConnected ? 1.0 : 0.2;
 
-    // 2. Lerp everything so nothing violently snaps
     animState.current.amplitude = THREE.MathUtils.lerp(
       animState.current.amplitude,
       targetAmplitude,
@@ -68,11 +64,9 @@ const DualSphere = ({
       0.05,
     );
 
-    // 3. Accumulate custom time safely
     timeRef.current += delta * animState.current.speed;
     const t = timeRef.current;
 
-    // Smooth Mouse Look
     const targetX = state.mouse.y * 0.5;
     const targetY = state.mouse.x * 0.5;
     groupRef.current.rotation.x = THREE.MathUtils.lerp(
@@ -86,7 +80,6 @@ const DualSphere = ({
       0.05,
     );
 
-    // Base Rotations
     innerRef.current.rotation.y -= delta * (isConnected ? 0.5 : 0.1);
     pointsRef.current.rotation.y += delta * (isConnected ? 0.2 : 0.05);
 

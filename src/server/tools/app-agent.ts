@@ -1,5 +1,5 @@
 import fkill from "fkill";
-import open from "open";
+import open, { openApp } from "open";
 import * as os from "os";
 import { Server } from "socket.io";
 
@@ -68,7 +68,7 @@ export const handleAppAction = async (fc: any, io: Server) => {
         await open(winMap[cleanName]);
       } else {
         // Otherwise, let the 'open' package handle the OS-native app launching
-        await open.openApp(args.app_name);
+        await openApp(args.app_name);
       }
 
       resultStr = `Success: Launched ${args.app_name}.`;

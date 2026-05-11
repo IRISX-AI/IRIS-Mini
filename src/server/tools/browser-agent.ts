@@ -1,7 +1,6 @@
 import open from "open";
 import { Server } from "socket.io";
 
-// --- 1. THE TOOL DECLARATIONS ---
 export const browserToolDeclarations = [
   {
     name: "open_website",
@@ -51,7 +50,6 @@ export const browserToolDeclarations = [
   },
 ];
 
-// --- 2. THE EXECUTION HANDLER ---
 export const handleBrowserAction = async (fc: any, io: Server) => {
   let resultStr = "";
   const args = fc.args as any;

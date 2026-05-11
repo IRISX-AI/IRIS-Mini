@@ -16,7 +16,7 @@ export const startIrisVoice = (io: Server) => {
   isRunning = true;
   io.emit("system_status", "IRIS-MINI : Connected");
 
-  // live().catch(console.error);
+  live().catch(console.error);
 };
 export const stopIrisVoice = (io: Server) => {
   if (!isRunning) return;

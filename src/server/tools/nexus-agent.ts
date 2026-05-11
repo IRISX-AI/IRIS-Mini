@@ -2,8 +2,6 @@ import { Type, type FunctionDeclaration } from "@google/genai";
 import * as fs from "fs";
 import { Server } from "socket.io";
 
-// --- 1. THE TOOL DECLARATIONS ---
-// We export this so iris-voice.ts can just plug it into the Gemini config
 export const nexusToolDeclarations: FunctionDeclaration[] = [
   {
     name: "create_directory",
@@ -43,9 +41,6 @@ export const nexusToolDeclarations: FunctionDeclaration[] = [
   },
 ];
 
-// --- 2. THE EXECUTION HANDLER ---
-// This takes the toolCall from Gemini, does the actual physical work,
-// updates the UI, and returns the response array.
 export const handleNexusFs = (toolCall: any, io: Server) => {
   console.log("[NEXUS-FS] Intercepted Tool Call from IRIS...");
   const functionResponses = [];
@@ -78,7 +73,6 @@ export const handleNexusFs = (toolCall: any, io: Server) => {
       io.emit("system_status", `[NEXUS-FS ERROR] ${err.message}`);
     }
 
-    // Pack the result into the format Gemini expects
     functionResponses.push({
       id: fc.id,
       name: fc.name,

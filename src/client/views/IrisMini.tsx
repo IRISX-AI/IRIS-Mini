@@ -31,7 +31,7 @@ const IrisMini = () => {
           transition: Slide,
         });
       } else if (msg === "IRIS-MINI : Disconnected") {
-        setIsSpeaking(false); // Safety reset
+        setIsSpeaking(false);
         toast.error(msg, {
           position: "top-left",
           autoClose: 3000,

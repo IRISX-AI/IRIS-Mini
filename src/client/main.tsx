@@ -6,7 +6,6 @@ import { Slide, ToastContainer } from "react-toastify";
 
 import App from "./App";
 
-// Suppress THREE.Clock deprecation warning caused by @react-three/fiber
 const originalWarn = console.warn;
 console.warn = (...args) => {
   if (

@@ -7,7 +7,7 @@ import {
 } from "@google/genai";
 import Decibri from "decibri";
 import { Server } from "socket.io";
-import { appToolDeclarations } from "../tools/app-agent.js";
+import { appToolDeclarations, handleAppAction } from "../tools/app-agent.js";
 import {
   browserToolDeclarations,
   handleBrowserAction,
@@ -120,6 +120,8 @@ async function live(io: Server) {
           ) {
             const browserResponse = await handleBrowserAction(fc, io);
             functionResponses.push(browserResponse);
+          } else if (fc.name === "open_app" || fc.name === "close_app") {
+            functionResponses.push(await handleAppAction(fc, io));
           }
         }
 

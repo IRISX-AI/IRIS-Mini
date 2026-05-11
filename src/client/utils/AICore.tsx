@@ -13,7 +13,11 @@ const DualSphere = ({
   const pointsRef = useRef<THREE.Points>(null);
   const innerRef = useRef<THREE.Mesh>(null);
 
-  const animState = useRef({ amplitude: 0.02, scale: 1.0 });
+  // Custom time tracker to fix the THREE.Clock warning and prevent "snapping"
+  const timeRef = useRef(0);
+
+  // Holds our smoothed values
+  const animState = useRef({ amplitude: 0.02, scale: 1.0, speed: 0.5 });
 
   const { positions, originalPositions } = useMemo(() => {
     const pos = new Float32Array(6000 * 3);
@@ -42,13 +46,12 @@ const DualSphere = ({
   useFrame((state, delta) => {
     if (!groupRef.current || !pointsRef.current || !innerRef.current) return;
 
-    const time = state.clock.elapsedTime;
-
-    const speed = isSpeaking ? 5.0 : isConnected ? 2.5 : 0.5;
-
-    const targetAmplitude = isSpeaking ? 0.35 : isConnected ? 0.12 : 0.02;
+    // 1. Smoothly target values based on AI state
+    const targetAmplitude = isSpeaking ? 0.25 : isConnected ? 0.08 : 0.02;
     const targetScale = isSpeaking ? 1.15 : 1.0;
+    const targetSpeed = isSpeaking ? 3.5 : isConnected ? 1.0 : 0.2;
 
+    // 2. Lerp everything so nothing violently snaps
     animState.current.amplitude = THREE.MathUtils.lerp(
       animState.current.amplitude,
       targetAmplitude,
@@ -59,7 +62,17 @@ const DualSphere = ({
       targetScale,
       0.1,
     );
+    animState.current.speed = THREE.MathUtils.lerp(
+      animState.current.speed,
+      targetSpeed,
+      0.05,
+    );
 
+    // 3. Accumulate custom time safely
+    timeRef.current += delta * animState.current.speed;
+    const t = timeRef.current;
+
+    // Smooth Mouse Look
     const targetX = state.mouse.y * 0.5;
     const targetY = state.mouse.x * 0.5;
     groupRef.current.rotation.x = THREE.MathUtils.lerp(
@@ -73,7 +86,8 @@ const DualSphere = ({
       0.05,
     );
 
-    innerRef.current.rotation.y -= delta * (isConnected ? 0.2 : 0.1);
+    // Base Rotations
+    innerRef.current.rotation.y -= delta * (isConnected ? 0.5 : 0.1);
     pointsRef.current.rotation.y += delta * (isConnected ? 0.2 : 0.05);
 
     pointsRef.current.scale.setScalar(animState.current.scale);
@@ -92,10 +106,14 @@ const DualSphere = ({
 
       const dist = Math.sqrt(origX * origX + origY * origY + origZ * origZ);
 
-      const wave =
-        Math.sin(origY * 4 + time * speed) * animState.current.amplitude;
+      // Organic, multi-axis fluid wave
+      const waveY = Math.sin(origY * 5 + t);
+      const waveX = Math.cos(origX * 3 + t * 0.8);
 
-      const jitter = isSpeaking ? Math.random() * 0.07 : 0;
+      const wave = (waveY + waveX) * 0.5 * animState.current.amplitude;
+
+      // Jitter for the "voice visualizer" effect
+      const jitter = isSpeaking ? Math.random() * 0.02 : 0;
       const factor = (dist + wave + jitter) / dist;
 
       positionsArray[ix] = origX * factor;
@@ -104,14 +122,12 @@ const DualSphere = ({
     }
     pointsRef.current.geometry.attributes.position.needsUpdate = true;
 
-    const corePulse = isSpeaking
-      ? Math.sin(time * 20) * 0.05
-      : Math.sin(time * 2) * 0.03;
-    const scale = isConnected ? 1 + corePulse : 1;
-    innerRef.current.scale.setScalar(scale);
+    // Inner Core Pulse
+    const corePulse = isSpeaking ? Math.sin(t * 5) * 0.05 : Math.sin(t) * 0.02;
+    innerRef.current.scale.setScalar(isConnected ? 1 + corePulse : 1);
   });
 
-  const outerColor = isConnected ? "#00ff41" : "#777777";
+  const outerColor = isConnected ? "#00ff41" : "#555555";
   const innerColor = isConnected ? "#002b12" : "#111111";
 
   return (

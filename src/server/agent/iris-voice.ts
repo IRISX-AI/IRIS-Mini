@@ -7,6 +7,10 @@ import {
 } from "@google/genai";
 import Decibri from "decibri";
 import { Server } from "socket.io";
+import {
+  browserToolDeclarations,
+  handleBrowserAction,
+} from "../tools/browser-agent.js";
 import { handleNexusFs, nexusToolDeclarations } from "../tools/nexus-agent.js";
 const { DecibriOutput } = Decibri;
 
@@ -44,7 +48,14 @@ const model = "gemini-3.1-flash-live-preview";
 const config = {
   responseModalities: [Modality.AUDIO],
   systemInstruction: "You are IRIS. An AI voice assistant created by Harsh.",
-  tools: [{ functionDeclarations: nexusToolDeclarations }],
+  tools: [
+    {
+      functionDeclarations: [
+        ...nexusToolDeclarations,
+        ...browserToolDeclarations,
+      ],
+    },
+  ],
   automaticActivityDetection: {
     disabled: true,
     startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_HIGH,
@@ -94,9 +105,23 @@ async function live(io: Server) {
       }
 
       if (message.toolCall) {
-        const responses = handleNexusFs(message.toolCall, io);
+        const functionResponses = [];
 
-        session.sendToolResponse({ functionResponses: responses });
+        for (const fc of message.toolCall.functionCalls || []) {
+          if (fc.name === "create_directory" || fc.name === "write_file") {
+            const fsResponses = handleNexusFs(message.toolCall, io);
+            functionResponses.push(...fsResponses);
+          } else if (
+            fc.name === "open_website" ||
+            fc.name === "search_youtube" ||
+            fc.name === "search_google"
+          ) {
+            const browserResponse = await handleBrowserAction(fc, io);
+            functionResponses.push(browserResponse);
+          }
+        }
+
+        session.sendToolResponse({ functionResponses: functionResponses });
       }
 
       if (

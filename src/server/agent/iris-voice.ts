@@ -107,28 +107,20 @@ async function live(io: Server) {
       if (message.toolCall) {
         const functionResponses = [];
 
-        // Loop through the tools Gemini wants to run
-        for (const fc of message.toolCall.functionCalls) {
-          // Check if it's a Nexus FS tool
+        for (const fc of message.toolCall.functionCalls || []) {
           if (fc.name === "create_directory" || fc.name === "write_file") {
-            // handleNexusFs returns an array, so we spread it
             const fsResponses = handleNexusFs(message.toolCall, io);
             functionResponses.push(...fsResponses);
-          }
-
-          // Check if it's a Browser tool
-          else if (
+          } else if (
             fc.name === "open_website" ||
             fc.name === "search_youtube" ||
             fc.name === "search_google"
           ) {
-            // handleBrowserAction is async, so we await it
             const browserResponse = await handleBrowserAction(fc, io);
             functionResponses.push(browserResponse);
           }
         }
 
-        // Send the generated responses straight back to Gemini so she can talk
         session.sendToolResponse({ functionResponses: functionResponses });
       }
 

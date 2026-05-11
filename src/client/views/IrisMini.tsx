@@ -15,6 +15,7 @@ type TranscriptMsg = {
 
 const IrisMini = () => {
   const [isConnected, setIsConnected] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false); // <-- ADDED THIS STATE
   const [transcripts, setTranscripts] = useState<TranscriptMsg[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -30,6 +31,7 @@ const IrisMini = () => {
           transition: Slide,
         });
       } else if (msg === "IRIS-MINI : Disconnected") {
+        setIsSpeaking(false); // Safety reset
         toast.error(msg, {
           position: "top-left",
           autoClose: 3000,
@@ -45,6 +47,11 @@ const IrisMini = () => {
     });
 
     socket.on("transcript_chunk", (msg: { role: string; text: string }) => {
+      // Trigger speaking animation when AI talks
+      if (msg.role === "AGENT") {
+        setIsSpeaking(true);
+      }
+
       setTranscripts((prev) => {
         if (prev.length === 0) {
           return [
@@ -69,6 +76,7 @@ const IrisMini = () => {
     });
 
     socket.on("turn_complete", () => {
+      setIsSpeaking(false); // Stop the animation when finished
       setTranscripts((prev) => {
         if (prev.length === 0) return prev;
         const updated = [...prev];
@@ -95,6 +103,7 @@ const IrisMini = () => {
     } else {
       socket.emit("Iris_Disconnected", "Iris Disconnected");
       setIsConnected(false);
+      setIsSpeaking(false); // Safety reset on disconnect
     }
   };
 
@@ -124,8 +133,8 @@ const IrisMini = () => {
                   msg.role === "SYSTEM"
                     ? "bg-[#111] rounded-xl p-4 text-[13px] text-gray-400 w-fit max-w-[85%] leading-relaxed border border-[#222]"
                     : msg.role === "USER"
-                      ? "bg-[#1a1a1a] rounded-xl p-4 text-[13px] text-white w-fit max-w-[85%] leading-relaxed border border-[#333] self-end ml-auto" // User on right side
-                      : "bg-[#00ff41]/5 rounded-xl p-4 text-[13px] text-[#00ff41] w-fit max-w-[85%] leading-relaxed border border-[#00ff41]/20" // AI on left side
+                      ? "bg-[#1a1a1a] rounded-xl p-4 text-[13px] text-white w-fit max-w-[85%] leading-relaxed border border-[#333] self-end ml-auto"
+                      : "bg-[#00ff41]/5 rounded-xl p-4 text-[13px] text-[#00ff41] w-fit max-w-[85%] leading-relaxed border border-[#00ff41]/20"
                 }
               >
                 {msg.role === "SYSTEM" ? `[System] ${msg.text}` : msg.text}
@@ -168,7 +177,8 @@ const IrisMini = () => {
         <div
           className={`absolute w-[40%] h-[40%] rounded-full transition-all duration-1000 blur-[100px] pointer-events-none ${isConnected ? "bg-[#00ff41]/20" : "bg-transparent"}`}
         />
-        <AICore isConnected={isConnected} />
+        {/* PASSED isSpeaking DOWN TO AICore */}
+        <AICore isConnected={isConnected} isSpeaking={isSpeaking} />
         <div className="absolute bottom-8 text-xs font-mono tracking-[0.3em] text-[#00ff41]/30 uppercase z-10">
           IRIS-Mini v1.0 - Local Server - 6754 - Secure Link -{" "}
           {new Date().toLocaleDateString()}

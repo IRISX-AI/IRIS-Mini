@@ -3,7 +3,7 @@ import http from "http";
 import { Server } from "socket.io";
 import ViteExpress from "vite-express";
 import "../config/dot-env.js";
-import { startIrisVoice } from "./agent/iris-voice.js";
+import { startIrisVoice, stopIrisVoice } from "./agent/iris-voice.js";
 import { getAvailablePort } from "./lib/port-picker.js";
 
 const app = express();
@@ -19,15 +19,15 @@ io.on("connection", (socket) => {
   console.log("\nThe User have been connected", socket.id);
 
   socket.on("Iris_Connected", (msg) => {
-    console.log(`Message From Frontend (Connection): ${msg}`);
     startIrisVoice(io);
   });
 
   socket.on("Iris_Disconnected", (msg) => {
-    console.log(`Message From Frontend (Disconnection) : ${msg}`);
+    stopIrisVoice(io);
   });
 
   socket.on("disconnect", () => {
+    stopIrisVoice(io);
     console.log(`The User have been disconnected`, socket.id);
   });
 });

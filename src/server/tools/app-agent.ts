@@ -1,3 +1,4 @@
+import { Type, type FunctionDeclaration } from "@google/genai";
 import { exec } from "child_process";
 import * as os from "os";
 import { Server } from "socket.io";
@@ -7,15 +8,15 @@ import { promisify } from "util";
 const execAsync = promisify(exec);
 
 // --- 1. THE TOOL DECLARATIONS ---
-export const appToolDeclarations = [
+export const appToolDeclarations: FunctionDeclaration[] = [
   {
     name: "open_app",
     description: "Opens a specific application on the user's local computer.",
     parameters: {
-      type: "OBJECT",
+      type: Type.OBJECT,
       properties: {
         app_name: {
-          type: "STRING",
+          type: Type.STRING,
           description:
             "The exact system name of the application, e.g., 'Spotify', 'Calculator', 'Code', 'Notepad'",
         },
@@ -28,10 +29,10 @@ export const appToolDeclarations = [
     description:
       "Force closes a currently running application on the user's computer.",
     parameters: {
-      type: "OBJECT",
+      type: Type.OBJECT,
       properties: {
         app_name: {
-          type: "STRING",
+          type: Type.STRING,
           description: "The system name of the application to close.",
         },
       },

@@ -51,7 +51,7 @@ const config = {
     silenceDurationMs: 100,
   },
   speechConfig: {
-    voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } },
+    voiceConfig: { prebuiltVoiceConfig: { voiceName: "Lyra" } },
   },
 };
 

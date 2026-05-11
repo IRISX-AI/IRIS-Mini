@@ -1,18 +1,19 @@
+import { Type, type FunctionDeclaration } from "@google/genai";
 import * as fs from "fs";
 import { Server } from "socket.io";
 
 // --- 1. THE TOOL DECLARATIONS ---
 // We export this so iris-voice.ts can just plug it into the Gemini config
-export const nexusToolDeclarations = [
+export const nexusToolDeclarations: FunctionDeclaration[] = [
   {
     name: "create_directory",
     description:
       "Creates a new directory/folder at the specified path on the local file system.",
     parameters: {
-      type: "OBJECT",
+      type: Type.OBJECT,
       properties: {
         dir_path: {
-          type: "STRING",
+          type: Type.STRING,
           description:
             "The path of the directory to create, e.g., './new_folder' or 'src/components'",
         },
@@ -25,15 +26,15 @@ export const nexusToolDeclarations = [
     description:
       "Creates a new file or overwrites an existing file with the specified text content.",
     parameters: {
-      type: "OBJECT",
+      type: Type.OBJECT,
       properties: {
         file_path: {
-          type: "STRING",
+          type: Type.STRING,
           description:
             "The path of the file to create, e.g., './index.js' or 'README.md'",
         },
         content: {
-          type: "STRING",
+          type: Type.STRING,
           description: "The text content to write inside the file.",
         },
       },

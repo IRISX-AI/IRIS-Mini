@@ -14,7 +14,7 @@ let isRunning = false;
 export const startIrisVoice = (io: Server) => {
   if (isRunning) return;
   isRunning = true;
-  io.emit("system_status", "System Status: Online");
+  io.emit("system_status", "IRIS-MINI : Connected");
 
   // live().catch(console.error);
 };

@@ -1,5 +1,6 @@
 import { Mic, MicOff, Power } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Slide, toast } from "react-toastify";
 import { io, Socket } from "socket.io-client";
 import AICore from "../utils/AICore";
 
@@ -12,7 +13,17 @@ const IrisMini = () => {
     socket = io();
 
     socket.on("system_status", (msg: string) => {
-      console.log(msg);
+      toast.success(msg, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Slide,
+      });
     });
 
     return () => {
@@ -22,7 +33,6 @@ const IrisMini = () => {
 
   const handleConnect = () => {
     if (!isConnected) {
-      socket.emit("Iris_Connected", "Iris Connected");
       setIsConnected(true);
     } else {
       socket.emit("Iris_Disconnected", "Iris Disconnected");

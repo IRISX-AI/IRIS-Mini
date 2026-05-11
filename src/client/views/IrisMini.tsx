@@ -42,7 +42,7 @@ const IrisMini = () => {
 
       setTranscripts((prev) => [
         ...prev,
-        { id: Date.now(), role: "SYSTEM", text: msg, isFinal: true },
+        { id: Date.now() + Math.random(), role: "SYSTEM", text: msg, isFinal: true },
       ]);
     });
 
@@ -54,7 +54,7 @@ const IrisMini = () => {
       setTranscripts((prev) => {
         if (prev.length === 0) {
           return [
-            { id: Date.now(), role: msg.role, text: msg.text, isFinal: false },
+            { id: Date.now() + Math.random(), role: msg.role, text: msg.text, isFinal: false },
           ];
         }
 
@@ -68,7 +68,7 @@ const IrisMini = () => {
         } else {
           return [
             ...prev,
-            { id: Date.now(), role: msg.role, text: msg.text, isFinal: false },
+            { id: Date.now() + Math.random(), role: msg.role, text: msg.text, isFinal: false },
           ];
         }
       });

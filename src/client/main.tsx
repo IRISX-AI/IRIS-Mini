@@ -6,6 +6,18 @@ import { Slide, ToastContainer } from "react-toastify";
 
 import App from "./App";
 
+// Suppress THREE.Clock deprecation warning caused by @react-three/fiber
+const originalWarn = console.warn;
+console.warn = (...args) => {
+  if (
+    typeof args[0] === "string" &&
+    args[0].includes("THREE.Clock: This module has been deprecated")
+  ) {
+    return;
+  }
+  originalWarn(...args);
+};
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ToastContainer

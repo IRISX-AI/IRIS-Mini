@@ -134,3 +134,4 @@ const AICore = ({ isConnected }: { isConnected: boolean }) => {
 };
 
 export default AICore;
+

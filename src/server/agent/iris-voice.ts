@@ -149,8 +149,8 @@ async function live(io: Server) {
           io.emit("turn_complete");
         }
       },
-      onerror: (e: ErrorEvent) => console.error("Error:", e.message),
-      onclose: (e: CloseEvent) => console.log("Closed:", e.reason),
+      onerror: (e: ErrorEvent) => io.emit("system_status", e.message),
+      onclose: (e: CloseEvent) => io.emit("system_status", e.reason),
     },
   });
 

@@ -15,7 +15,7 @@ type TranscriptMsg = {
 
 const IrisMini = () => {
   const [isConnected, setIsConnected] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false); // <-- ADDED THIS STATE
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcripts, setTranscripts] = useState<TranscriptMsg[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -47,7 +47,6 @@ const IrisMini = () => {
     });
 
     socket.on("transcript_chunk", (msg: { role: string; text: string }) => {
-      // Trigger speaking animation when AI talks
       if (msg.role === "AGENT") {
         setIsSpeaking(true);
       }
@@ -76,7 +75,7 @@ const IrisMini = () => {
     });
 
     socket.on("turn_complete", () => {
-      setIsSpeaking(false); // Stop the animation when finished
+      setIsSpeaking(false);
       setTranscripts((prev) => {
         if (prev.length === 0) return prev;
         const updated = [...prev];
@@ -103,7 +102,7 @@ const IrisMini = () => {
     } else {
       socket.emit("Iris_Disconnected", "Iris Disconnected");
       setIsConnected(false);
-      setIsSpeaking(false); // Safety reset on disconnect
+      setIsSpeaking(false);
     }
   };
 
@@ -177,7 +176,6 @@ const IrisMini = () => {
         <div
           className={`absolute w-[40%] h-[40%] rounded-full transition-all duration-1000 blur-[100px] pointer-events-none ${isConnected ? "bg-[#00ff41]/20" : "bg-transparent"}`}
         />
-        {/* PASSED isSpeaking DOWN TO AICore */}
         <AICore isConnected={isConnected} isSpeaking={isSpeaking} />
         <div className="absolute bottom-8 text-xs font-mono tracking-[0.3em] text-[#00ff41]/30 uppercase z-10">
           IRIS-Mini v1.0 - Local Server - 6754 - Secure Link -{" "}

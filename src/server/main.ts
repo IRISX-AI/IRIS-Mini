@@ -27,6 +27,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    stopIrisVoice(io);
     console.log(`The User have been disconnected`, socket.id);
   });
 });

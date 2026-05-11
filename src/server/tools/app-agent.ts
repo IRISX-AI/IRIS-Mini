@@ -3,7 +3,6 @@ import open, { openApp } from "open";
 import * as os from "os";
 import { Server } from "socket.io";
 
-// --- 1. THE TOOL DECLARATIONS ---
 export const appToolDeclarations = [
   {
     name: "open_app",
@@ -37,7 +36,6 @@ export const appToolDeclarations = [
   },
 ];
 
-// --- 2. THE EXECUTION HANDLER ---
 export const handleAppAction = async (fc: any, io: Server) => {
   let resultStr = "";
   const args = fc.args as any;
@@ -49,7 +47,6 @@ export const handleAppAction = async (fc: any, io: Server) => {
       const platform = os.platform();
       const cleanName = args.app_name.toLowerCase().replace(".exe", "").trim();
 
-      // Windows 11 UWP Apps still need their secret URIs
       const winMap: Record<string, string> = {
         camera: "microsoft.windows.camera:",
         settings: "ms-settings:",
@@ -64,10 +61,8 @@ export const handleAppAction = async (fc: any, io: Server) => {
       };
 
       if (platform === "win32" && winMap[cleanName]) {
-        // If it's a special Windows app, open its URI
         await open(winMap[cleanName]);
       } else {
-        // Otherwise, let the 'open' package handle the OS-native app launching
         await openApp(args.app_name);
       }
 
@@ -75,8 +70,6 @@ export const handleAppAction = async (fc: any, io: Server) => {
     } else if (fc.name === "close_app") {
       io.emit("system_status", `[APP] Terminating: ${args.app_name}`);
 
-      // Let 'fkill' fabulously handle the cross-platform process killing!
-      // force: true skips safe-shutdown, ignoreCase: true saves us from case-sensitive crashes
       await fkill(args.app_name, { force: true, ignoreCase: true });
 
       resultStr = `Success: Terminated ${args.app_name}.`;

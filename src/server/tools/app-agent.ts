@@ -1,4 +1,3 @@
-import { Type, type FunctionDeclaration } from "@google/genai";
 import { exec } from "child_process";
 import * as os from "os";
 import { Server } from "socket.io";
@@ -6,15 +5,15 @@ import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
-export const appToolDeclarations: FunctionDeclaration[] = [
+export const appToolDeclarations = [
   {
     name: "open_app",
     description: "Opens a specific application on the user's local computer.",
     parameters: {
-      type: Type.OBJECT,
+      type: "OBJECT",
       properties: {
         app_name: {
-          type: Type.STRING,
+          type: "STRING",
           description:
             "The exact system name of the application, e.g., 'Spotify', 'Calculator', 'Code', 'Notepad'",
         },
@@ -27,10 +26,10 @@ export const appToolDeclarations: FunctionDeclaration[] = [
     description:
       "Force closes a currently running application on the user's computer.",
     parameters: {
-      type: Type.OBJECT,
+      type: "OBJECT",
       properties: {
         app_name: {
-          type: Type.STRING,
+          type: "STRING",
           description: "The system name of the application to close.",
         },
       },
@@ -49,7 +48,30 @@ export const handleAppAction = async (fc: any, io: Server) => {
       io.emit("system_status", `[APP] Launching: ${args.app_name}`);
 
       if (platform === "win32") {
-        await execAsync(`start ${args.app_name}`);
+        // --- THE FIX: Windows UWP Translation Map ---
+        const winMap: Record<string, string> = {
+          camera: "microsoft.windows.camera:",
+          settings: "ms-settings:",
+          calculator: "calc",
+          paint: "ms-paint:",
+          photos: "ms-photos:",
+          mail: "outlookmail:",
+          clock: "ms-clock:",
+          weather: "msnweather:",
+          explorer: "explorer",
+          notepad: "notepad",
+        };
+
+        // Clean up the name Gemini sends (lowercase, remove .exe if present)
+        const cleanName = args.app_name
+          .toLowerCase()
+          .replace(".exe", "")
+          .trim();
+
+        // If it's in our map, use the secret URI. Otherwise, try what Gemini suggested.
+        const command = winMap[cleanName] || args.app_name;
+
+        await execAsync(`start ${command}`);
       } else if (platform === "darwin") {
         await execAsync(`open -a "${args.app_name}"`);
       } else {
@@ -61,7 +83,7 @@ export const handleAppAction = async (fc: any, io: Server) => {
       io.emit("system_status", `[APP] Terminating: ${args.app_name}`);
 
       if (platform === "win32") {
-        const exeName = args.app_name.endsWith(".exe")
+        const exeName = args.app_name.toLowerCase().endsWith(".exe")
           ? args.app_name
           : `${args.app_name}.exe`;
         await execAsync(`taskkill /IM "${exeName}" /F`);
@@ -72,8 +94,8 @@ export const handleAppAction = async (fc: any, io: Server) => {
       resultStr = `Success: Terminated ${args.app_name}.`;
     }
   } catch (err: any) {
-    resultStr = `Error managing ${args.app_name}. Note: System process names must be exact. Details: ${err.message}`;
-    io.emit("system_status", `[APP ERROR] Check terminal logs.`);
+    resultStr = `Error managing ${args.app_name}. System process names must be exact. Details: ${err.message}`;
+    io.emit("system_status", `[APP ERROR] Failed to manage ${args.app_name}`);
   }
 
   console.log(`[APP-AGENT] ${resultStr}`);

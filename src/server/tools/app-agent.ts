@@ -1,10 +1,9 @@
-import { exec } from "child_process";
+import fkill from "fkill";
+import open from "open";
 import * as os from "os";
 import { Server } from "socket.io";
-import { promisify } from "util";
 
-const execAsync = promisify(exec);
-
+// --- 1. THE TOOL DECLARATIONS ---
 export const appToolDeclarations = [
   {
     name: "open_app",
@@ -38,63 +37,52 @@ export const appToolDeclarations = [
   },
 ];
 
+// --- 2. THE EXECUTION HANDLER ---
 export const handleAppAction = async (fc: any, io: Server) => {
   let resultStr = "";
   const args = fc.args as any;
-  const platform = os.platform();
 
   try {
     if (fc.name === "open_app") {
       io.emit("system_status", `[APP] Launching: ${args.app_name}`);
 
-      if (platform === "win32") {
-        // --- THE FIX: Windows UWP Translation Map ---
-        const winMap: Record<string, string> = {
-          camera: "microsoft.windows.camera:",
-          settings: "ms-settings:",
-          calculator: "calc",
-          paint: "ms-paint:",
-          photos: "ms-photos:",
-          mail: "outlookmail:",
-          clock: "ms-clock:",
-          weather: "msnweather:",
-          explorer: "explorer",
-          notepad: "notepad",
-        };
+      const platform = os.platform();
+      const cleanName = args.app_name.toLowerCase().replace(".exe", "").trim();
 
-        // Clean up the name Gemini sends (lowercase, remove .exe if present)
-        const cleanName = args.app_name
-          .toLowerCase()
-          .replace(".exe", "")
-          .trim();
+      // Windows 11 UWP Apps still need their secret URIs
+      const winMap: Record<string, string> = {
+        camera: "microsoft.windows.camera:",
+        settings: "ms-settings:",
+        calculator: "calc",
+        paint: "ms-paint:",
+        photos: "ms-photos:",
+        mail: "outlookmail:",
+        clock: "ms-clock:",
+        weather: "msnweather:",
+        explorer: "explorer",
+        notepad: "notepad",
+      };
 
-        // If it's in our map, use the secret URI. Otherwise, try what Gemini suggested.
-        const command = winMap[cleanName] || args.app_name;
-
-        await execAsync(`start ${command}`);
-      } else if (platform === "darwin") {
-        await execAsync(`open -a "${args.app_name}"`);
+      if (platform === "win32" && winMap[cleanName]) {
+        // If it's a special Windows app, open its URI
+        await open(winMap[cleanName]);
       } else {
-        await execAsync(`${args.app_name}`);
+        // Otherwise, let the 'open' package handle the OS-native app launching
+        await open.openApp(args.app_name);
       }
 
       resultStr = `Success: Launched ${args.app_name}.`;
     } else if (fc.name === "close_app") {
       io.emit("system_status", `[APP] Terminating: ${args.app_name}`);
 
-      if (platform === "win32") {
-        const exeName = args.app_name.toLowerCase().endsWith(".exe")
-          ? args.app_name
-          : `${args.app_name}.exe`;
-        await execAsync(`taskkill /IM "${exeName}" /F`);
-      } else {
-        await execAsync(`killall "${args.app_name}"`);
-      }
+      // Let 'fkill' fabulously handle the cross-platform process killing!
+      // force: true skips safe-shutdown, ignoreCase: true saves us from case-sensitive crashes
+      await fkill(args.app_name, { force: true, ignoreCase: true });
 
       resultStr = `Success: Terminated ${args.app_name}.`;
     }
   } catch (err: any) {
-    resultStr = `Error managing ${args.app_name}. System process names must be exact. Details: ${err.message}`;
+    resultStr = `Error managing ${args.app_name}. Details: ${err.message}`;
     io.emit("system_status", `[APP ERROR] Failed to manage ${args.app_name}`);
   }
 

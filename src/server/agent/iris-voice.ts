@@ -10,13 +10,29 @@ import { Server } from "socket.io";
 const { DecibriOutput } = Decibri;
 
 let isRunning = false;
+let closeSessionFn: (() => void) | null = null;
 
 export const startIrisVoice = (io: Server) => {
   if (isRunning) return;
   isRunning = true;
-  io.emit("system_status", "System Status: Online");
+  io.emit("system_status", "IRIS-MINI : Connected");
 
-  // live().catch(console.error);
+  live()
+    .then((fn) => {
+      closeSessionFn = fn;
+    })
+    .catch(console.error);
+};
+
+export const stopIrisVoice = (io: Server) => {
+  if (!isRunning) return;
+  isRunning = false;
+  io.emit("system_status", "IRIS-MINI : Disconnected");
+
+  if (closeSessionFn) {
+    closeSessionFn();
+    closeSessionFn = null;
+  }
 };
 
 const ai = new GoogleGenAI({
@@ -136,6 +152,13 @@ async function live() {
   });
 
   console.log("Microphone started. Speak now...");
+
+  const closeSession = () => {
+    micInstance.stop();
+    session.close();
+    isRunning = false;
+  };
+  return closeSession;
 }
 
 // live().catch(console.error);

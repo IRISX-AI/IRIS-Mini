@@ -1,5 +1,6 @@
-import { Mic, MicOff, Power } from "lucide-react";
+import { Power } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Slide, toast } from "react-toastify";
 import { io, Socket } from "socket.io-client";
 import AICore from "../utils/AICore";
 
@@ -7,12 +8,35 @@ let socket: Socket;
 
 const IrisMini = () => {
   const [isConnected, setIsConnected] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
   useEffect(() => {
     socket = io();
 
     socket.on("system_status", (msg: string) => {
-      console.log(msg);
+      if (msg === "IRIS-MINI : Connected") {
+        toast.success(msg, {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Slide,
+        });
+      } else {
+        toast.error("IRIS-MINI : Disconnected", {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Slide,
+        });
+      }
     });
 
     return () => {
@@ -73,20 +97,6 @@ const IrisMini = () => {
             >
               <Power size={18} strokeWidth={2.5} />
               {isConnected ? "Disconnect" : "Connect"}
-            </button>
-
-            <button
-              onClick={() => setIsMuted(!isMuted)}
-              disabled={!isConnected}
-              className={`w-16 h-13.5 rounded-xl flex items-center justify-center transition-all border ${
-                !isConnected
-                  ? "opacity-30 cursor-not-allowed bg-black border-[#111] text-gray-600"
-                  : isMuted
-                    ? "bg-amber-950/20 border-amber-900/40 text-amber-500 hover:bg-amber-900/30"
-                    : "bg-[#00ff41]/10 border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/20"
-              }`}
-            >
-              {isMuted ? <MicOff size={20} /> : <Mic size={20} />}
             </button>
           </div>
         </div>

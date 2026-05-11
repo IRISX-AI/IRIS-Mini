@@ -14,9 +14,9 @@ let isRunning = false;
 export const startIrisVoice = (io: Server) => {
   if (isRunning) return;
   isRunning = true;
-  console.log("[ENGINE] Ignition sequence started...");
+  io.emit("system_status", "System Status: Online");
 
-  live().catch(console.error);
+  // live().catch(console.error);
 };
 
 const ai = new GoogleGenAI({

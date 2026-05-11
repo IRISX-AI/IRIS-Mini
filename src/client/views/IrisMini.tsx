@@ -13,18 +13,31 @@ const IrisMini = () => {
     socket = io();
 
     socket.on("system_status", (msg: string) => {
-      console.log(msg);
-      toast.success(msg, {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: Slide,
-      });
+      if (msg === "IRIS-MINI : Connected") {
+        toast.success(msg, {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Slide,
+        });
+      } else {
+        toast.error("IRIS-MINI : Disconnected", {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Slide,
+        });
+      }
     });
 
     return () => {

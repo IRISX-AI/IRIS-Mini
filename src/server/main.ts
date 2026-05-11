@@ -18,7 +18,7 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("\nThe User have been connected", socket.id);
 
-  socket.on("Iris_Connected", () => {
+  socket.on("Iris_Connected", (msg) => {
     startIrisVoice(io);
   });
 

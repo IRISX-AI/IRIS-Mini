@@ -94,10 +94,8 @@ async function live(io: Server) {
       }
 
       if (message.toolCall) {
-        // Hand off the heavy lifting to the Nexus Agent!
         const responses = handleNexusFs(message.toolCall, io);
 
-        // Send the generated responses straight back to Gemini
         session.sendToolResponse({ functionResponses: responses });
       }
 

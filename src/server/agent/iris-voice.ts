@@ -17,7 +17,7 @@ export const startIrisVoice = (io: Server) => {
   isRunning = true;
   io.emit("system_status", "IRIS-MINI : Connected");
 
-  live()
+  live(io)
     .then((fn) => {
       closeSessionFn = fn;
     })
@@ -55,7 +55,7 @@ const config = {
   },
 };
 
-async function live() {
+async function live(io: Server) {
   const responseQueue: LiveServerMessage[] = [];
   const audioQueue: Buffer[] = [];
   let speaker: any | null = null;
@@ -131,11 +131,25 @@ async function live() {
       onmessage: (message: LiveServerMessage) => {
         responseQueue.push(message);
         const content = message.serverContent;
+        // Emit User Speech Chunks
         if (content?.inputTranscription) {
-          console.log("User:", content.inputTranscription.text);
+          io.emit("transcript_chunk", {
+            role: "USER",
+            text: content.inputTranscription.text,
+          });
         }
+
+        // Emit Gemini Speech Chunks
         if (content?.outputTranscription) {
-          console.log("Gemini:", content.outputTranscription.text);
+          io.emit("transcript_chunk", {
+            role: "AGENT",
+            text: content.outputTranscription.text,
+          });
+        }
+
+        // When a turn finishes (either you stop talking or Gemini stops talking)
+        if (content?.turnComplete) {
+          io.emit("turn_complete");
         }
       },
       onerror: (e: ErrorEvent) => console.error("Error:", e.message),

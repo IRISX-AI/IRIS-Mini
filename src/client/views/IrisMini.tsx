@@ -1,13 +1,24 @@
 import { Power } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Slide, toast } from "react-toastify";
 import { io, Socket } from "socket.io-client";
 import AICore from "../utils/AICore";
 
 let socket: Socket;
 
+// We add an "isFinal" flag to track if the current bubble is still streaming
+type TranscriptMsg = {
+  id: number;
+  role: string;
+  text: string;
+  isFinal: boolean;
+};
+
 const IrisMini = () => {
   const [isConnected, setIsConnected] = useState(false);
+  const [transcripts, setTranscripts] = useState<TranscriptMsg[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     socket = io();
 
@@ -16,33 +27,74 @@ const IrisMini = () => {
         toast.success(msg, {
           position: "top-left",
           autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
           theme: "dark",
           transition: Slide,
         });
-      } else {
-        toast.error("IRIS-MINI : Disconnected", {
+      } else if (msg === "IRIS-MINI : Disconnected") {
+        toast.error(msg, {
           position: "top-left",
           autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
           theme: "dark",
           transition: Slide,
         });
       }
+
+      // Also add system statuses to the chat log
+      setTranscripts((prev) => [
+        ...prev,
+        { id: Date.now(), role: "SYSTEM", text: msg, isFinal: true },
+      ]);
+    });
+
+    // --- THE STREAMING LOGIC ---
+    socket.on("transcript_chunk", (msg: { role: string; text: string }) => {
+      setTranscripts((prev) => {
+        if (prev.length === 0) {
+          return [
+            { id: Date.now(), role: msg.role, text: msg.text, isFinal: false },
+          ];
+        }
+
+        const lastIndex = prev.length - 1;
+        const lastMsg = prev[lastIndex];
+
+        // If the last message is from the SAME person and hasn't been finalized, append the text!
+        if (lastMsg.role === msg.role && !lastMsg.isFinal) {
+          const updated = [...prev];
+          // Append the chunk
+          updated[lastIndex].text += msg.text;
+          return updated;
+        } else {
+          // Otherwise, create a brand new message bubble
+          return [
+            ...prev,
+            { id: Date.now(), role: msg.role, text: msg.text, isFinal: false },
+          ];
+        }
+      });
+    });
+
+    // Lock the bubble when the turn is complete
+    socket.on("turn_complete", () => {
+      setTranscripts((prev) => {
+        if (prev.length === 0) return prev;
+        const updated = [...prev];
+        updated[prev.length - 1].isFinal = true;
+        return updated;
+      });
     });
 
     return () => {
       socket.disconnect();
     };
   }, []);
+
+  // Auto-scroll to the bottom automatically when new words arrive
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [transcripts]);
 
   const handleConnect = () => {
     if (!isConnected) {
@@ -60,19 +112,39 @@ const IrisMini = () => {
         <div className="flex-none">
           <h1 className="text-xl font-bold mb-1 text-white">IRIS-MINI</h1>
           <p className="text-[11px] text-[#00ff41]/60 font-mono tracking-widest uppercase">
-            Local Server :: Port 6753 :: Secure Connection to Gemini API
+            Local Server :: Port 6754 :: Secure Connection
           </p>
         </div>
 
-        <div className="flex-1 overflow-y-auto space-y-6 py-8 pr-4 font-mono scrollbar-thin scrollbar-thumb-[#1a1a1a] flex flex-col justify-end">
-          <div className="bg-[#111] rounded-xl p-4 text-[13px] text-gray-400 w-fit max-w-[85%] leading-relaxed border border-[#222]">
-            [System] Uplink initialized. Current node time:{" "}
-            {new Date().toLocaleTimeString()}
-          </div>
-
-          <div className="bg-[#00ff41]/5 rounded-xl p-4 text-[13px] text-[#00ff41] w-fit max-w-[85%] leading-relaxed border border-[#00ff41]/20">
-            Uplink established. Ready for command input, Operator.
-          </div>
+        {/* --- DYNAMIC TRANSCRIPT MAP --- */}
+        <div
+          ref={scrollRef}
+          className="flex-1 overflow-y-auto space-y-6 py-8 pr-4 font-mono scrollbar-thin scrollbar-thumb-[#1a1a1a] flex flex-col justify-start"
+        >
+          {transcripts.length === 0 ? (
+            <div className="bg-[#111] rounded-xl p-4 text-[13px] text-gray-400 w-fit max-w-[85%] leading-relaxed border border-[#222]">
+              [System] Uplink initialized. Node standing by.
+            </div>
+          ) : (
+            transcripts.map((msg) => (
+              <div
+                key={msg.id}
+                className={
+                  msg.role === "SYSTEM"
+                    ? "bg-[#111] rounded-xl p-4 text-[13px] text-gray-400 w-fit max-w-[85%] leading-relaxed border border-[#222]"
+                    : msg.role === "USER"
+                      ? "bg-[#1a1a1a] rounded-xl p-4 text-[13px] text-white w-fit max-w-[85%] leading-relaxed border border-[#333] self-end ml-auto" // User on right side
+                      : "bg-[#00ff41]/5 rounded-xl p-4 text-[13px] text-[#00ff41] w-fit max-w-[85%] leading-relaxed border border-[#00ff41]/20" // AI on left side
+                }
+              >
+                {/* Add a tiny blinker if the message is currently streaming */}
+                {msg.role === "SYSTEM" ? `[System] ${msg.text}` : msg.text}
+                {!msg.isFinal && msg.role !== "SYSTEM" && (
+                  <span className="animate-pulse ml-1 text-[#00ff41]">_</span>
+                )}
+              </div>
+            ))
+          )}
         </div>
 
         <div className="flex-none pt-6 font-mono">
@@ -88,7 +160,7 @@ const IrisMini = () => {
 
           <div className="flex items-center gap-4 w-full max-w-md">
             <button
-              onClick={() => handleConnect()}
+              onClick={handleConnect}
               className={`flex-1 py-4 rounded-xl text-[12px] font-bold tracking-widest uppercase flex items-center justify-center gap-3 transition-all active:scale-[0.98] ${
                 isConnected
                   ? "bg-red-950/20 text-red-500 border border-red-900/40 hover:bg-red-900/30"
@@ -106,11 +178,9 @@ const IrisMini = () => {
         <div
           className={`absolute w-[40%] h-[40%] rounded-full transition-all duration-1000 blur-[100px] pointer-events-none ${isConnected ? "bg-[#00ff41]/20" : "bg-transparent"}`}
         />
-
         <AICore isConnected={isConnected} />
-
         <div className="absolute bottom-8 text-xs font-mono tracking-[0.3em] text-[#00ff41]/30 uppercase z-10">
-          IRIS-Mini v1.0 - Local Server - 6753 - Secure Link -{" "}
+          IRIS-Mini v1.0 - Local Server - 6754 - Secure Link -{" "}
           {new Date().toLocaleDateString()}
         </div>
       </div>

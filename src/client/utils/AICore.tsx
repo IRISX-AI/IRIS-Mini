@@ -73,7 +73,7 @@ const DualSphere = ({
       0.05,
     );
 
-    innerRef.current.rotation.y -= delta * (isConnected ? 0.5 : 0.1);
+    innerRef.current.rotation.y -= delta * (isConnected ? 0.2 : 0.1);
     pointsRef.current.rotation.y += delta * (isConnected ? 0.2 : 0.05);
 
     pointsRef.current.scale.setScalar(animState.current.scale);
@@ -95,7 +95,7 @@ const DualSphere = ({
       const wave =
         Math.sin(origY * 4 + time * speed) * animState.current.amplitude;
 
-      const jitter = isSpeaking ? Math.random() * 0.03 : 0;
+      const jitter = isSpeaking ? Math.random() * 0.07 : 0;
       const factor = (dist + wave + jitter) / dist;
 
       positionsArray[ix] = origX * factor;

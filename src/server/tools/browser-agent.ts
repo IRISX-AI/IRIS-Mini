@@ -1,16 +1,17 @@
 import open from "open";
 import { Server } from "socket.io";
+import { Type, type FunctionDeclaration } from "@google/genai";
 
-export const browserToolDeclarations = [
+export const browserToolDeclarations: FunctionDeclaration[] = [
   {
     name: "open_website",
     description:
       "Opens a specific website URL in the user's default web browser.",
     parameters: {
-      type: "OBJECT",
+      type: Type.OBJECT,
       properties: {
         url: {
-          type: "STRING",
+          type: Type.STRING,
           description:
             "The full URL to open, e.g., 'https://github.com' or 'https://chat.openai.com'",
         },
@@ -23,10 +24,10 @@ export const browserToolDeclarations = [
     description:
       "Searches YouTube for a specific query or song and plays it in the browser.",
     parameters: {
-      type: "OBJECT",
+      type: Type.OBJECT,
       properties: {
         query: {
-          type: "STRING",
+          type: Type.STRING,
           description:
             "The search query, e.g., 'Blinding Lights The Weeknd' or 'Top 10 coders'",
         },
@@ -38,10 +39,10 @@ export const browserToolDeclarations = [
     name: "search_google",
     description: "Searches Google for a specific query to find information.",
     parameters: {
-      type: "OBJECT",
+      type: Type.OBJECT,
       properties: {
         query: {
-          type: "STRING",
+          type: Type.STRING,
           description: "The search query to look up on Google.",
         },
       },

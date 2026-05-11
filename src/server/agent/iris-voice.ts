@@ -7,6 +7,7 @@ import {
 } from "@google/genai";
 import Decibri from "decibri";
 import { Server } from "socket.io";
+import { appToolDeclarations } from "../tools/app-agent.js";
 import {
   browserToolDeclarations,
   handleBrowserAction,
@@ -53,6 +54,7 @@ const config = {
       functionDeclarations: [
         ...nexusToolDeclarations,
         ...browserToolDeclarations,
+        ...appToolDeclarations,
       ],
     },
   ],

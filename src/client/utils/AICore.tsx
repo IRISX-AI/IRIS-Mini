@@ -106,13 +106,11 @@ const DualSphere = ({
 
       const dist = Math.sqrt(origX * origX + origY * origY + origZ * origZ);
 
-      // Organic, multi-axis fluid wave
       const waveY = Math.sin(origY * 5 + t);
       const waveX = Math.cos(origX * 3 + t * 0.8);
 
       const wave = (waveY + waveX) * 0.5 * animState.current.amplitude;
 
-      // Jitter for the "voice visualizer" effect
       const jitter = isSpeaking ? Math.random() * 0.02 : 0;
       const factor = (dist + wave + jitter) / dist;
 
@@ -122,7 +120,6 @@ const DualSphere = ({
     }
     pointsRef.current.geometry.attributes.position.needsUpdate = true;
 
-    // Inner Core Pulse
     const corePulse = isSpeaking ? Math.sin(t * 5) * 0.05 : Math.sin(t) * 0.02;
     innerRef.current.scale.setScalar(isConnected ? 1 + corePulse : 1);
   });

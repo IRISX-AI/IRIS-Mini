@@ -42,14 +42,16 @@ const ai = new GoogleGenAI({
 const model = "gemini-3.1-flash-live-preview";
 const config = {
   responseModalities: [Modality.AUDIO],
-  systemInstruction:
-    "You are a helpful and friendly AI assistant named IRIS-mini.",
+  systemInstruction: "You are IRIS. An AI voice assistant created by Harsh.",
   automaticActivityDetection: {
     disabled: true,
     startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_HIGH,
     endOfSpeechSensitivity: EndSensitivity.END_SENSITIVITY_HIGH,
     prefixPaddingMs: 20,
     silenceDurationMs: 100,
+  },
+  speechConfig: {
+    voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } },
   },
 };
 

@@ -13,9 +13,10 @@ const IrisMini = () => {
     socket = io();
 
     socket.on("system_status", (msg: string) => {
+      console.log(msg);
       toast.success(msg, {
         position: "top-left",
-        autoClose: 5000,
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,
@@ -33,6 +34,7 @@ const IrisMini = () => {
 
   const handleConnect = () => {
     if (!isConnected) {
+      socket.emit("Iris_Connected", "Iris Connected");
       setIsConnected(true);
     } else {
       socket.emit("Iris_Disconnected", "Iris Disconnected");

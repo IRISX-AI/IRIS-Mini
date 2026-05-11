@@ -131,7 +131,6 @@ async function live(io: Server) {
       onmessage: (message: LiveServerMessage) => {
         responseQueue.push(message);
         const content = message.serverContent;
-        // Emit User Speech Chunks
         if (content?.inputTranscription) {
           io.emit("transcript_chunk", {
             role: "USER",
@@ -139,7 +138,6 @@ async function live(io: Server) {
           });
         }
 
-        // Emit Gemini Speech Chunks
         if (content?.outputTranscription) {
           io.emit("transcript_chunk", {
             role: "AGENT",
@@ -147,7 +145,6 @@ async function live(io: Server) {
           });
         }
 
-        // When a turn finishes (either you stop talking or Gemini stops talking)
         if (content?.turnComplete) {
           io.emit("turn_complete");
         }

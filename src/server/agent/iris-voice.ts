@@ -181,7 +181,7 @@ async function live(io: Server) {
         responseQueue.push(message);
         const content = message.serverContent;
         if (content?.inputTranscription) {
-          currentUserText += content.inputTranscription.text; // Buffer user text
+          currentUserText += content.inputTranscription.text;
           io.emit("transcript_chunk", {
             role: "USER",
             text: content.inputTranscription.text,

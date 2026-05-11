@@ -23,7 +23,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("Iris_Disconnected", (msg) => {
-    console.log(`Message From Frontend (Disconnection) : ${msg}`);
+    stopIrisVoice(io);
   });
 
   socket.on("disconnect", () => {

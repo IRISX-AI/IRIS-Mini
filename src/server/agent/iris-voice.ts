@@ -18,6 +18,13 @@ export const startIrisVoice = (io: Server) => {
 
   // live().catch(console.error);
 };
+export const stopIrisVoice = (io: Server) => {
+  if (!isRunning) return;
+  isRunning = false;
+  io.emit("system_status", "IRIS-MINI : Disconnected");
+
+  // live().catch(console.error);
+};
 
 const ai = new GoogleGenAI({
   apiKey: (process.env.GOOGLE_API_KEY as string) || "",

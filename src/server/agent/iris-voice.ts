@@ -126,7 +126,16 @@ async function live() {
     config: config,
     callbacks: {
       onopen: () => console.log("Connected to Gemini Live API"),
-      onmessage: (message: LiveServerMessage) => responseQueue.push(message),
+      onmessage: (message: LiveServerMessage) => {
+        responseQueue.push(message);
+        const content = message.serverContent;
+        if (content?.inputTranscription) {
+          console.log("User:", content.inputTranscription.text);
+        }
+        if (content?.outputTranscription) {
+          console.log("Gemini:", content.outputTranscription.text);
+        }
+      },
       onerror: (e: ErrorEvent) => console.error("Error:", e.message),
       onclose: (e: CloseEvent) => console.log("Closed:", e.reason),
     },

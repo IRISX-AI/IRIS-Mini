@@ -54,7 +54,7 @@ async function initCLI() {
 
   // 5. Boot the actual backend server!
   // Note: Depending on your compiler, you might need to adjust this path to point to your compiled main.js
-  await import("../src/server/main.js");
+  await import("../src/server/main.ts");
 }
 
 // Catch any hard crashes and exit cleanly

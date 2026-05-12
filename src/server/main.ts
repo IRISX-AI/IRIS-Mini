@@ -6,14 +6,12 @@ import { startIrisVoice, stopIrisVoice } from "./agent/iris-voice.js";
 import { getAvailablePort } from "./lib/port-picker.js";
 
 if (process.env.NODE_ENV === "production") {
-  // Silence stdout (for vite-express logs)
   const originalStdout = process.stdout.write.bind(process.stdout);
   process.stdout.write = ((chunk: any, encoding?: any, callback?: any): boolean => {
     if (typeof chunk === "string" && chunk.includes("[vite-express]")) return true;
     return originalStdout(chunk, encoding, callback);
   }) as any;
 
-  // Silence stderr (for the pesky DEP0205 warning)
   const originalStderr = process.stderr.write.bind(process.stderr);
   process.stderr.write = ((chunk: any, encoding?: any, callback?: any): boolean => {
     if (typeof chunk === "string" && (chunk.includes("DEP0205") || chunk.includes("DeprecationWarning"))) {

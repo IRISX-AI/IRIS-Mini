@@ -42,7 +42,12 @@ const IrisMini = () => {
 
       setTranscripts((prev) => [
         ...prev,
-        { id: Date.now() + Math.random(), role: "SYSTEM", text: msg, isFinal: true },
+        {
+          id: Date.now() + Math.random(),
+          role: "SYSTEM",
+          text: msg,
+          isFinal: true,
+        },
       ]);
     });
 
@@ -54,7 +59,12 @@ const IrisMini = () => {
       setTranscripts((prev) => {
         if (prev.length === 0) {
           return [
-            { id: Date.now() + Math.random(), role: msg.role, text: msg.text, isFinal: false },
+            {
+              id: Date.now() + Math.random(),
+              role: msg.role,
+              text: msg.text,
+              isFinal: false,
+            },
           ];
         }
 
@@ -68,7 +78,12 @@ const IrisMini = () => {
         } else {
           return [
             ...prev,
-            { id: Date.now() + Math.random(), role: msg.role, text: msg.text, isFinal: false },
+            {
+              id: Date.now() + Math.random(),
+              role: msg.role,
+              text: msg.text,
+              isFinal: false,
+            },
           ];
         }
       });
@@ -178,7 +193,7 @@ const IrisMini = () => {
         />
         <AICore isConnected={isConnected} isSpeaking={isSpeaking} />
         <div className="absolute bottom-8 text-xs font-mono tracking-[0.3em] text-[#00ff41]/30 uppercase z-10">
-          IRIS-Mini v1.0 - Local Server - 6754 - Secure Link -{" "}
+          IRIS-Mini v1.0 - Local Server - Secure Link -{" "}
           {new Date().toLocaleDateString()}
         </div>
       </div>

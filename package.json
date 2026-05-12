@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "bin": {
-    "iris": "./bin/iris-mini.ts"
+    "iris": "./dist/cli.js"
   },
   "scripts": {
     "dev": "nodemon -w src/server -x tsx src/server/main.ts",

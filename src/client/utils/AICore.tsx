@@ -44,8 +44,8 @@ const DualSphere = ({
   useFrame((state, delta) => {
     if (!groupRef.current || !pointsRef.current || !innerRef.current) return;
 
-    const targetAmplitude = isSpeaking ? 0.25 : isConnected ? 0.08 : 0.02;
-    const targetScale = isSpeaking ? 1.15 : 1.0;
+    const targetAmplitude = isSpeaking ? 0.3 : isConnected ? 0.08 : 0.02;
+    const targetScale = isSpeaking ? 1.2 : 1.0;
     const targetSpeed = isSpeaking ? 3.5 : isConnected ? 1.0 : 0.2;
 
     animState.current.amplitude = THREE.MathUtils.lerp(
@@ -113,7 +113,7 @@ const DualSphere = ({
     }
     pointsRef.current.geometry.attributes.position.needsUpdate = true;
 
-    const corePulse = isSpeaking ? Math.sin(t * 5) * 0.05 : Math.sin(t) * 0.02;
+    const corePulse = isSpeaking ? Math.sin(t * 5) * 0.05 : Math.sin(t) * 0.03;
     innerRef.current.scale.setScalar(isConnected ? 1 + corePulse : 1);
   });
 

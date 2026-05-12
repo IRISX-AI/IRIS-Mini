@@ -7,7 +7,6 @@ services:
     ports:
       - "6754:6754"
     environment:
-      # Inject your API keys here so the CLI doesn't freeze waiting for Inquirer input
       - GOOGLE_API_KEY=${GEMINI_API_KEY}
       - IRIS_VOICE=Lyra
     restart: unless-stopped

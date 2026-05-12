@@ -1,6 +1,5 @@
 version: 2
 updates:
-  # Check for npm updates at the root of the repository
   - package-ecosystem: "npm"
     directory: "/"
     schedule:

@@ -45,10 +45,7 @@ async function initCLI() {
   process.env.GOOGLE_API_KEY = config.apiKey;
   process.env.IRIS_VOICE = config.voice;
 
-  console.log("[SYSTEM] Booting IRIS Neural Core...");
-
-  process.env.NODE_ENV = "production";
-
+  // Boot the core. main.ts will handle the console clearing and banner drawing!
   await import("../src/server/main.ts");
 }
 

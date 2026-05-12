@@ -7,6 +7,7 @@ import {
 } from "@google/genai";
 import Decibri from "decibri";
 import { Server } from "socket.io";
+import StreamConfig from "../constants/StreamConfig.js";
 import { appToolDeclarations, handleAppAction } from "../tools/app-agent.js";
 import {
   browserToolDeclarations,
@@ -46,20 +47,20 @@ const ai = new GoogleGenAI({
   apiKey: (process.env.GOOGLE_API_KEY as string) || "",
 });
 
-const model = "gemini-3.1-flash-live-preview";
-
 async function live(io: Server) {
   const pastContext = getMemoryContextString();
   console.log("[MEMORY] Injecting history into Neural Core...");
 
-  const config = {
-    responseModalities: [Modality.AUDIO],
-    systemInstruction: `You are IRIS. You have root access to the machine to manage files, apps, and browsers. 
+  const coreInstruction = `You are IRIS. You have root access to the machine to manage files, apps, and browsers. 
     
     CRITICAL CONTEXT - HERE IS YOUR PREVIOUS CONVERSATION HISTORY WITH HARSH:
     ${pastContext}
     
-    Resume the conversation naturally based on this history. Do not say "hello" if you are in the middle of a conversation.`,
+    Resume the conversation naturally based on this history. Do not say "hello" if you are in the middle of a conversation.`;
+
+  const config = {
+    responseModalities: [Modality.AUDIO],
+    systemInstruction: coreInstruction,
     tools: [
       {
         functionDeclarations: [
@@ -86,6 +87,8 @@ async function live(io: Server) {
 
   let currentUserText = "";
   let currentAgentText = "";
+
+  const Model = StreamConfig(coreInstruction);
 
   async function waitMessage(): Promise<LiveServerMessage> {
     while (responseQueue.length === 0) {
@@ -174,7 +177,7 @@ async function live(io: Server) {
   playbackLoop();
 
   const session = await ai.live.connect({
-    model: model,
+    model: Model,
     config: config,
     callbacks: {
       onopen: () => console.log("Connected to Gemini Live API"),

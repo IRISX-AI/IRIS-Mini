@@ -78,7 +78,11 @@ async function live(io: Server) {
       silenceDurationMs: 100,
     },
     speechConfig: {
-      voiceName: (process.env.IRIS_VOICE as string) || "Lyra",
+      voiceConfig: {
+        prebuiltVoiceConfig: {
+          voiceName: (process.env.IRIS_VOICE as string) || "Lyra",
+        },
+      },
     },
   };
   const responseQueue: LiveServerMessage[] = [];

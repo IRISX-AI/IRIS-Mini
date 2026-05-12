@@ -114,7 +114,10 @@ async function runSetup(): Promise<{ apiKey: string; voice: string }> {
 
   div("  1 / 2  ·  API KEY  ");
   ln();
-  hint("Get your free key at  →  https://aistudio.google.com/api-keys");
+  const keyUrl = "https://aistudio.google.com/app/api-keys";
+  console.log(
+    `  ${cy("·")}  ${d("Get your free key at  →  ")}\x1b]8;;${keyUrl}\x07${cy(keyUrl)}\x1b]8;;\x07`,
+  );
   ln();
 
   const apiKey = await input({

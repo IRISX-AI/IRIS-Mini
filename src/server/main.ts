@@ -6,26 +6,24 @@ import { startIrisVoice, stopIrisVoice } from "./agent/iris-voice.js";
 import { getAvailablePort } from "./lib/port-picker.js";
 
 if (process.env.NODE_ENV === "production") {
-  const originalStdoutWrite = process.stdout.write.bind(process.stdout);
-  process.stdout.write = (
-    chunk: any,
-    encoding?: any,
-    callback?: any,
-  ): boolean => {
-    if (typeof chunk === "string" && chunk.includes("[vite-express]")) {
+  // Silence stdout (for vite-express logs)
+  const originalStdout = process.stdout.write.bind(process.stdout);
+  process.stdout.write = ((chunk: any, encoding?: any, callback?: any): boolean => {
+    if (typeof chunk === "string" && chunk.includes("[vite-express]")) return true;
+    return originalStdout(chunk, encoding, callback);
+  }) as any;
+
+  // Silence stderr (for the pesky DEP0205 warning)
+  const originalStderr = process.stderr.write.bind(process.stderr);
+  process.stderr.write = ((chunk: any, encoding?: any, callback?: any): boolean => {
+    if (typeof chunk === "string" && (chunk.includes("DEP0205") || chunk.includes("DeprecationWarning"))) {
       return true;
     }
-    return originalStdoutWrite(chunk, encoding, callback);
-  };
+    return originalStderr(chunk, encoding, callback);
+  }) as any;
 
   process.on("warning", (warning) => {
-    if (warning.name === "DeprecationWarning" && warning.message.includes("module.register")) {
-      return;
-    }
-    if (warning.name === "DeprecationWarning") {
-      return;
-    }
-    originalStdoutWrite(warning.stack + "\n");
+    if (warning.name === "DeprecationWarning") return;
   });
 }
 

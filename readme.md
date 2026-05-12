@@ -135,8 +135,35 @@ src/
 │   └── types/
 │       └── app-types.ts
 ├── public/          # Static Assets
+├── Dockerfile       # Docker Containerization
+├── docker-compose.yml # Multi-container setup
+├── .nvmrc           # Node Version Control
+├── .npmrc           # NPM Configuration
 └── .env             # Environment Configuration
 ```
+
+## 🛠️ Developer Experience (DX)
+
+IRIS-MINI is built with a production-ready developer experience in mind. It includes:
+
+- **Node Version Management**: `.nvmrc` and `.npmrc` to strictly control and match Node/NPM environments.
+- **Containerization**: Native `Dockerfile` and `docker-compose.yml` support for easy isolated deployments.
+- **Code Quality**: Enforced linting and formatting rules via Prettier and Commitlint.
+- **Changelog Automation**: Configurations for automated, standardized changelog generation.
+
+## 🤝 Contributing
+
+We welcome contributions from the community! Whether you want to fix bugs, improve documentation, or add new features, please check our [Contributing Guidelines](CONTRIBUTING.md) to get started.
+
+Please ensure you also review our [Code of Conduct](CODE_OF_CONDUCT.md) to keep our community approachable and respectable.
+
+## 🛡️ Security
+
+Security is a priority. For instructions on how to report vulnerabilities and our security practices, please refer to our [Security Policy](SECURITY.md).
+
+## 📄 License
+
+This project is licensed under the terms of the included [LICENSE](LICENSE) file.
 
 ---
 

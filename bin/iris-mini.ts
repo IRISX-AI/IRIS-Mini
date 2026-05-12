@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+process.env.NODE_NO_WARNINGS = "1";
 import { confirm, input, select } from "@inquirer/prompts";
 import * as fs from "fs";
 import * as os from "os";

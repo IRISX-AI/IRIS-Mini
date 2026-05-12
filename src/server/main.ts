@@ -5,8 +5,6 @@ import ViteExpress from "vite-express";
 import { startIrisVoice, stopIrisVoice } from "./agent/iris-voice.js";
 import { getAvailablePort } from "./lib/port-picker.js";
 
-// --- THE ABSOLUTE MUTE ---
-// Gag vite-express before it can run any configuration
 if (process.env.NODE_ENV === "production") {
   console.info = () => {};
 }
@@ -40,7 +38,6 @@ const startServer = async () => {
   const port = await getAvailablePort(6754, 8764);
 
   server.listen(port, () => {
-    // Wipe the terminal clean
     console.clear();
 
     const banner = `

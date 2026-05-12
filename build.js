@@ -9,17 +9,21 @@ await esbuild
     format: "esm",
     packages: "external",
     minify: true,
-    define: {
-      "process.env.IRIS_PRODUCTION": '"true"',
-    },
     outfile: "dist/cli.js",
   })
   .catch(() => process.exit(1));
 
 const file = "dist/cli.js";
 let code = fs.readFileSync(file, "utf8");
+
+// Strip any garbage shebangs left by esbuild
 code = code.replace(/^#!(.*)/gm, "");
 code = code.trimStart();
-fs.writeFileSync(file, "#!/usr/bin/env node\n" + code);
 
-console.log("CLI Build Complete. Shebang locked to Line 1.");
+// --- THE GOD-MODE INJECTION ---
+// This writes the flag BEFORE any imports can load
+const absoluteTop = `#!/usr/bin/env node\nprocess.env.NODE_ENV = "production";\n`;
+
+fs.writeFileSync(file, absoluteTop + code);
+
+console.log("CLI Build Complete. Production Lock Injected.");

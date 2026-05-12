@@ -6,7 +6,6 @@ import * as path from "path";
 
 const configPath = path.join(os.homedir(), ".iris-config.json");
 
-// ── ANSI color helpers ────────────────────────────────────────────────────────
 const c = {
   green: (s: string) => `\x1b[38;2;0;255;136m${s}\x1b[0m`,
   dimGreen: (s: string) => `\x1b[38;2;0;140;70m${s}\x1b[0m`,
@@ -17,10 +16,8 @@ const c = {
   reset: "\x1b[0m",
 };
 
-// ── Sleep helper ──────────────────────────────────────────────────────────────
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-// ── Typewriter effect ─────────────────────────────────────────────────────────
 async function typewrite(text: string, delay = 18) {
   for (const char of text) {
     process.stdout.write(char);
@@ -29,7 +26,6 @@ async function typewrite(text: string, delay = 18) {
   process.stdout.write("\n");
 }
 
-// ── Animated progress bar ─────────────────────────────────────────────────────
 async function progressBar(label: string, durationMs = 800) {
   const width = 28;
   const steps = width;
@@ -48,7 +44,6 @@ async function progressBar(label: string, durationMs = 800) {
   );
 }
 
-// ── Banner ────────────────────────────────────────────────────────────────────
 function printBanner() {
   const lines = [
     "",
@@ -67,7 +62,6 @@ function printBanner() {
   lines.forEach((l) => console.log(l));
 }
 
-// ── Section divider ───────────────────────────────────────────────────────────
 function divider(label?: string) {
   const line = "─".repeat(46);
   if (label) {
@@ -82,7 +76,6 @@ function divider(label?: string) {
   }
 }
 
-// ── Status message ────────────────────────────────────────────────────────────
 function info(msg: string) {
   console.log(`  ${c.dimGreen("›")} ${c.dim(msg)}`);
 }
@@ -93,7 +86,6 @@ function warn(msg: string) {
   console.log(`  ${c.teal("!")} ${c.dim(msg)}`);
 }
 
-// ── First-run setup flow ──────────────────────────────────────────────────────
 async function runSetup(): Promise<{ apiKey: string; voice: string }> {
   console.clear();
   printBanner();
@@ -106,7 +98,6 @@ async function runSetup(): Promise<{ apiKey: string; voice: string }> {
   );
   console.log();
 
-  // Step 1 – API key
   divider("STEP 1  ·  API ACCESS");
   console.log();
   info("Get your key at: aistudio.google.com/app/apikey");
@@ -120,7 +111,6 @@ async function runSetup(): Promise<{ apiKey: string; voice: string }> {
 
   console.log();
 
-  // Step 2 – Voice
   divider("STEP 2  ·  VOICE");
   console.log();
 

@@ -2,7 +2,6 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import ViteExpress from "vite-express";
-import "../config/dot-env.js";
 import { startIrisVoice, stopIrisVoice } from "./agent/iris-voice.js";
 import { getAvailablePort } from "./lib/port-picker.js";
 

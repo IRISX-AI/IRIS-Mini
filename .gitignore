@@ -23,4 +23,4 @@ dist-ssr
 .env.test
 
 data
-iris-mini-1.0.0.tgz
+iris-mini-*.tgz

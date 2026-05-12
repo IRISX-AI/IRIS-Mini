@@ -45,7 +45,7 @@ io.on("connection", (socket) => {
 });
 
 const startServer = async () => {
-  const port = await getAvailablePort(6754, 8764);
+  const port = await getAvailablePort(6753, 8769);
 
   server.listen(port, () => {
     console.clear();

@@ -6,13 +6,13 @@ import * as path from "path";
 
 const configPath = path.join(os.homedir(), ".iris-mini-config.json");
 
-const g = (s: string) => `\x1b[38;2;0;255;136m${s}\x1b[0m`; // neon green
-const dg = (s: string) => `\x1b[38;2;0;160;80m${s}\x1b[0m`; // dim green
-const cy = (s: string) => `\x1b[38;2;0;210;180m${s}\x1b[0m`; // cyan-teal
-const w = (s: string) => `\x1b[97m${s}\x1b[0m`; // bright white
-const d = (s: string) => `\x1b[2m${s}\x1b[0m`; // dim
-const b = (s: string) => `\x1b[1m${s}\x1b[0m`; // bold
-const pu = (s: string) => `\x1b[38;2;160;100;255m${s}\x1b[0m`; // purple
+const g = (s: string) => `\x1b[38;2;0;255;136m${s}\x1b[0m`;
+const dg = (s: string) => `\x1b[38;2;0;160;80m${s}\x1b[0m`;
+const cy = (s: string) => `\x1b[38;2;0;210;180m${s}\x1b[0m`;
+const w = (s: string) => `\x1b[97m${s}\x1b[0m`;
+const d = (s: string) => `\x1b[2m${s}\x1b[0m`;
+const b = (s: string) => `\x1b[1m${s}\x1b[0m`;
+const pu = (s: string) => `\x1b[38;2;160;100;255m${s}\x1b[0m`;
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 

@@ -109,37 +109,42 @@ npm run dev
 ## 📂 Project Structure
 
 ```text
-src/
-├── client/          # Premium React Frontend
-│   ├── index.html
-│   ├── index.css
-│   ├── index.tsx
-│   ├── App.tsx
-│   └── components/  # Reusable UI Components
-│       ├── MicrophoneButton.tsx
-│       ├── ChatWindow.tsx
-│       ├── SystemStatus.tsx
-│       └── Waveform.tsx
-├── server/          # Powerful Node.js Backend
-│   ├── index.ts
-│   ├── agent/       # Specialized Agents (Voice, OS, Browser)
-│   │   ├── iris-voice.ts
-│   │   ├── system-agent.ts
-│   │   ├── browser-agent.ts
-│   │   └── file-agent.ts
-│   ├── utils/       # Utility Functions & Integrations
-│   │   ├── google-genai.ts
-│   │   ├── glowe-agent.ts
-│   │   ├── file-utils.ts
-│   │   └── date-utils.ts
-│   └── types/
-│       └── app-types.ts
-├── public/          # Static Assets
-├── Dockerfile       # Docker Containerization
-├── docker-compose.yml # Multi-container setup
-├── .nvmrc           # Node Version Control
-├── .npmrc           # NPM Configuration
-└── .env             # Environment Configuration
+├── bin/                 # CLI Executable
+│   └── iris-mini.ts
+├── data/                # Local data storage
+│   └── memory.json
+├── public/              # Static Assets
+├── src/
+│   ├── client/          # Premium React Frontend
+│   │   ├── assets/
+│   │   ├── utils/
+│   │   │   └── AICore.tsx
+│   │   ├── views/
+│   │   │   └── IrisMini.tsx
+│   │   ├── App.tsx
+│   │   ├── index.css
+│   │   └── main.tsx
+│   ├── config/          # Configuration handling
+│   │   └── dot-env.ts
+│   └── server/          # Powerful Node.js Backend
+│       ├── agent/       # Core Voice Agent
+│       │   └── iris-voice.ts
+│       ├── constants/
+│       │   └── StreamConfig.ts
+│       ├── lib/
+│       │   └── port-picker.ts
+│       ├── tools/       # Specialized Agents
+│       │   ├── app-agent.ts
+│       │   ├── browser-agent.ts
+│       │   └── nexus-agent.ts
+│       ├── utils/       # Utility Functions
+│       │   └── memory.ts
+│       └── main.ts      # Server entrypoint
+├── Dockerfile           # Docker Containerization
+├── docker-compose.yml   # Multi-container setup
+├── .nvmrc               # Node Version Control
+├── .npmrc               # NPM Configuration
+└── .env                 # Environment Configuration
 ```
 
 ## 🛠️ Developer Experience (DX)

@@ -35,7 +35,7 @@ const startServer = async () => {
   const port = await getAvailablePort(6754, 8764);
 
   server.listen(port, () => {
-    console.clear();
+    // console.clear();
     console.log(`Server is listening on http://localhost:${port}`);
   });
 

@@ -1,0 +1,15 @@
+# Dependency directories
+node_modules/
+
+# Build artifacts and compiled code
+dist/
+build/
+*.tgz
+*.exe
+
+# Environment variables
+.env
+.env.local
+
+# Package locks
+package-lock.json

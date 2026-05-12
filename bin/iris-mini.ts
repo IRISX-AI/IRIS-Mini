@@ -31,8 +31,8 @@ async function initCLI() {
     const voice = await select({
       message: "Select IRIS's voice profile:",
       choices: [
-        { name: "Female (Lyra)", value: "Lyra" },
-        { name: "Male (Puck)", value: "Puck" },
+        { name: "Female Voice", value: "Lyra" },
+        { name: "Male Voice", value: "Puck" },
       ],
     });
 

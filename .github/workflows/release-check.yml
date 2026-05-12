@@ -21,14 +21,12 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        # npm ci is faster and more reliable in CI environments
         run: npm ci
 
       - name: Run Build and Release Cycle
         run: npm run release
 
       - name: Verify Build Artifacts
-        # This checks if the .tgz package and dist folder were created
         run: |
           ls -l dist/
           ls -l *.tgz

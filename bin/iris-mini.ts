@@ -32,7 +32,7 @@ async function initCLI() {
       message: "Select IRIS's voice profile:",
       choices: [
         { name: "Female (Lyra)", value: "Lyra" },
-        { name: "Male (Puck)", value: "Puck" }, // Puck is the standard Gemini male voice
+        { name: "Male (Puck)", value: "Puck" },
       ],
     });
 
@@ -43,7 +43,7 @@ async function initCLI() {
   }
 
   process.env.GOOGLE_API_KEY = config.apiKey;
-  process.env.IRIS_VOICE = config.voice; // We will read this in your voice agent
+  process.env.IRIS_VOICE = config.voice;
 
   console.log("[SYSTEM] Booting IRIS Neural Core...");
 

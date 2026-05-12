@@ -17,7 +17,7 @@
 
 ## 🌟 Overview
 
-**IRIS-MINI** is a production-grade, state-of-the-art Voice AI Assistant. Harnessing the power of the **Google Gemini Live API**, IRIS provides real-time, conversational interactions combined with powerful system integrations. 
+**IRIS-MINI** is a production-grade, state-of-the-art Voice AI Assistant. Harnessing the power of the **Google Gemini Live API**, IRIS provides real-time, conversational interactions combined with powerful system integrations.
 
 Whether you prefer a beautiful graphical interface or a blazing-fast command-line experience, IRIS-MINI adapts to your workflow seamlessly.
 
@@ -47,37 +47,55 @@ Before you begin, ensure you have obtained the necessary API Keys:
 
 ## 🚀 Quick Start
 
-### 1. Clone the Repository
+You can use IRIS-MINI as a globally installed CLI or run it locally from the source code.
+
+### Option A: Global CLI Installation (Recommended)
+
+Install the package globally via npm:
+
+```bash
+npm install -g iris-mini
+```
+
+_(Testing locally? Build the package and install via tarball: `npm install -g ./iris-mini-1.0.0.tgz`)_
+
+Launch the assistant from your terminal from anywhere by simply typing:
+
+```bash
+iris
+```
+
+### Option B: Local Development
+
+#### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/your-username/iris-mini.git
 cd iris-mini
 ```
 
-### 2. Install Dependencies
+#### 2. Install Dependencies
+
 ```bash
 npm install
 ```
 
-### 3. Environment Variables
-Create a `.env` file in the root directory and add your API keys (see `.env.example` if available):
+#### 3. Environment Variables
+
+Create a `.env` file in the root directory and add your API keys:
+
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
 OPENWEATHER_API_KEY=your_openweather_api_key_here
 ```
 
-### 4. Run the Project
+#### 4. Run the Project
+
 To run the server and client concurrently in development mode:
+
 ```bash
 npm run dev
 ```
-
-### 5. CLI Usage
-IRIS-MINI comes with a globally accessible CLI. Build and run it easily:
-```bash
-npm run release
-npm start
-```
-*(You can also link the CLI globally using `npm link` to run `iris` from anywhere).*
 
 ## 📂 Project Structure
 
@@ -112,6 +130,7 @@ src/
 ```
 
 ---
+
 <p align="center">
   Built with 💚 and powered by AI.
 </p>

@@ -1,0 +1,34 @@
+name: IRIS-MINI CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js v24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        # npm ci is faster and more reliable in CI environments
+        run: npm ci
+
+      - name: Run Build and Release Cycle
+        run: npm run release
+
+      - name: Verify Build Artifacts
+        # This checks if the .tgz package and dist folder were created
+        run: |
+          ls -l dist/
+          ls -l *.tgz

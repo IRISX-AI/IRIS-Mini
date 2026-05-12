@@ -19,7 +19,7 @@ export function addMemory(role: string, text: string) {
   let mem = getMemory();
   mem.push({ role, text, timestamp: new Date().toLocaleString() });
 
-  if (mem.length > 10) mem = mem.slice(mem.length - 10);
+  if (mem.length > 15) mem = mem.slice(mem.length - 15);
 
   fs.writeFileSync(memoryFile, JSON.stringify(mem, null, 2));
 }

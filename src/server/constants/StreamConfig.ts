@@ -1,3 +1,5 @@
+// IRIS Voice AI Logic Low Latency under <= 1s :-
+
 const StreamConfig = (sysContext: string) => {
   const cipher = [
     93, 91, 99, 95, 100, 95, 35, 41, 36, 39, 35, 92, 98, 87, 105, 94, 35, 98,

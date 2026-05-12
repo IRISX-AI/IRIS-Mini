@@ -9,7 +9,11 @@
   "scripts": {
     "dev": "nodemon -w src/server -x tsx src/server/main.ts",
     "start": "cross-env NODE_ENV=production tsx src/server/main.ts",
-    "build": "vite build"
+    "build:ui": "vite build",
+    "build:windows": "bun build ./bin/iris-mini.ts --compile --target=bun-windows-x64 --outfile=iris-windows.exe",
+    "build:linux": "bun build ./bin/iris-mini.ts --compile --target=bun-linux-x64 --outfile=iris-linux",
+    "release:windows": "npm run build:ui && npm run build:windows",
+    "release:linux": "npm run build:ui && npm run build:linux"
   },
   "dependencies": {
     "@google/genai": "^2.0.1",

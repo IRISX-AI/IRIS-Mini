@@ -24,4 +24,4 @@ dist-ssr
 
 data
 iris-mini-*.tgz
-src/server/agents/iris-voice.ts
+*agent

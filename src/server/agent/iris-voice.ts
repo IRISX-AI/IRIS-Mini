@@ -7,12 +7,14 @@ import {
 } from "@google/genai";
 import Decibri from "decibri";
 import { Server } from "socket.io";
+import StreamConfig from "../constants/StreamConfig.js";
 import { appToolDeclarations, handleAppAction } from "../tools/app-agent.js";
 import {
   browserToolDeclarations,
   handleBrowserAction,
 } from "../tools/browser-agent.js";
 import { handleNexusFs, nexusToolDeclarations } from "../tools/nexus-agent.js";
+import { addMemory, getMemoryContextString } from "../utils/memory.js";
 const { DecibriOutput } = Decibri;
 
 let isRunning = false;
@@ -45,35 +47,48 @@ const ai = new GoogleGenAI({
   apiKey: (process.env.GOOGLE_API_KEY as string) || "",
 });
 
-const model = "gemini-3.1-flash-live-preview";
-const config = {
-  responseModalities: [Modality.AUDIO],
-  systemInstruction: "You are IRIS. An AI voice assistant created by Harsh.",
-  tools: [
-    {
-      functionDeclarations: [
-        ...nexusToolDeclarations,
-        ...browserToolDeclarations,
-        ...appToolDeclarations,
-      ],
-    },
-  ],
-  automaticActivityDetection: {
-    disabled: true,
-    startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_HIGH,
-    endOfSpeechSensitivity: EndSensitivity.END_SENSITIVITY_HIGH,
-    prefixPaddingMs: 20,
-    silenceDurationMs: 100,
-  },
-  speechConfig: {
-    voiceConfig: { prebuiltVoiceConfig: { voiceName: "Lyra" } },
-  },
-};
-
 async function live(io: Server) {
+  const pastContext = getMemoryContextString();
+  console.log("[MEMORY] Injecting history into Neural Core...");
+
+  const coreInstruction = `You are IRIS. You have root access to the machine to manage files, apps, and browsers. 
+    
+    CRITICAL CONTEXT - HERE IS YOUR PREVIOUS CONVERSATION HISTORY WITH HARSH:
+    ${pastContext}
+    
+    Resume the conversation naturally based on this history. Do not say "hello" if you are in the middle of a conversation.`;
+
+  const config = {
+    responseModalities: [Modality.AUDIO],
+    systemInstruction: coreInstruction,
+    tools: [
+      {
+        functionDeclarations: [
+          ...nexusToolDeclarations,
+          ...browserToolDeclarations,
+          ...appToolDeclarations,
+        ],
+      },
+    ],
+    automaticActivityDetection: {
+      disabled: true,
+      startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_HIGH,
+      endOfSpeechSensitivity: EndSensitivity.END_SENSITIVITY_HIGH,
+      prefixPaddingMs: 20,
+      silenceDurationMs: 100,
+    },
+    speechConfig: {
+      voiceConfig: { prebuiltVoiceConfig: { voiceName: "Lyra" } },
+    },
+  };
   const responseQueue: LiveServerMessage[] = [];
   const audioQueue: Buffer[] = [];
   let speaker: any | null = null;
+
+  let currentUserText = "";
+  let currentAgentText = "";
+
+  const Model = StreamConfig(coreInstruction);
 
   async function waitMessage(): Promise<LiveServerMessage> {
     while (responseQueue.length === 0) {
@@ -162,7 +177,7 @@ async function live(io: Server) {
   playbackLoop();
 
   const session = await ai.live.connect({
-    model: model,
+    model: Model,
     config: config,
     callbacks: {
       onopen: () => console.log("Connected to Gemini Live API"),
@@ -170,13 +185,14 @@ async function live(io: Server) {
         responseQueue.push(message);
         const content = message.serverContent;
         if (content?.inputTranscription) {
+          currentUserText += content.inputTranscription.text;
           io.emit("transcript_chunk", {
             role: "USER",
             text: content.inputTranscription.text,
           });
         }
-
         if (content?.outputTranscription) {
+          currentAgentText += content.outputTranscription.text;
           io.emit("transcript_chunk", {
             role: "AGENT",
             text: content.outputTranscription.text,
@@ -184,6 +200,14 @@ async function live(io: Server) {
         }
 
         if (content?.turnComplete) {
+          if (currentUserText.trim()) {
+            addMemory("USER", currentUserText.trim());
+            currentUserText = "";
+          }
+          if (currentAgentText.trim()) {
+            addMemory("AGENT", currentAgentText.trim());
+            currentAgentText = "";
+          }
           io.emit("turn_complete");
         }
       },

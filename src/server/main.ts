@@ -34,7 +34,8 @@ const startServer = async () => {
   const port = await getAvailablePort(6754, 8764);
 
   server.listen(port, () => {
-    // console.clear();
+    // Wipe the terminal clean
+    console.clear();
 
     const banner = `
 \x1b[32m
@@ -52,6 +53,12 @@ const startServer = async () => {
 `;
     console.log(banner);
   });
+
+  // --- THE ULTIMATE MUTE ---
+  // Temporarily disable console.info so vite-express stays quiet
+  if (process.env.NODE_ENV === "production") {
+    console.info = () => {};
+  }
 
   ViteExpress.bind(app, server);
 };

@@ -5,6 +5,12 @@ import ViteExpress from "vite-express";
 import { startIrisVoice, stopIrisVoice } from "./agent/iris-voice.js";
 import { getAvailablePort } from "./lib/port-picker.js";
 
+// --- THE ABSOLUTE MUTE ---
+// Gag vite-express before it can run any configuration
+if (process.env.NODE_ENV === "production") {
+  console.info = () => {};
+}
+
 const app = express();
 const server = http.createServer(app);
 
@@ -34,6 +40,7 @@ const startServer = async () => {
   const port = await getAvailablePort(6754, 8764);
 
   server.listen(port, () => {
+    // Wipe the terminal clean
     console.clear();
 
     const banner = `
@@ -49,13 +56,13 @@ const startServer = async () => {
 \x1b[35m [ UI PORT ] \x1b[0m http://localhost:${port}
 \x1b[35m [ AGENT ]   \x1b[0m Awaiting Connection...
 ========================================================
+\x1b[36m CREATED BY \x1b[0m Harsh (\x1b[32m@irisxai\x1b[0m)
+\x1b[36m GITHUB     \x1b[0m https://github.com/201Harsh
+\x1b[36m INSTAGRAM  \x1b[0m https://www.instagram.com/201harshs/
+========================================================
 `;
     console.log(banner);
   });
-
-  if (process.env.NODE_ENV === "production") {
-    console.info = () => {};
-  }
 
   ViteExpress.bind(app, server);
 };

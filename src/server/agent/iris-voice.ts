@@ -49,7 +49,6 @@ const ai = new GoogleGenAI({
 
 async function live(io: Server) {
   const pastContext = getMemoryContextString();
-  console.log("[MEMORY] Injecting history into Neural Core...");
 
   const coreInstruction = `You are IRIS. You have root access to the machine to manage files, apps, and browsers. 
     
@@ -110,7 +109,7 @@ async function live(io: Server) {
       format: "int16",
       sampleRate: 24000,
     });
-    speaker.on("error", (err: Error) => console.error("Speaker error:", err));
+    speaker.on("error", (err: Error) => {});
   }
 
   async function messageLoop() {
@@ -184,7 +183,7 @@ async function live(io: Server) {
     model: Model,
     config: config,
     callbacks: {
-      onopen: () => console.log("Connected to Gemini Live API"),
+      onopen: () => {},
       onmessage: (message: LiveServerMessage) => {
         responseQueue.push(message);
         const content = message.serverContent;
@@ -235,11 +234,7 @@ async function live(io: Server) {
     });
   });
 
-  micInstance.on("error", (err: Error) => {
-    console.error("Microphone error:", err);
-  });
-
-  console.log("Microphone started. Speak now...");
+  micInstance.on("error", (err: Error) => {});
 
   const closeSession = () => {
     micInstance.stop();

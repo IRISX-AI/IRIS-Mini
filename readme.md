@@ -21,6 +21,15 @@
 
 Whether you prefer a beautiful graphical interface or a blazing-fast command-line experience, IRIS-MINI adapts to your workflow seamlessly.
 
+## 📸 Showcase
+
+| **Premium Web Interface** | **Hacker-Style CLI** |
+| :---: | :---: |
+| <img src="assets/1.png" width="450" alt="IRIS Web UI" /> | <img src="assets/2.png" width="450" alt="IRIS CLI" /> |
+| *Beautiful Three.js Visualizer & React UI* | *Clean, Silent & Branded Terminal Experience* |
+
+---
+
 ## ✨ Features
 
 - 🎙️ **Advanced Voice AI**: Powered by Google Gemini Live API for real-time, low-latency, and highly intelligent conversational experiences.

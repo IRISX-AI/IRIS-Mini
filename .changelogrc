@@ -1,0 +1,13 @@
+{
+  "header": "# IRIS-MINI Changelog\n\nAll notable changes to the IRIS Neural Core will be documented in this file.",
+  "types": [
+    { "type": "feat", "section": "🚀 New Features" },
+    { "type": "fix", "section": "🐛 Bug Fixes" },
+    { "type": "chore", "section": "🛠️ Maintenance" },
+    { "type": "docs", "section": "📚 Documentation" },
+    { "type": "style", "hidden": true },
+    { "type": "refactor", "section": "🧪 Refactors" },
+    { "type": "perf", "section": "⚡ Performance Updates" },
+    { "type": "test", "hidden": true }
+  ]
+}

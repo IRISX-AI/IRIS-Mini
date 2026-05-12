@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=39FF14&height=250&section=header&text=IRIS%20Mini&fontSize=90&fontColor=ffffff&animation=fadeIn&desc=A%20Premium%20Voice%20AI%20Assistant%20powered%20by%20Google%20Gemini%20Live&descAlignY=70&descAlign=62" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0F9D58&height=250&section=header&text=IRIS%20Mini&fontSize=90&fontColor=ffffff&animation=fadeIn&desc=A%20Premium%20Voice%20AI%20Assistant%20powered%20by%20Google%20Gemini%20Live&descAlignY=70&descAlign=62" />
 </div>
 
 <p align="center">
@@ -7,10 +7,10 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Google-Gemini_Live-39FF14?style=for-the-badge&logo=google" alt="Google Gemini" />
-  <img src="https://img.shields.io/badge/CLI-Ready-39FF14?style=for-the-badge&logo=command-line" alt="CLI Ready" />
-  <img src="https://img.shields.io/badge/React-UI-39FF14?style=for-the-badge&logo=react" alt="React UI" />
-  <img src="https://img.shields.io/badge/Node.js-Backend-39FF14?style=for-the-badge&logo=nodedotjs" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Google-Gemini_Live-0F9D58?style=for-the-badge&logo=google" alt="Google Gemini" />
+  <img src="https://img.shields.io/badge/CLI-Ready-0F9D58?style=for-the-badge&logo=command-line" alt="CLI Ready" />
+  <img src="https://img.shields.io/badge/React-UI-0F9D58?style=for-the-badge&logo=react" alt="React UI" />
+  <img src="https://img.shields.io/badge/Node.js-Backend-0F9D58?style=for-the-badge&logo=nodedotjs" alt="Node.js" />
 </p>
 
 ---

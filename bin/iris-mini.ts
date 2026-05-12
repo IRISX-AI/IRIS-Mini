@@ -45,7 +45,6 @@ async function initCLI() {
   process.env.GOOGLE_API_KEY = config.apiKey;
   process.env.IRIS_VOICE = config.voice;
 
-  // Boot the core. main.ts will handle the console clearing and banner drawing!
   await import("../src/server/main.ts");
 }
 

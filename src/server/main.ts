@@ -2,11 +2,17 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import ViteExpress from "vite-express";
-import { startIrisVoice, stopIrisVoice } from "./agent/iris-voice.js";
-import { getAvailablePort } from "./lib/port-picker.js";
+import { startIrisVoice, stopIrisVoice } from "./agent/iris-voice.ts";
+import { getAvailablePort } from "./lib/port-picker.ts";
 
 if (process.env.NODE_ENV === "production") {
-  console.info = () => {};
+  const originalLog = console.log;
+  console.log = (...args: any[]) => {
+    if (typeof args[0] === "string" && args[0].includes("[vite-express]")) {
+      return; // Drop the log into the void
+    }
+    originalLog.apply(console, args);
+  };
 }
 
 const app = express();

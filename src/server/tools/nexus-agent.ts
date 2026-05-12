@@ -42,7 +42,6 @@ export const nexusToolDeclarations: FunctionDeclaration[] = [
 ];
 
 export const handleNexusFs = (toolCall: any, io: Server) => {
-  console.log("[NEXUS-FS] Intercepted Tool Call from IRIS...");
   const functionResponses = [];
 
   for (const fc of toolCall.functionCalls) {
@@ -54,7 +53,6 @@ export const handleNexusFs = (toolCall: any, io: Server) => {
       if (fc.name === "create_directory") {
         fs.mkdirSync(args.dir_path, { recursive: true });
         resultStr = `Success: Directory created at ${args.dir_path}`;
-        console.log(resultStr);
         io.emit(
           "system_status",
           `[NEXUS-FS] Directory Created: ${args.dir_path}`,
@@ -62,14 +60,12 @@ export const handleNexusFs = (toolCall: any, io: Server) => {
       } else if (fc.name === "write_file") {
         fs.writeFileSync(args.file_path, args.content);
         resultStr = `Success: File written at ${args.file_path}`;
-        console.log(resultStr);
         io.emit("system_status", `[NEXUS-FS] File Created: ${args.file_path}`);
       } else {
         resultStr = `Error: Function ${fc.name} not found.`;
       }
     } catch (err: any) {
       resultStr = `Error executing ${fc.name}: ${err.message}`;
-      console.error(resultStr);
       io.emit("system_status", `[NEXUS-FS ERROR] ${err.message}`);
     }
 

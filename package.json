@@ -3,13 +3,19 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "bin": {
+    "iris": "./dist/cli.js"
+  },
   "scripts": {
     "dev": "nodemon -w src/server -x tsx src/server/main.ts",
-    "start": "cross-env NODE_ENV=production tsx src/server/main.ts",
-    "build": "vite build"
+    "start": "cross-env NODE_ENV=production node dist/cli.js",
+    "build:ui": "vite build",
+    "build:cli": "node build.js",
+    "release": "npm run build:ui && npm run build:cli && npm pack"
   },
   "dependencies": {
     "@google/genai": "^2.0.1",
+    "@inquirer/prompts": "^8.4.3",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "@tailwindcss/vite": "^4.3.0",

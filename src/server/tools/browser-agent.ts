@@ -1,6 +1,6 @@
+import { Type, type FunctionDeclaration } from "@google/genai";
 import open from "open";
 import { Server } from "socket.io";
-import { Type, type FunctionDeclaration } from "@google/genai";
 
 export const browserToolDeclarations: FunctionDeclaration[] = [
   {
@@ -77,8 +77,6 @@ export const handleBrowserAction = async (fc: any, io: Server) => {
     resultStr = `Error executing ${fc.name}: ${err.message}`;
     io.emit("system_status", `[BROWSER ERROR] ${err.message}`);
   }
-
-  console.log(`[BROWSER-AGENT] ${resultStr}`);
 
   return {
     id: fc.id,

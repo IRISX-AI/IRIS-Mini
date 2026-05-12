@@ -8,6 +8,13 @@ import { getAvailablePort } from "./lib/port-picker.js";
 const app = express();
 const server = http.createServer(app);
 
+if (
+  process.env.IRIS_PRODUCTION === "true" ||
+  process.env.NODE_ENV === "production"
+) {
+  ViteExpress.config({ mode: "production" });
+}
+
 const io = new Server(server, {
   cors: {
     origin: "*",

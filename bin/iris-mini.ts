@@ -6,7 +6,6 @@ import * as path from "path";
 
 const configPath = path.join(os.homedir(), ".iris-mini-config.json");
 
-// ── ANSI helpers ──────────────────────────────────────────────────────────────
 const g = (s: string) => `\x1b[38;2;0;255;136m${s}\x1b[0m`; // neon green
 const dg = (s: string) => `\x1b[38;2;0;160;80m${s}\x1b[0m`; // dim green
 const cy = (s: string) => `\x1b[38;2;0;210;180m${s}\x1b[0m`; // cyan-teal
@@ -17,7 +16,6 @@ const pu = (s: string) => `\x1b[38;2;160;100;255m${s}\x1b[0m`; // purple
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
-// ── Typewriter ────────────────────────────────────────────────────────────────
 async function type(text: string, ms = 15) {
   for (const ch of text) {
     process.stdout.write(ch);
@@ -26,7 +24,6 @@ async function type(text: string, ms = 15) {
   process.stdout.write("\n");
 }
 
-// ── Spinner ───────────────────────────────────────────────────────────────────
 async function spinner(label: string, ms = 700) {
   const frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
   const end = Date.now() + ms;
@@ -39,7 +36,6 @@ async function spinner(label: string, ms = 700) {
   process.stdout.write(`\r  ${g("✓")}  ${d(label)}\n`);
 }
 
-// ── Progress bar ──────────────────────────────────────────────────────────────
 async function bar(label: string, ms = 600) {
   const W = 24;
   for (let i = 0; i <= W; i++) {
@@ -54,7 +50,6 @@ async function bar(label: string, ms = 600) {
   process.stdout.write("\n");
 }
 
-// ── Layout helpers ────────────────────────────────────────────────────────────
 const LINE = "─".repeat(56);
 function div(label = "") {
   if (!label) {
@@ -72,7 +67,6 @@ const info = (msg: string) => console.log(`  ${dg("›")}  ${d(msg)}`);
 const ok = (msg: string) => console.log(`  ${g("✓")}  ${msg}`);
 const hint = (msg: string) => console.log(`  ${cy("·")}  ${d(msg)}`);
 
-// ── Banners ───────────────────────────────────────────────────────────────────
 function printBanner(mode: "setup" | "online") {
   console.clear();
   ln();
@@ -108,7 +102,6 @@ function printBanner(mode: "setup" | "online") {
   ln();
 }
 
-// ── First-run setup ───────────────────────────────────────────────────────────
 async function runSetup(): Promise<{ apiKey: string; voice: string }> {
   printBanner("setup");
 
@@ -119,7 +112,6 @@ async function runSetup(): Promise<{ apiKey: string; voice: string }> {
   ln();
   await sleep(200);
 
-  // Step 1 — API key
   div("  1 / 2  ·  API KEY  ");
   ln();
   hint("Get your free key at  →  aistudio.google.com/app/apikey");
@@ -136,7 +128,6 @@ async function runSetup(): Promise<{ apiKey: string; voice: string }> {
   await spinner("Validating key format", 480);
   ln();
 
-  // Step 2 — Voice
   div("  2 / 2  ·  VOICE  ");
   ln();
   hint("You can change this anytime in  ~/.iris-mini-config.json");
@@ -160,7 +151,6 @@ async function runSetup(): Promise<{ apiKey: string; voice: string }> {
 
   ln();
 
-  // Confirm
   div("  REVIEW  ");
   ln();
   info(
@@ -185,7 +175,6 @@ async function runSetup(): Promise<{ apiKey: string; voice: string }> {
   return { apiKey: apiKey.trim(), voice };
 }
 
-// ── Boot animation ────────────────────────────────────────────────────────────
 async function boot() {
   ln();
   div("  STARTING  ");
@@ -205,7 +194,6 @@ async function boot() {
   ln();
 }
 
-// ── Entry point ───────────────────────────────────────────────────────────────
 async function initCLI() {
   let config: { apiKey: string; voice: string } | null = null;
   let firstRun = false;
@@ -214,9 +202,7 @@ async function initCLI() {
     try {
       const raw = JSON.parse(fs.readFileSync(configPath, "utf-8"));
       if (raw?.apiKey && raw?.voice) config = raw;
-    } catch {
-      // corrupted — re-run setup below
-    }
+    } catch {}
   }
 
   if (!config) {

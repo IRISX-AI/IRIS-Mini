@@ -72,6 +72,7 @@ const startServer = async () => {
 \x1b[36m [ NEURAL CORE ONLINE ]\x1b[0m
 \x1b[35m [ UI PORT ] \x1b[0m http://localhost:${port}
 \x1b[35m [ AGENT ]   \x1b[0m Awaiting Connection...
+\x1b[90m [ EXIT ]    \x1b[0m Press \x1b[31mCtrl + C\x1b[0m to stop
 ========================================================
 \x1b[36m CREATED BY \x1b[0m Harsh (\x1b[32m@irisxai\x1b[0m)
 \x1b[36m GITHUB     \x1b[0m https://github.com/201Harsh

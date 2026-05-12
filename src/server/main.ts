@@ -8,7 +8,6 @@ import { getAvailablePort } from "./lib/port-picker.js";
 const app = express();
 const server = http.createServer(app);
 
-// Force ViteExpress to stay quiet
 ViteExpress.config({ mode: "production" });
 
 const io = new Server(server, {
@@ -35,10 +34,8 @@ const startServer = async () => {
   const port = await getAvailablePort(6754, 8764);
 
   server.listen(port, () => {
-    // 1. Wipe the terminal clean of any startup noise
     console.clear();
 
-    // 2. Draw the Hacker Banner (Using raw ANSI color codes)
     const banner = `
 \x1b[32m
  ██╗██████╗ ██╗███████╗   ███╗   ███╗██╗███╗   ██╗██╗

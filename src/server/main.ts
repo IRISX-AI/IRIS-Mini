@@ -8,12 +8,8 @@ import { getAvailablePort } from "./lib/port-picker.js";
 const app = express();
 const server = http.createServer(app);
 
-if (
-  process.env.IRIS_PRODUCTION === "true" ||
-  process.env.NODE_ENV === "production"
-) {
-  ViteExpress.config({ mode: "production" });
-}
+// Force ViteExpress to stay quiet
+ViteExpress.config({ mode: "production" });
 
 const io = new Server(server, {
   cors: {
@@ -22,8 +18,6 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("\nThe User have been connected", socket.id);
-
   socket.on("Iris_Connected", (msg) => {
     startIrisVoice(io);
   });
@@ -34,7 +28,6 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     stopIrisVoice(io);
-    console.log(`The User have been disconnected`, socket.id);
   });
 });
 
@@ -42,8 +35,25 @@ const startServer = async () => {
   const port = await getAvailablePort(6754, 8764);
 
   server.listen(port, () => {
-    // console.clear();
-    console.log(`Server is listening on http://localhost:${port}`);
+    // 1. Wipe the terminal clean of any startup noise
+    console.clear();
+
+    // 2. Draw the Hacker Banner (Using raw ANSI color codes)
+    const banner = `
+\x1b[32m
+ ██╗██████╗ ██╗███████╗   ███╗   ███╗██╗███╗   ██╗██╗
+ ██║██╔══██╗██║██╔════╝   ████╗ ████║██║████╗  ██║██║
+ ██║██████╔╝██║███████╗   ██╔████╔██║██║██╔██╗ ██║██║
+ ██║██╔══██╗██║╚════██║   ██║╚██╔╝██║██║██║╚██╗██║██║
+ ██║██║  ██║██║███████║   ██║ ╚═╝ ██║██║██║ ╚████║██║
+ ╚═╝╚═╝  ╚═╝╚═╝╚══════╝   ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝
+\x1b[0m
+\x1b[36m [ NEURAL CORE ONLINE ]\x1b[0m
+\x1b[35m [ UI PORT ] \x1b[0m http://localhost:${port}
+\x1b[35m [ AGENT ]   \x1b[0m Awaiting Connection...
+========================================================
+`;
+    console.log(banner);
   });
 
   ViteExpress.bind(app, server);

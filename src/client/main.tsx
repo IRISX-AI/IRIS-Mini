@@ -21,7 +21,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ToastContainer
       position="top-left"
-      autoClose={3000}
+      autoClose={2500}
       hideProgressBar={false}
       newestOnTop={false}
       closeOnClick={false}

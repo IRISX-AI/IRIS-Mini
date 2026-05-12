@@ -5,8 +5,6 @@ import ViteExpress from "vite-express";
 import { startIrisVoice, stopIrisVoice } from "./agent/iris-voice.js";
 import { getAvailablePort } from "./lib/port-picker.js";
 
-// --- THE NUCLEAR STREAM INTERCEPTOR ---
-// Hijacks the raw Node.js system output stream. Nothing can bypass this.
 if (process.env.NODE_ENV === "production") {
   const originalStdoutWrite = process.stdout.write.bind(process.stdout);
   process.stdout.write = (
@@ -15,9 +13,8 @@ if (process.env.NODE_ENV === "production") {
     callback?: any,
   ): boolean => {
     if (typeof chunk === "string" && chunk.includes("[vite-express]")) {
-      return true; // Silently drop the chunk into the void
+      return true;
     }
-    // Let everything else through
     return originalStdoutWrite(chunk, encoding, callback);
   };
 }
@@ -51,10 +48,8 @@ const startServer = async () => {
   const port = await getAvailablePort(6754, 8764);
 
   server.listen(port, () => {
-    // Wipe the terminal clean
     console.clear();
 
-    // Your Branded ASCII Banner
     const banner = `
 \x1b[32m
  ██╗██████╗ ██╗███████╗   ███╗   ███╗██╗███╗   ██╗██╗
@@ -73,7 +68,6 @@ const startServer = async () => {
 \x1b[36m INSTAGRAM  \x1b[0m https://www.instagram.com/201harshs/
 ========================================================
 `;
-    // The interceptor lets your banner through because it's clean!
     process.stdout.write(banner + "\n");
   });
 

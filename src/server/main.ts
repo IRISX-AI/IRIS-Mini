@@ -6,6 +6,7 @@ import { startIrisVoice, stopIrisVoice } from "./agent/iris-voice.js";
 import { getAvailablePort } from "./lib/port-picker.js";
 
 if (process.env.NODE_ENV === "production") {
+  // 1. Intercept Raw System Output (Kills [vite-express] logs)
   const originalStdoutWrite = process.stdout.write.bind(process.stdout);
   process.stdout.write = (
     chunk: any,
@@ -17,7 +18,23 @@ if (process.env.NODE_ENV === "production") {
     }
     return originalStdoutWrite(chunk, encoding, callback);
   };
+
+  // 2. Intercept Internal Node Warnings (Kills DEP0205 and others)
+  process.on("warning", (warning) => {
+    // Specifically target the module registration warning
+    if (warning.name === "DeprecationWarning" && warning.message.includes("module.register")) {
+      return;
+    }
+    // Silence all deprecation warnings in production to keep the CLI clean
+    if (warning.name === "DeprecationWarning") {
+      return;
+    }
+    // Let critical non-deprecation warnings through (optional)
+    originalStdoutWrite(warning.stack + "\n");
+  });
 }
+
+
 
 const app = express();
 const server = http.createServer(app);

@@ -55,6 +55,7 @@ const startServer = async () => {
 
   server.listen(port, () => {
     console.clear();
+    console.clear();
 
     const banner = `
 \x1b[32m

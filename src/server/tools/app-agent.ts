@@ -80,8 +80,6 @@ export const handleAppAction = async (fc: any, io: Server) => {
     io.emit("system_status", `[APP ERROR] Failed to manage ${args.app_name}`);
   }
 
-  console.log(`[APP-AGENT] ${resultStr}`);
-
   return {
     id: fc.id,
     name: fc.name,

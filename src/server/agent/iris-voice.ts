@@ -46,37 +46,7 @@ const ai = new GoogleGenAI({
   apiKey: (process.env.GOOGLE_API_KEY as string) || "",
 });
 
-// const pastContext = getMemoryContextString();
-
 const model = "gemini-3.1-flash-live-preview";
-// const config = {
-//   responseModalities: [Modality.AUDIO],
-//   systemInstruction: `You are IRIS. You have root access to the machine to manage files, apps, and browsers.
-
-//     CRITICAL CONTEXT - HERE IS YOUR PREVIOUS CONVERSATION HISTORY WITH HARSH:
-//     ${pastContext}
-
-//     Resume the conversation naturally based on this history.`,
-//   tools: [
-//     {
-//       functionDeclarations: [
-//         ...nexusToolDeclarations,
-//         ...browserToolDeclarations,
-//         ...appToolDeclarations,
-//       ],
-//     },
-//   ],
-//   automaticActivityDetection: {
-//     disabled: true,
-//     startOfSpeechSensitivity: StartSensitivity.START_SENSITIVITY_HIGH,
-//     endOfSpeechSensitivity: EndSensitivity.END_SENSITIVITY_HIGH,
-//     prefixPaddingMs: 20,
-//     silenceDurationMs: 100,
-//   },
-//   speechConfig: {
-//     voiceConfig: { prebuiltVoiceConfig: { voiceName: "Lyra" } },
-//   },
-// };
 
 async function live(io: Server) {
   const pastContext = getMemoryContextString();

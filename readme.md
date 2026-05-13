@@ -7,6 +7,7 @@
 </p>
 
 <p align="center">
+  <a href="https://www.npmjs.com/package/iris-mini"><img src="https://img.shields.io/npm/v/iris-mini?style=for-the-badge&color=0F9D58" alt="NPM Version" /></a>
   <img src="https://img.shields.io/badge/Google-Gemini_Live-0F9D58?style=for-the-badge&logo=google" alt="Google Gemini" />
   <img src="https://img.shields.io/badge/CLI-Ready-0F9D58?style=for-the-badge&logo=command-line" alt="CLI Ready" />
   <img src="https://img.shields.io/badge/React-UI-0F9D58?style=for-the-badge&logo=react" alt="React UI" />
@@ -54,57 +55,100 @@ Before you begin, ensure you have obtained the necessary API Keys:
 - [Google Gemini API Key](https://aistudio.google.com/app/apikey)
 - [OpenWeatherMap API Key](https://openweathermap.org/api)
 
-## 🚀 Quick Start
+## 🚀 Quick Start & Installation
 
-You can use IRIS-MINI as a globally installed CLI or run it locally from the source code.
+You can use IRIS-MINI as a globally installed CLI (Recommended) or run it locally from the source code for development.
 
-### Option A: Global CLI Installation (Recommended)
+### Option A: Global CLI Installation (The Primary Path)
 
-Install the package globally via npm:
+The most robust way to experience IRIS is directly through your terminal.
+
+> **⚠️ Important Requirement:** IRIS-MINI strictly requires **Node.js v24+**. Please ensure your environment is updated before proceeding.
+
+#### Step 1: Install Globally
+Install the package globally via npm to make the `iris` command available everywhere on your system:
 
 ```bash
 npm install -g iris-mini
 ```
 
-_(Testing locally? Build the package and install via tarball: `npm install -g ./iris-mini-1.0.0.tgz`)_
-
-Launch the assistant from your terminal from anywhere by simply typing:
+#### Step 2: First Run Experience
+Launch the assistant for the first time:
 
 ```bash
 iris
 ```
 
-### Option B: Local Development
+On this initial run, an interactive **Setup Wizard** will launch. It will guide you to:
+1. Input your **Gemini API Key**.
+2. Select your preferred **Voice Personality** (Choose between the crisp tones of *Lyra* or *Puck*).
+
+*Note: Subsequent runs will completely bypass this setup, instantly booting the Neural Core and dropping you straight into the Voice AI experience.*
+
+### Option B: Local Development & Hacker Setup
+
+If you want to poke around the codebase, tweak the UI, or contribute to the project, follow this path.
 
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/iris-mini.git
-cd iris-mini
+git clone https://github.com/201Harsh/IRIS-Mini.git
+cd IRIS-Mini
 ```
 
 #### 2. Install Dependencies
+
+Ensure you are on Node.js v24+, then run:
 
 ```bash
 npm install
 ```
 
-#### 3. Environment Variables
+#### 3. Configure Environment Variables
 
-Create a `.env` file in the root directory and add your API keys:
+Create a `.env` file in the root directory based on the following template. Replace the placeholders with your actual API keys:
 
 ```env
+# Google Gemini API Key for Voice AI
 GEMINI_API_KEY=your_gemini_api_key_here
+
+# OpenWeatherMap API Key for real-time weather data
 OPENWEATHER_API_KEY=your_openweather_api_key_here
 ```
 
-#### 4. Run the Project
+#### 4. Ignite the Core
 
-To run the server and client concurrently in development mode:
+Start both the backend server and the React frontend concurrently in development mode:
 
 ```bash
 npm run dev
 ```
+
+### Option C: Docker Deployment
+
+For headless environments, homelab servers, or cloud deployments, IRIS-MINI comes fully containerized out-of-the-box.
+
+> **Note:** Running via Docker disables local Windows integrations and native microphone access due to container isolation. It is best suited for network-level access or backend services.
+
+Launch the full stack in detached mode:
+
+```bash
+docker-compose up -d --build
+```
+
+---
+
+## 🚑 Troubleshooting & Common Issues
+
+Encountering issues? Here are the most common hurdles and how to bypass them:
+
+- **"Unsupported Engine" Error during `npm install`:**
+  You are running an older version of Node.js. IRIS-MINI enforces strict environment rules via `.npmrc`. You **must** update to Node.js v24+.
+
+- **Voice AI / Microphone Not Working (Windows):**
+  Windows may block terminal apps from accessing your microphone by default. Go to **Windows Settings > Privacy & security > Microphone** and ensure that "Let desktop apps access your microphone" is turned **ON**.
+
+---
 
 ## 📂 Project Structure
 

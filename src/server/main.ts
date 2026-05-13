@@ -4,6 +4,8 @@ import { Server } from "socket.io";
 import ViteExpress from "vite-express";
 import { startIrisVoice, stopIrisVoice } from "./agent/iris-voice.js";
 import { getAvailablePort } from "./lib/port-picker.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 if (process.env.NODE_ENV === "production") {
   const originalStdout = process.stdout.write.bind(process.stdout);
@@ -79,7 +81,23 @@ const startServer = async () => {
     process.stdout.write(banner + "\n");
   });
 
-  ViteExpress.bind(app, server);
+  // --- THE PATHING FIX FOR GLOBAL INSTALLS ---
+  if (process.env.NODE_ENV === "production") {
+    // 1. Calculate the absolute directory of this compiled file
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+
+    // 2. Serve the compiled React UI directly from that directory
+    app.use(express.static(__dirname));
+
+    // 3. SPA Fallback: Route all unmatched paths back to React
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(__dirname, "index.html"));
+    });
+  } else {
+    // 4. Use ViteExpress strictly for local dev Hot-Module Reloading
+    ViteExpress.bind(app, server);
+  }
 };
 
 startServer();

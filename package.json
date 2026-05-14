@@ -1,11 +1,21 @@
 {
   "name": "iris-mini",
+  "description": "A lightweight CLI Voice Assistant powered by Gemini",
   "author": {
     "name": "Harsh Pandey",
     "email": "gamerpandeyharsh@gmail.com"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/201Harsh/iris-mini.git"
+  },
+  "bugs": {
+    "url": "https://github.com/201Harsh/iris-mini/issues"
+  },
+  "homepage": "https://irisaiw.vercel.app",
   "private": false,
-  "version": "1.1.1",
+  "version": "1.1.2",
   "type": "module",
   "engines": {
     "node": ">=24.0.0",

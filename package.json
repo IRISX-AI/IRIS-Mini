@@ -5,7 +5,7 @@
     "name": "Harsh Pandey",
     "email": "gamerpandeyharsh@gmail.com"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/201Harsh/iris-mini.git"

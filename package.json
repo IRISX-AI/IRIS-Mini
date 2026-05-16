@@ -1,6 +1,6 @@
 {
   "name": "iris-mini",
-  "description": "A lightweight CLI Voice Assistant powered by Gemini",
+  "description": "A lightweight CLI Voice Assistant powered by Gemini with Ultra Low Latency",
   "author": {
     "name": "Harsh Pandey",
     "email": "gamerpandeyharsh@gmail.com"

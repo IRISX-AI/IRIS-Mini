@@ -26,3 +26,4 @@ Please report any security issues directly via:
 - Any potential impact on user data or system integrity.
 
 We take all reports seriously and will attempt to acknowledge your report within 48 hours. If the vulnerability is verified, we will issue a patch and credit you in the release notes for the responsible disclosure.
+

@@ -52,3 +52,4 @@ Project maintainers will follow these Community Impact Guidelines in determining
 ---
 
 _This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1._
+

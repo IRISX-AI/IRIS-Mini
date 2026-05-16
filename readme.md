@@ -36,7 +36,6 @@ Whether you prefer a beautiful graphical interface or a blazing-fast command-lin
 - 🎙️ **Advanced Voice AI**: Powered by Google Gemini Live API for real-time, low-latency, and highly intelligent conversational experiences.
 - 💻 **Deep OS Integration**: Seamlessly open, close, and manage applications on your local Windows machine.
 - 🌍 **Web Search & Knowledge**: Instantly search Google and fetch accurate, up-to-date information.
-- ⛅ **Real-Time Data**: Get the latest weather updates, time, date, and day information for any specific location worldwide.
 - 🚀 **CLI Powerhouse**: Exposes an easy-to-use Command Line Interface (CLI) for power users to manage the assistant entirely from the terminal.
 
 ## 🛠️ Tech Stack
@@ -53,7 +52,6 @@ Built with modern, robust technologies ensuring high performance and a premium f
 Before you begin, ensure you have obtained the necessary API Keys:
 
 - [Google Gemini API Key](https://aistudio.google.com/app/apikey)
-- [OpenWeatherMap API Key](https://openweathermap.org/api)
 
 ## 🚀 Quick Start & Installation
 
@@ -112,8 +110,6 @@ Create a `.env` file in the root directory based on the following template. Repl
 # Google Gemini API Key for Voice AI
 GEMINI_API_KEY=your_gemini_api_key_here
 
-# OpenWeatherMap API Key for real-time weather data
-OPENWEATHER_API_KEY=your_openweather_api_key_here
 ```
 
 #### 4. Ignite the Core

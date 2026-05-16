@@ -168,7 +168,7 @@ Encountering issues? Here are the most common hurdles and how to bypass them:
 │   │   └── dot-env.ts
 │   └── server/          # Powerful Node.js Backend
 │       ├── agent/       # Core Voice Agent
-│       │   └── iris-voice.ts
+│       │   └── iris-voice.ts # Gemini Live API
 │       ├── constants/
 │       │   └── StreamConfig.ts
 │       ├── lib/

@@ -9,4 +9,3 @@ bracketSameLine: false
 arrowParens: always
 plugins:
   - prettier-plugin-tailwindcss
-

@@ -16,4 +16,3 @@ ENV IRIS_PRODUCTION="true"
 EXPOSE 6754
 
 CMD [ "node", "dist/cli.js" ]
-

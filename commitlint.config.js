@@ -9,4 +9,3 @@ export default {
     "subject-case": [2, "always", "sentence-case"]
   }
 };
-

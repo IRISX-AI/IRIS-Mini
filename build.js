@@ -22,4 +22,3 @@ code = code.trimStart();
 const absoluteTop = `#!/usr/bin/env node\nprocess.env.NODE_ENV = "production";\n`;
 
 fs.writeFileSync(file, absoluteTop + code);
-

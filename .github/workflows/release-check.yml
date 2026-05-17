@@ -1,32 +1,32 @@
-# name: IRIS-MINI CI
+name: IRIS-MINI CI
 
-# on:
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-# jobs:
-#   build-and-test:
-#     runs-on: ubuntu-latest
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout Code
-#         uses: actions/checkout@v4
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-#       - name: Setup Node.js v24
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: '24'
-#           cache: 'npm'
+      - name: Setup Node.js v24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
 
-#       - name: Install Dependencies
-#         run: npm ci
+      - name: Install Dependencies
+        run: npm ci
 
-#       - name: Run Build and Release Cycle
-#         run: npm run release
+      - name: Run Build and Release Cycle
+        run: npm run release
 
-#       - name: Verify Build Artifacts
-#         run: |
-#           ls -l dist/
-#           ls -l *.tgz
+      - name: Verify Build Artifacts
+        run: |
+          ls -l dist/
+          ls -l *.tgz

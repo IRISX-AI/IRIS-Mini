@@ -13,4 +13,3 @@ Fixes # (issue number)
 - [ ] I have commented my code, particularly in hard-to-understand areas.
 - [ ] I have verified that `npm run release` successfully builds the CLI without syntax errors.
 - [ ] I agree to the Non-Commercial Apache 2.0 licensing terms of this repository.
-

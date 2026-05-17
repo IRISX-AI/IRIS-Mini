@@ -144,4 +144,3 @@ src/
 <p align="center">
   Built with 💚 and powered by AI.
 </p>
-

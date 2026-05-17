@@ -8,4 +8,3 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   logLevel: isProduction ? "silent" : "info",
 });
-

@@ -1,7 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 
+
 const memoryFile = path.join(process.cwd(), "data", "memory.json");
+
 
 export function getMemory() {
   if (!fs.existsSync(memoryFile)) return [];

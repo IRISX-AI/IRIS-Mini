@@ -213,6 +213,6 @@ This project is licensed under the terms of the included [LICENSE](LICENSE) file
 ---
 
 <p align="center">
-  Built with 💚 by 201Harsh.
+  Built with 💚 by Harsh.
 </p>
 

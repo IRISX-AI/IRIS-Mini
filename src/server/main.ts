@@ -1,3 +1,4 @@
+import "../config/dot-env.js";
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
@@ -39,11 +40,11 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("Iris_Connected", (msg) => {
+  socket.on("Yana_Connected", (msg) => {
     startIrisVoice(io);
   });
 
-  socket.on("Iris_Disconnected", (msg) => {
+  socket.on("Yana_Disconnected", (msg) => {
     stopIrisVoice(io);
   });
 
@@ -60,22 +61,21 @@ const startServer = async () => {
     console.clear();
 
     const banner = `
-\x1b[32m
- ██╗██████╗ ██╗███████╗   ███╗   ███╗██╗███╗   ██╗██╗
- ██║██╔══██╗██║██╔════╝   ████╗ ████║██║████╗  ██║██║
- ██║██████╔╝██║███████╗   ██╔████╔██║██║██╔██╗ ██║██║
- ██║██╔══██╗██║╚════██║   ██║╚██╔╝██║██║██║╚██╗██║██║
- ██║██║  ██║██║███████║   ██║ ╚═╝ ██║██║██║ ╚████║██║
- ╚═╝╚═╝  ╚═╝╚═╝╚══════╝   ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝
+\x1b[38;2;236;72;153m
+  ██╗   ██╗ █████╗ ███╗   ██╗ █████╗ 
+  ╚██╗ ██╔╝██╔══██╗████╗  ██║██╔══██╗
+   ╚████╔╝ ███████║██╔██╗ ██║███████║
+    ╚██╔╝  ██╔══██║██║╚██╗██║██╔══██║
+     ██║   ██║  ██║██║ ╚████║██║  ██║
+     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
 \x1b[0m
-\x1b[36m [ NEURAL CORE ONLINE ]\x1b[0m
-\x1b[35m [ UI PORT ] \x1b[0m http://localhost:${port}
-\x1b[35m [ AGENT ]   \x1b[0m Awaiting Connection...
+\x1b[38;2;168;85;247m [ NEURAL CORE ONLINE ]\x1b[0m
+\x1b[38;2;236;72;153m [ UI PORT ] \x1b[0m http://localhost:${port}
+\x1b[38;2;236;72;153m [ AGENT ]   \x1b[0m Awaiting Connection...
 \x1b[90m [ EXIT ]    \x1b[0m Press \x1b[31mCtrl + C\x1b[0m to stop
 ========================================================
-\x1b[36m CREATED BY \x1b[0m Harsh (\x1b[32m@irisxai\x1b[0m)
-\x1b[36m GITHUB     \x1b[0m https://github.com/201Harsh
-\x1b[36m INSTAGRAM  \x1b[0m https://www.instagram.com/201harshs/
+\x1b[38;2;168;85;247m CRAFTED BY \x1b[0m Ashit
+\x1b[38;2;168;85;247m POWERED BY \x1b[0m Gemini Live API
 ========================================================
 `;
     process.stdout.write(banner + "\n");

@@ -5,7 +5,7 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 
-const configPath = path.join(os.homedir(), ".iris-mini-config.json");
+const configPath = path.join(os.homedir(), ".yana-mini-config.json");
 
 const g = (s: string) => `\x1b[38;2;0;255;136m${s}\x1b[0m`;
 const dg = (s: string) => `\x1b[38;2;0;160;80m${s}\x1b[0m`;
@@ -71,12 +71,12 @@ const hint = (msg: string) => console.log(`  ${cy("·")}  ${d(msg)}`);
 function printBanner(mode: "setup" | "online") {
   console.clear();
   ln();
-  console.log(g("  ██╗██████╗ ██╗███████╗   ███╗   ███╗██╗███╗   ██╗██╗"));
-  console.log(g("  ██║██╔══██╗██║██╔════╝   ████╗ ████║██║████╗  ██║██║"));
-  console.log(g("  ██║██████╔╝██║███████╗   ██╔████╔██║██║██╔██╗ ██║██║"));
-  console.log(g("  ██║██╔══██╗██║╚════██║   ██║╚██╔╝██║██║██║╚██╗██║██║"));
-  console.log(g("  ██║██║  ██║██║███████║   ██║ ╚═╝ ██║██║██║ ╚████║██║"));
-  console.log(g("  ╚═╝╚═╝  ╚═╝╚═╝╚══════╝   ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝"));
+  console.log(g("  ██╗   ██╗ █████╗ ███╗   ██╗ █████╗ "));
+  console.log(g("  ╚██╗ ██╔╝██╔══██╗████╗  ██║██╔══██╗"));
+  console.log(g("   ╚████╔╝ ███████║██╔██╗ ██║███████║"));
+  console.log(g("    ╚██╔╝  ██╔══██║██║╚██╗██║██╔══██║"));
+  console.log(g("     ██║   ██║  ██║██║ ╚████║██║  ██║"));
+  console.log(g("     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝"));
   ln();
 
   const tag =
@@ -91,11 +91,7 @@ function printBanner(mode: "setup" | "online") {
   if (mode === "online") {
     ln();
     console.log(
-      `  ${dg("CREATED BY")}  ${w("Harsh")}  ${dg("(")}${g("@irisxai")}${dg(")")}`,
-    );
-    console.log(`  ${dg("GITHUB")}      ${d("https://github.com/201Harsh")}`);
-    console.log(
-      `  ${dg("INSTAGRAM")}   ${d("https://www.instagram.com/201harshs/")}`,
+      `  ${dg("CRAFTED BY")}  ${w("Ashit")}`,
     );
     console.log(dg(`  ${LINE}`));
   }
@@ -134,7 +130,7 @@ async function runSetup(): Promise<{ apiKey: string; voice: string }> {
 
   div("  2 / 2  ·  VOICE  ");
   ln();
-  hint("You can change this anytime in  ~/.iris-mini-config.json");
+  hint("You can change this anytime in  ~/.yana-mini-config.json");
   ln();
 
   const voice = await select({
@@ -165,13 +161,13 @@ async function runSetup(): Promise<{ apiKey: string; voice: string }> {
   ln();
 
   const confirmed = await confirm({
-    message: g("  Save and launch IRIS?"),
+    message: g("  Save and launch YANA?"),
     default: true,
   });
 
   if (!confirmed) {
     ln();
-    hint("No problem. Run  iris  again whenever you're ready.");
+    hint("No problem. Run  yana  again whenever you're ready.");
     ln();
     process.exit(0);
   }
@@ -189,7 +185,7 @@ async function boot() {
   await bar("Almost ready      ", 200);
   ln();
   console.log(
-    `  ${b(g("IRIS MINI is live."))}  ${d("Open your browser to start talking.")}`,
+    `  ${b(g("YANA MINI is live."))}  ${d("Open your browser to start talking.")}`,
   );
   ln();
   div();

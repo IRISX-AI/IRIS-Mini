@@ -32,7 +32,7 @@
   "release": "npm run build:ui && npm run build:cli && npm pack"
 },
   "dependencies": {
-    "@google/genai": "^2.12.0",
+    "@google/genai": "^2.13.0",
     "@inquirer/prompts": "^8.5.2",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
@@ -63,7 +63,7 @@
     "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.1.2",
-    "@vitejs/plugin-react": "^6.0.3",
+    "@vitejs/plugin-react": "^6.0.4",
     "nodemon": "^3.1.10",
     "tsx": "^4.23.1",
     "vite": "^8.1.5"

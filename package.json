@@ -51,7 +51,7 @@
     "react-dom": "^19.3.0",
     "react-icons": "^5.7.0",
     "react-toastify": "^11.1.0",
-    "socket.io": "^4.8.3",
+    "socket.io": "^4.8.4",
     "socket.io-client": "^4.8.3",
     "tailwindcss": "^4.3.3",
     "three": "^0.186.0",

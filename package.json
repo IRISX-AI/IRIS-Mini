@@ -54,7 +54,7 @@
     "socket.io": "^4.8.4",
     "socket.io-client": "^4.8.3",
     "tailwindcss": "^4.3.3",
-    "three": "^0.186.0",
+    "three": "^0.186.1",
     "typescript": "^7.0.2",
     "vite-express": "*"
   },

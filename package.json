@@ -32,7 +32,7 @@
   "release": "npm run build:ui && npm run build:cli && npm pack"
 },
   "dependencies": {
-    "@google/genai": "^2.26.0",
+    "@google/genai": "^2.27.0",
     "@inquirer/prompts": "^8.7.2",
     "@react-three/drei": "^10.7.9",
     "@react-three/fiber": "^9.8.1",

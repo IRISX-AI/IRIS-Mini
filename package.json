@@ -33,7 +33,7 @@
 },
   "dependencies": {
     "@google/genai": "^2.27.0",
-    "@inquirer/prompts": "^8.7.2",
+    "@inquirer/prompts": "^8.7.3",
     "@react-three/drei": "^10.7.9",
     "@react-three/fiber": "^9.8.1",
     "@tailwindcss/vite": "^4.3.3",

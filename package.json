@@ -35,7 +35,7 @@
     "@google/genai": "^2.30.0",
     "@inquirer/prompts": "^8.7.3",
     "@react-three/drei": "^10.7.9",
-    "@react-three/fiber": "^9.8.1",
+    "@react-three/fiber": "^9.8.2",
     "@tailwindcss/vite": "^4.3.3",
     "chalk": "^6.0.1",
     "cross-env": "^10.1.0",
